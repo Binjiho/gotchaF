@@ -8,8 +8,9 @@
 * php 8.2 nts 설치 ( url : https://windows.php.net/download#php-8.2 )
 * php 환경 변수 설정
 * composer 설치
-* 터미널(command Prompt)열기
 * .env.example 파일 이름 .env로 변경
+* 터미널(command Prompt)열기
+* [ composer update ]
 * [ php artisan serve ]
 
 ## REACT
