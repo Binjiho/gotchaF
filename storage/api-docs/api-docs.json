@@ -1,0 +1,50 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My Fsirst API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/boards": {
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "summary": "게시글 등록",
+                "description": "게시글을 등록",
+                "operationId": "c4fcd761c67c86f9772421eb778062cc",
+                "requestBody": {
+                    "description": "게시글 정보",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "board_title": {
+                                        "description": "게시글 제목",
+                                        "type": "string",
+                                        "example": "공지사항입니다."
+                                    },
+                                    "board_content": {
+                                        "description": "게시글 내용",
+                                        "type": "string",
+                                        "example": "공지사항 내용입니다."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        }
+    }
+}
