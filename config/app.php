@@ -173,6 +173,8 @@ return [
          * Laravel Framework Service Providers...
          */
         L5Swagger\L5SwaggerServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
+
     ])->toArray(),
 
     /*
