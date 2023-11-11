@@ -12,21 +12,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-//Route::post('signup', [AuthController::class, 'signup']);
-Route::post('/signup', [App\Http\Controllers\Api\member\AuthController::class, 'signup']);
-//Route::post('/signup', function() {
-//    return view('auth/login');
-//});
-//
-//Route::prefix('/auth')->group(function () {
-//    Route::post('signup', [AuthController::class, 'signup']);
-////    Route::post('login', 'AuthController@login');
-//
+Route::prefix('/auth')->group(function () {
+    Route::post('signup', [App\Http\Controllers\api\member\AuthController::class, 'signup']);
+    Route::post('signin', [App\Http\Controllers\api\member\AuthController::class, 'signin']);
+
 //    Route::middleware('auth:api')->group(function() {
 //        Route::get('logout', 'AuthController@logout');
 //        Route::get('user', 'AuthController@user');
 //    });
-//});
+});

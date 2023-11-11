@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api\member;
+namespace App\Services\api\member;
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -46,6 +46,38 @@ class AuthService
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error create user!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function signin(Request $request)
+    {
+        try {
+            $request->validate([
+                'email' => 'required|string',
+                'password' => 'required|string'
+            ]);
+
+            $data = [
+                'email' => $request->email,
+                'password' => $request->password
+            ];
+            if(auth()->attempt($data)) {
+                $token = auth()->user()->createToken('gotcha')->accessToken;
+//                $user = User::find(Auth::user()->id);
+//
+//                $user_token['token'] = $user->createToken('appToken')->accessToken;
+                return response()->json([
+                    'message' => 'Successfully login!',
+                    'state' => "S",
+                    'token' => $token
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'login failed! unauthorized!',
                 'state' => "E",
                 'error' => $e,
             ], 500);

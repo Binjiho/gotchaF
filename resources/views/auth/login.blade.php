@@ -11,17 +11,17 @@
         <div class="login">
             <h4>로그인</h4>
 
-            <form id="login-frm" action="/auth/login" method="post" onsubmit="return false;">
+            <form id="login-frm" action="/api/auth/login" method="post">
                 <fieldset>
                     <legend>로그인</legend>
 
                     <ul class="inputArea">
                         <li>
-                            <label class="hidden">아이디</label>
-                            <input type="text" name="uid" placeholder="아이디를 입력하여 주세요." noneSpace>
+                            <label class="hidden">이메일</label>
+                            <input type="text" name="email" placeholder="email 입력하여 주세요." noneSpace>
                         </li>
                         <li>
-                            <label class="hidden">아이디</label>
+                            <label class="hidden">비밀번호</label>
                             <input type="password" name="password" placeholder="비밀번호를 입력하여 주세요." noneSpace>
                         </li>
                     </ul>

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\member;
+namespace App\Http\Controllers\api\member;
 
 use Illuminate\Routing\Controller as BaseController;
-use App\Services\Api\member\AuthService;
+use App\Services\api\member\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +28,12 @@ class AuthController extends BaseController
     public function signup(Request $request)
     {
         return $this->authService->signup($request);
+    }
+
+    public function signin(Request $request)
+    {
+        return $this->authService->signin($request);
+
     }
 
     /**
