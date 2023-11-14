@@ -17,19 +17,48 @@ class AuthController extends BaseController
 
 
     /**
-     * Create user
-     *
-     * @param  [string] name
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [string] password_confirmation
-     * @return [string] message
+     * @OA\Post (
+     *     path="/api/auth/signup",
+     *     tags={"회원가입"},
+     *     description="일반 회원가입",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="email", type="string", description="email", example="jiho@naver.com"),
+     *                 @OA\Property (property="password", type="string", description="password", example="1234"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
      */
     public function signup(Request $request)
     {
         return $this->authService->signup($request);
     }
 
+    /**
+     * @OA\Post (
+     *     path="/api/auth/signin",
+     *     tags={"회원가입"},
+     *     description="일반 회원 로그인",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="email", type="string", description="email", example="jiho@naver.com"),
+     *                 @OA\Property (property="password", type="string", description="password", example="1234"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
     public function signin(Request $request)
     {
         return $this->authService->signin($request);

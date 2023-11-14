@@ -45,6 +45,84 @@
                     }
                 }
             }
+        },
+        "/api/auth/signup": {
+            "post": {
+                "tags": [
+                    "회원가입"
+                ],
+                "description": "일반 회원가입",
+                "operationId": "69378bbb677f044653171efe402bdd5b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "email",
+                                        "type": "string",
+                                        "example": "jiho@naver.com"
+                                    },
+                                    "password": {
+                                        "description": "password",
+                                        "type": "string",
+                                        "example": "1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/auth/signin": {
+            "post": {
+                "tags": [
+                    "회원가입"
+                ],
+                "description": "일반 회원 로그인",
+                "operationId": "7b4f0ab816307d4a731b47c761b8f746",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "email",
+                                        "type": "string",
+                                        "example": "jiho@naver.com"
+                                    },
+                                    "password": {
+                                        "description": "password",
+                                        "type": "string",
+                                        "example": "1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
         }
     }
 }

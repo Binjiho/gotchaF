@@ -16,8 +16,8 @@ class AuthService
     {
         try {
             $request->validate([
-                'email' => 'required|string',
-                'password' => 'required|string'
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|max:255'
             ]);
 
             $now = date('Y-m-d H:i:s');
