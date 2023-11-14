@@ -6,6 +6,7 @@
 /storage/*.key
 /vendor
 .env
+.env.example
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -22,6 +23,7 @@ yarn-error.log
 # frontend
 /frontend/node_modules
 /frontend/.pnp
+/frontend/.env.local
 .pnp.js
 
 # testing
