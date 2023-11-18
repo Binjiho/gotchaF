@@ -12,7 +12,7 @@
 </head>
 <body class="antialiased">
 <div>
-    hello
+    this is for sns login blade
 </div>
 </body>
 </html>

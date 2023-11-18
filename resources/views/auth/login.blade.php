@@ -10,6 +10,12 @@
 
         <div class="login">
             <h4>로그인</h4>
+            <div class="btn">
+                <a href="/api/auth/redirect/kakao">카카오 로그인</a>
+                <a href="/api/auth/redirect/naver">네이버 로그인</a>
+                <a href="/api/auth/redirect/facebook">facebook 로그인</a>
+                <a href="/api/auth/redirect/google">google 로그인</a>
+            </div>
 
             <form id="login-frm" action="/api/auth/login" method="post">
                 <fieldset>

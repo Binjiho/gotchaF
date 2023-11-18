@@ -174,6 +174,8 @@ return [
          */
         L5Swagger\L5SwaggerServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
 
     ])->toArray(),
 
