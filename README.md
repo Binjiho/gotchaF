@@ -10,7 +10,7 @@
 * composer 설치
 * .env.example 파일 이름 .env로 변경
 * 터미널(command Prompt)열기
-* [ composer update ]
+* [ composer update ] or [composer update --ignore-platform-req=ext-sodium]
 * [ php artisan serve ]
 
 ## Next

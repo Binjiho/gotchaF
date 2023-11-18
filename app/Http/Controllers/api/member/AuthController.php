@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\api\member;
 
+use App\Models\User;
 use Illuminate\Routing\Controller as BaseController;
 use App\Services\api\member\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends BaseController
 {
@@ -52,6 +54,7 @@ class AuthController extends BaseController
      *             @OA\Schema (
      *                 @OA\Property (property="email", type="string", description="email", example="jiho@naver.com"),
      *                 @OA\Property (property="password", type="string", description="password", example="1234"),
+     *                 @OA\Property (property="social", type="string", description="social타입 null가능", example="google"),
      *             )
      *         )
      *     ),
@@ -66,69 +69,73 @@ class AuthController extends BaseController
     }
 
     /**
-     * Login user and create token
-     *
-     * @param  [string] email
-     * @param  [string] password
-     * @param  [boolean] remember_me
-     * @return [string] access_token
-     * @return [string] token_type
-     * @return [string] expires_at
-     */
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
-        return $this->createToken($request->user_id, $request->password);
-
-    }
-
-    public function createToken ($userId, $password) {
-        $credentials = array(
-            'email' => $userId,
-            'password' => $password
-        );
-
-        if (!Auth::attempt($credentials)) {
-            return 'login fail';
-        }
-
-        $data = [
-            'grant_type' => 'password',
-            'client_id' => '2',
-            'client_secret' => 'M4t3qokY6IcAiMdHFqq5gxGeuklxHgPYvX8KF78Y',
-            'username' => Auth::user()['id'],
-            'password' => $password,
-            'scope' => '*',
-        ];
-        $request = Request::create('/oauth/token', 'POST', $data);
-        $response = app()->handle($request);
-
-        return $response;
-    }
-
-    /**
-     * Logout user (Revoke the token)
-     *
-     * @return [string] message
+     * @OA\Get (
+     *     path="/api/auth/logout",
+     *     tags={"회원가입"},
+     *     description="로그아웃",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="token"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
      */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+        return $this->authService->logout($request);
     }
 
     /**
-     * Get the authenticated User
-     *
-     * @return [json] user object
+     * @OA\Get (
+     *     path="/api/auth/user",
+     *     tags={"회원가입"},
+     *     description="토큰으로 사용자 정보 얻기",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="token"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
      */
     public function user(Request $request)
     {
         return response()->json($request->user());
     }
+
+
+    /**
+     * @OA\Get (
+     *     path="/api/auth/callback",
+     *     tags={"회원가입"},
+     *     description="sns 연동 url",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="provider"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function callback(String $provider)
+    {
+        return $this->authService->callback($provider);
+    }
+
 }

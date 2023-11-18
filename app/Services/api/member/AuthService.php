@@ -5,6 +5,8 @@ namespace App\Services\api\member;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AuthServices
@@ -25,9 +27,8 @@ class AuthService
             $user = new User([
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
-                'state'=>1,
-                'created_at' => $now,
-                'updated_at' => $now
+                'social'=> isset($request->social) ? $request->social : null,
+                'created_at' => $now
             ]);
 
             $user->save();
@@ -65,10 +66,9 @@ class AuthService
                 'password' => $request->password
             ];
             if(auth()->attempt($data)) {
-                $token = auth()->user()->createToken('gotcha')->accessToken;
-//                $user = User::find(Auth::user()->id);
-//
-//                $user_token['token'] = $user->createToken('appToken')->accessToken;
+//                $token = auth()->user()->createToken('gotcha')->accessToken;
+                $token = auth()->user()->createToken('gotcha')->plainTextToken;
+
                 return response()->json([
                     'message' => 'Successfully login!',
                     'state' => "S",
@@ -84,33 +84,51 @@ class AuthService
         }
     }
 
-    private function forgotUidServices(Request $request)
+    public function logout(Request $request)
     {
-        $user = User::where(['name_kr' => $request->name_kr, 'license_number' => $request->license_number])->first();
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'message' => 'Successfully logged out',
+                'state' => "S",
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'delete token failed!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
 
-        if(empty($user)) {
-            $this->setJsonData('addCss', [
-                $this->ajaxActionCss('.formArea:eq(0) .result', 'display', 'none'),
-                $this->ajaxActionCss('.formArea:eq(0) .noResult', 'display', 'table-cell'),
-            ]);
+    public function callback(String $provider)
+    {
+        try {
+            $socialUser = Socialite::driver($provider)->stateless()->user();
 
-            return $this->returnJsonData('html', [
-                $this->ajaxActionHtml('.formArea:eq(0) .noResult', '일치하는 정보가 없습니다.'),
-            ]);
-        }else {
-            $this->setJsonData('input', [
-                $this->ajaxActionInput('#forgot-uid-frm input[name=name_kr]', ''),
-                $this->ajaxActionInput('#forgot-uid-frm input[name=license_number]', ''),
-            ]);
+            // Find User By Email
+            $user = User::where([
+                'email'=> $socialUser->getEmail()
+            ])->first();
 
-            $this->setJsonData('addCss', [
-                $this->ajaxActionCss('.formArea:eq(0) .noResult', 'display', 'none'),
-                $this->ajaxActionCss('.formArea:eq(0) .result', 'display', 'table-cell'),
-            ]);
-
-            return $this->returnJsonData('html', [
-                $this->ajaxActionHtml('.formArea:eq(0) .result', "회원님의 아이디는 <span>{$user->uid}</span> 입니다."),
-            ]);
+            if($user){
+                if(Auth::loginUsingId($user['id'])) {
+                    $token = auth()->user()->createToken('gotcha')->plainTextToken;
+                    return response()->json([
+                        'message' => 'Successfully login!',
+                        'state' => "S",
+                        'token' => $token
+                    ], 200);
+                }
+            }else{
+                return redirect()->route('snsSignup',['provider'=>$provider]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'callback failed!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
         }
     }
 

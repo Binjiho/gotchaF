@@ -13,6 +13,15 @@
 <body class="antialiased">
 <div>
     this is for sns login blade
+
+    <ul class="inputArea">
+        <li>
+            <label class="hidden">[provider] snstype</label>
+            <h1>{{ $provider }}</h1>
+        </li>
+
+    </ul>
+
 </div>
 </body>
 </html>

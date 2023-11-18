@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('test');
 
 Route::get('/api/hello', function () {
     return view('hello');
@@ -27,9 +27,6 @@ Route::prefix('auth')->group(function () {
         return view('auth/login');
     });
 
-    Route::post('/login', function() {
-        return view('auth/login');
-    });
 });
 //Route::prefix('auth')->group(function () {
 //    Route::controller(\App\Http\Controllers\Web\Auth\AuthController::class)->group(function () {

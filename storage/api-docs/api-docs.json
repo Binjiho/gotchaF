@@ -107,7 +107,102 @@
                                         "description": "password",
                                         "type": "string",
                                         "example": "1234"
+                                    },
+                                    "social": {
+                                        "description": "social타입 null가능",
+                                        "type": "string",
+                                        "example": "google"
                                     }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "get": {
+                "tags": [
+                    "회원가입"
+                ],
+                "description": "로그아웃",
+                "operationId": "783bb89018fabb5dd893626036b41fcf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "token": {}
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/auth/user": {
+            "get": {
+                "tags": [
+                    "회원가입"
+                ],
+                "description": "토큰으로 사용자 정보 얻기",
+                "operationId": "f016df54df6df53ba85c48a554cce1a0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "token": {}
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/auth/callback": {
+            "get": {
+                "tags": [
+                    "회원가입"
+                ],
+                "description": "sns 연동 url",
+                "operationId": "b2270a5d6ebbc56f49677f67af59010a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "provider": {}
                                 },
                                 "type": "object"
                             }
