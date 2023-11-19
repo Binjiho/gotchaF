@@ -1,18 +1,24 @@
-/**
- * @type {import('next').NextConfig}
- */
+/** @type {import('next').NextConfig} */
+
 
 const nextConfig = {
-    reactStrictMode: true,
-    async rewrites() {
-        return [
-            {
-                source: '/api/:path*/',
-                destination: `${process.env.DB_HOST}/api/:path*/`, // 외부 API 주소
-            },
-        ];
-    },
-    // trailingSlash: true,
-}
+  reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${process.env.API_HOST}/api/:path*`,
+      },
+    ];
+  },
+  webpack: config => {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
 
-module.exports = nextConfig
+    return config;
+  },
+};
+
+module.exports = nextConfig;
