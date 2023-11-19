@@ -1,0 +1,65 @@
+.btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 3px;
+  height: 50px;
+  font-size: 15px;
+  border: none;
+  font-weight: 700;
+
+  &::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+  }
+
+  &.kakao {
+    background: #fae300;
+    color: $gray10;
+
+    &::before {
+      @include maskIcon("/icons/logos/kakao.svg", 18px);
+    }
+  }
+
+  &.naver {
+    background: #03c75a;
+    color: #fff;
+
+    &::before {
+      @include maskIcon("/icons/logos/naver.svg", 18px);
+    }
+  }
+
+  &.facebook {
+    background: #4285f4;
+    color: #fff;
+
+    &::before {
+      @include maskIcon("/icons/logos/facebook.svg", 18px);
+    }
+  }
+
+  &.google {
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+
+    &::before {
+      background: no-repeat url("/icons/logos/google.svg");
+      background-size: cover;
+    }
+  }
+
+  &.email {
+    background: #000;
+    color: #fff;
+
+    &::before {
+      @include maskIcon("/icons/tool/mail-fill.svg", 18px);
+    }
+  }
+}

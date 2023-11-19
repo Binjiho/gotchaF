@@ -1,0 +1,52 @@
+.join {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 215px;
+  height: 215px;
+  background: #d9d9d9;
+  margin-top: 10vh;
+  border-radius: 100%;
+  margin-bottom: 90px;
+}
+
+.btns {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.otherBtn {
+  width: 100%;
+  border-radius: 3px;
+  background: #000;
+  color: #fff;
+  height: 50px;
+  font-size: 15px;
+  border: none;
+}
+
+.forgetAccount {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: $gray7;
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  padding: 0;
+
+  &::after {
+    content: "";
+    display: inline-block;
+    @include maskIcon("/icons/system/arrow-right-s-line.svg", 20px);
+  }
+}
