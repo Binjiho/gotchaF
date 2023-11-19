@@ -2,7 +2,6 @@
 ## GOTCHA
 
 
-
 ## Laravel
 
 * php 8.2 nts 설치 ( url : [https://windows.php.net/download#php-8.2](https://windows.php.net/download#php-8.2) )
@@ -16,8 +15,8 @@
 ## Next
 
 * react in laravel
-* node v18.17.0
-* npx create-next-app@latest ( [Next](https://nextjs.org/docs/getting-started/installation) )
+* node v16.14.0
+* npx create-next-app@13.4.9 ( [Next](https://nextjs.org/docs/getting-started/installation) )
 * cd frontend
 * [ npm run dev ]
 
