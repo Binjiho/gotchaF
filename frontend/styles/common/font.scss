@@ -1,0 +1,47 @@
+/*******************************************************************
+// 위치 : src/assets/scss/guide/font.scss
+// 설명 : 가이드 폰트 클래스 정의
+********************************************************************/
+
+//폰트 사이즈
+.title1 {
+  font-size: $title1;
+}
+.title2 {
+  font-size: $title2;
+}
+.title3 {
+  font-size: $title3;
+}
+.title4 {
+  font-size: $title4;
+}
+.title5 {
+  font-size: $title5;
+}
+.body1 {
+  font-size: $body1;
+}
+.body2 {
+  font-size: $body2;
+}
+.body3 {
+  font-size: $body3;
+}
+.body4 {
+  font-size: $body4;
+}
+.text-caption {
+  font-size: $text-caption;
+}
+
+//폰트 굵기
+.font-bold {
+  font-weight: bold;
+}
+.font-regular {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}

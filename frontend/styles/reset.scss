@@ -1,0 +1,22 @@
+ul > li {
+  list-style: none;
+}
+
+button,
+input,
+a {
+  letter-spacing: -0.002em !important;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+body {
+  background: #f5f5f5;
+}
+
+body > * {
+  height: 100%;
+}

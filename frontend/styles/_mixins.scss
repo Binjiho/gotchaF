@@ -1,0 +1,31 @@
+@mixin maskIcon($root, $size, $color: currentColor) {
+  -webkit-mask-image: url($root);
+  mask-image: url($root);
+  background-color: $color;
+  -webkit-mask-size: $size;
+  width: $size;
+  height: $size;
+  -webkit-mask-repeat: no-repeat;
+}
+
+@mixin divider($height: 10px, $color: $gray2) {
+  height: $height;
+  max-height: $height;
+  background: $color;
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+//텍스트 사이 구분 라인
+@mixin line($color: #000, $height: 12px, $margin: 8px, $width: 1px) {
+  content: "";
+  display: inline-block;
+  width: $width;
+  background: $color;
+  height: $height;
+  margin: 0 $margin;
+  vertical-align: middle;
+  max-width: $width;
+  flex: 0 0 $width;
+}
