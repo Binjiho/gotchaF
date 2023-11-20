@@ -1,0 +1,16 @@
+.header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.prevBtn {
+  background: transparent;
+  border: none;
+  padding: 0;
+
+  svg {
+    width: 24px;
+  }
+}

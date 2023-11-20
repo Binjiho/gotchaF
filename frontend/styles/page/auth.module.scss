@@ -50,3 +50,48 @@
     @include maskIcon("/icons/system/arrow-right-s-line.svg", 20px);
   }
 }
+
+.snsSignup {
+  padding-top: 20px;
+
+  &__title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  &__connect {
+    margin-bottom: 20px;
+    margin-top: 40px;
+
+    label {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.agree_item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  justify-content: space-between;
+  font-size: 14px;
+
+  & > div {
+    margin-bottom: 0;
+    min-height: unset;
+  }
+}
+
+.plusBtn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 20px;
+  }
+}

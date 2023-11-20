@@ -1,0 +1,33 @@
+.divider-line {
+  border: none;
+  height: 1px !important;
+  position: relative;
+  width: 100%;
+  overflow: hidden !important;
+
+  &::after {
+    content: "";
+    @include divider(1px);
+    width: 100vw;
+    position: absolute;
+    left: -20px;
+    top: 0;
+  }
+}
+
+main {
+  padding: 0 20px;
+}
+
+.bottom-fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  padding: 0 20px;
+  background: #fff;
+
+  &.btns {
+    padding-bottom: 20px;
+  }
+}

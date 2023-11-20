@@ -1,7 +1,10 @@
 .main {
   max-width: 500px;
-  padding: 0 20px;
   margin: 0 auto;
   background: #fff;
   height: 100%;
+
+  & > div {
+    height: 100%;
+  }
 }

@@ -1,0 +1,18 @@
+.form-control {
+  &[type="text"] {
+    border-radius: 3px;
+    padding: 0 15px;
+
+    &.height-50 {
+      height: 50px;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    &:disabled {
+      background: $gray2;
+      border: 1px solid $gray4;
+      color: $gray7;
+    }
+  }
+}

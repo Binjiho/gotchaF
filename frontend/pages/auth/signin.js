@@ -7,7 +7,7 @@ export default function SignIn() {
   const [toggleSnsJoin, setToggleSnsJoin] = useState(false);
 
   return (
-    <div className={styles.join}>
+    <main className={styles.join}>
       <div className={styles.logo}></div>
       <div className={styles.btns}>
         <SnsLoginBtn type="kakao">카카오로 시작하기</SnsLoginBtn>
@@ -30,6 +30,6 @@ export default function SignIn() {
         </Button>
       )}
       <Button className={styles.forgetAccount}>계정을 잊으셨나요?</Button>
-    </div>
+    </main>
   );
 }
