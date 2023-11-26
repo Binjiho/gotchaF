@@ -1,10 +1,8 @@
-import styles from "@/styles/component/layout/common.module.scss";
-
 export default function Layout({ children }) {
   return (
     <>
-      <div className={styles.main}>
-        <div>{children}</div>
+      <div className={`min-h-full max-w-[500px] mx-auto my-0 bg-white`}>
+        <div className={`min-h-[100vh]`}>{children}</div>
       </div>
     </>
   );

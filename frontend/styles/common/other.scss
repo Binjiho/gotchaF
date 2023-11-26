@@ -1,22 +1,6 @@
-.divider-line {
-  border: none;
-  height: 1px !important;
-  position: relative;
-  width: 100%;
-  overflow: hidden !important;
-
-  &::after {
-    content: "";
-    @include divider(1px);
-    width: 100vw;
-    position: absolute;
-    left: -20px;
-    top: 0;
-  }
-}
-
 main {
   padding: 0 20px;
+  color: $gray10;
 }
 
 .bottom-fixed {
@@ -30,4 +14,10 @@ main {
   &.btns {
     padding-bottom: 20px;
   }
+}
+
+.gap-line {
+  width: 1px;
+  height: 12px;
+  background: $gray5;
 }

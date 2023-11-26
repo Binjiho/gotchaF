@@ -23,6 +23,12 @@
     &::before {
       @include maskIcon("/icons/logos/kakao.svg", 18px);
     }
+
+    &:active {
+      background: #fae300;
+      color: $gray10;
+      opacity: 0.5;
+    }
   }
 
   &.naver {
@@ -32,6 +38,12 @@
     &::before {
       @include maskIcon("/icons/logos/naver.svg", 18px);
     }
+
+    &:active {
+      background: #03c75a;
+      color: #fff;
+      opacity: 0.5;
+    }
   }
 
   &.facebook {
@@ -40,6 +52,12 @@
 
     &::before {
       @include maskIcon("/icons/logos/facebook.svg", 18px);
+    }
+
+    &:active {
+      background: #4285f4;
+      color: #fff;
+      opacity: 0.5;
     }
   }
 
@@ -52,6 +70,12 @@
       background: no-repeat url("/icons/logos/google.svg");
       background-size: cover;
     }
+
+    &:active {
+      background: #fff;
+      color: #000;
+      opacity: 0.5;
+    }
   }
 
   &.email {
@@ -60,6 +84,12 @@
 
     &::before {
       @include maskIcon("/icons/tool/mail-fill.svg", 18px);
+    }
+
+    &:active {
+      background: #000;
+      color: #fff;
+      opacity: 0.5;
     }
   }
 }

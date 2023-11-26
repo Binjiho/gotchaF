@@ -1,7 +1,9 @@
 .form-control {
-  &[type="text"] {
+  &[type="text"],
+  &[type="password"] {
     border-radius: 3px;
     padding: 0 15px;
+    border-color: $gray4;
 
     &.height-50 {
       height: 50px;
@@ -14,5 +16,50 @@
       border: 1px solid $gray4;
       color: $gray7;
     }
+
+    &::placeholder {
+      color: $gray7;
+    }
+  }
+}
+
+.btn {
+  border: none;
+
+  &.btn-40 {
+    height: 40px;
+    border-radius: 2px;
+    font-size: 14px;
+  }
+
+  &.btn-50 {
+    height: 50px;
+    border-radius: 3px;
+    font-size: 15px;
+  }
+
+  &.btn-60 {
+    height: 60px;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+
+  &.btn-black {
+    background: #000;
+    color: #fff;
+
+    &:active {
+      background: #222;
+      color: #fff;
+    }
+  }
+
+  &.btn-text {
+    padding: 0;
+  }
+
+  &:disabled {
+    background: $gray5;
+    color: #fff;
   }
 }
