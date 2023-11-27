@@ -28,8 +28,16 @@ Route::prefix('/auth')->group(function () {
     Route::get('callback/{provider}',[App\Http\Controllers\api\member\AuthController::class, 'callback']);
 
     Route::get('snsSignup/{provider?}', function ($provider=null) {
-        return view('auth/snsSignup',['provider'=>$provider]);
+        return response()->json([
+            'message' => 'please sns Signup',
+            'state' => "S",
+            'data' => $provider
+        ], 200);
     })->name('snsSignup');
+
+//    Route::get('snsSignup/{provider?}', function ($provider=null) {
+//        return view('auth/snsSignup',['provider'=>$provider]);
+//    })->name('snsSignup');
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user',[App\Http\Controllers\api\member\AuthController::class, 'user']);

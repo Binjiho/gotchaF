@@ -122,6 +122,7 @@ class AuthService
                 }
             }else{
                 return redirect()->route('snsSignup',['provider'=>$provider]);
+
             }
         } catch (\Exception $e) {
             return response()->json([
