@@ -121,7 +121,12 @@ class AuthService
                     ], 200);
                 }
             }else{
-                return redirect()->route('snsSignup',['provider'=>$provider]);
+//                return redirect()->route('snsSignup',['provider'=>$provider]);
+                return response()->json([
+                    'message' => 'please sns Signup',
+                    'state' => "S",
+                    'data' => $provider
+                ], 200);
 
             }
         } catch (\Exception $e) {
