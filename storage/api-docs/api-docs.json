@@ -218,6 +218,70 @@
                     }
                 }
             }
+        },
+        "/api/team/make": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 생성",
+                "operationId": "7be1083e1113ff4c019827168df7df8c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "region": {
+                                        "description": "지역",
+                                        "type": "string",
+                                        "example": "강남구"
+                                    },
+                                    "limit": {
+                                        "description": "정원",
+                                        "type": "string",
+                                        "example": "1234"
+                                    },
+                                    "sex": {
+                                        "description": "성별",
+                                        "type": "string",
+                                        "example": "male"
+                                    },
+                                    "under_age": {
+                                        "description": "최소나이",
+                                        "type": "string",
+                                        "example": "20"
+                                    },
+                                    "top_age": {
+                                        "description": "최대나이",
+                                        "type": "string",
+                                        "example": "40"
+                                    },
+                                    "content": {
+                                        "description": "팀소개",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "image": {
+                                        "description": "이미지",
+                                        "type": "file",
+                                        "example": "file[]"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
         }
     }
 }
