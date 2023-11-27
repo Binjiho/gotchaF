@@ -17,6 +17,7 @@
 * react in laravel
 * node v16.14.0
 * npx create-next-app@13.4.9 ( [Next](https://nextjs.org/docs/getting-started/installation) )
+* npm install
 * cd frontend
 * [ npm run dev ]
 
