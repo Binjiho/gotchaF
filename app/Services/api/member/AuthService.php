@@ -122,10 +122,14 @@ class AuthService
                 }
             }else{
 //                return redirect()->route('snsSignup',['provider'=>$provider]);
+                $user = Socialite::driver($provider)->user();
                 return response()->json([
                     'message' => 'please sns Signup',
                     'state' => "S",
-                    'data' => $provider
+                    'data' => [
+                        "email" => $user->getEmail(),
+                        "provider" => $provider,
+                        ]
                 ], 200);
 
             }
