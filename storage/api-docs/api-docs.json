@@ -219,25 +219,35 @@
                 }
             }
         },
-        "/api/team/make": {
+        "/api/teams": {
             "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 생성",
-                "operationId": "7be1083e1113ff4c019827168df7df8c",
+                "operationId": "2244563fc6dd9770ce5f2b9e5e5e9002",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
+                                    "title": {
+                                        "description": "팀이름",
+                                        "type": "string",
+                                        "example": "갓챠"
+                                    },
+                                    "content": {
+                                        "description": "팀소개",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
                                     "region": {
                                         "description": "지역",
                                         "type": "string",
                                         "example": "강남구"
                                     },
-                                    "limit": {
+                                    "limit_person": {
                                         "description": "정원",
                                         "type": "string",
                                         "example": "1234"
@@ -245,27 +255,22 @@
                                     "sex": {
                                         "description": "성별",
                                         "type": "string",
-                                        "example": "male"
+                                        "example": "혼성:0, 남자:1, 여자:2"
                                     },
-                                    "under_age": {
+                                    "min_age": {
                                         "description": "최소나이",
                                         "type": "string",
                                         "example": "20"
                                     },
-                                    "top_age": {
+                                    "max_age": {
                                         "description": "최대나이",
                                         "type": "string",
                                         "example": "40"
                                     },
-                                    "content": {
-                                        "description": "팀소개",
-                                        "type": "string",
-                                        "example": "내용"
-                                    },
-                                    "image": {
-                                        "description": "이미지",
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
                                         "type": "file",
-                                        "example": "file[]"
+                                        "example": "file.jpg"
                                     }
                                 },
                                 "type": "object"

@@ -46,6 +46,6 @@ Route::prefix('/auth')->group(function () {
 
 });
 
-Route::prefix('/team')->group(function () {
-    Route::post('make', [App\Http\Controllers\api\member\AuthController::class, 'make']);
+Route::prefix('/teams')->group(function () {
+    Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'post']);
 });
