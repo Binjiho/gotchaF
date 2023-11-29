@@ -52,7 +52,7 @@ class TeamController extends BaseController
      * @OA\Get (
      *     path="/api/teams",
      *     tags={"팀"},
-     *     description="팀 리스트 불러오기 (del_yn='n') ",
+     *     description="팀 리스트 불러오기",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )
@@ -66,7 +66,7 @@ class TeamController extends BaseController
      * @OA\Post (
      *     path="/api/teams/searchTeams",
      *     tags={"팀"},
-     *     description="팀 검색 (del_yn='n')",
+     *     description="팀 검색",
      *      @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -89,7 +89,7 @@ class TeamController extends BaseController
      * @OA\Get (
      *     path="/api/teams/{$sid}",
      *     tags={"팀"},
-     *     description="팀 상세 불러오기 (del_yn='n') ",
+     *     description="팀 상세 불러오기",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )

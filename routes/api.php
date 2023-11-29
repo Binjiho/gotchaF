@@ -47,11 +47,25 @@ Route::prefix('/auth')->group(function () {
 });
 
 /*
-    Team
+|--------------------------------------------------------------------------
+| TEAM
+|--------------------------------------------------------------------------
 */
 Route::prefix('/teams')->group(function () {
     Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
     Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
     Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| BOARD
+|--------------------------------------------------------------------------
+*/
+Route::prefix('/boards')->group(function () {
+    Route::post('', [App\Http\Controllers\api\board\BoardController::class, 'storeBoard']);
+    Route::get('', [App\Http\Controllers\api\board\BoardController::class, 'indexBoards']);
+    Route::get('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showBoard']);
+    Route::patch('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateBoard']);
 });

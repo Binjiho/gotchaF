@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
-class SocialController extends BaseController
+class AuthOldController extends BaseController
 {
     public function login(string $provider)
     {

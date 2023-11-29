@@ -1,40 +1,38 @@
 <?php
 
-namespace App\Services\api\team;
+namespace App\Services\api\board;
 
-use App\Models\Team;
+use App\Models\Board;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class AuthServices
  * @package App\Services
  */
-class TeamService
+class BoardService
 {
-    public function storeTeam(Request $request)
+    public function storeBoard(Request $request)
     {
         try {
             $now = date('Y-m-d H:i:s');
 
-            $team = new Team;
-            $team->title = $request->title;
-            $team->contents = $request->contents;
-            $team->region = $request->region;
-            $team->limit_person = $request->limit_person;
-            $team->sex = $request->sex;
-            $team->min_age = $request->min_age;
-            $team->max_age = $request->max_age;
-            $team->created_at = $now;
-            $team->save();
-            $save_id = $team->sid;
+            $board = new Board;
+            $board->ccode = $request->ccode;
+            $board->tid = $request->tid;
+            $board->uid = $request->uid;
+            $board->title = $request->title;
+            $board->contents = $request->contents;
+            $board->writer = $request->writer;
+            $board->created_at = $now;
+            $board->save();
+            $save_id = $board->sid;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/".$save_id."/thum";
+                $s3_path = "gotcha/boards/".$save_id;
                 foreach($request->file('files') as $file){
                     $extension = $file->getClientOriginalExtension();
                     $uuid = uniqid();
@@ -44,20 +42,20 @@ class TeamService
                     // S3에 파일 저장
                     Storage::disk('s3')->put($filepath, $file);
 
-                    $update_team = Team::find($save_id);
-                    $update_team->file_name = $file->getClientOriginalName();
-                    $update_team->file_path = Storage::disk('s3')->url($filepath);
-                    $update_team->save();
+                    $update_board = Board::find($save_id);
+                    $update_board->file_name = $file->getClientOriginalName();
+                    $update_board->file_path = Storage::disk('s3')->url($filepath);
+                    $update_board->save();
                 }
             }
             return response()->json([
-                'message' => 'Successfully created team!',
+                'message' => 'Successfully created board!',
                 'state' => "S",
-                "data" => [ "team" => $update_team , "save_id"=>$save_id ],
+                "data" => [ "board" => $update_board , "save_id"=>$save_id ],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error create team!',
+                'message' => 'Error create board!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
@@ -65,16 +63,16 @@ class TeamService
     }
 
 
-    public function indexTeams()
+    public function indexBoards()
     {
         try {
-            $teams = Team::where( ['del_yn' => 'N' ])->get();
-//            $teams = DB::table('teams')->where( ['del_yn' => 'N' ])->get();
-
+            $boards = Board::where( [
+                'display_yn' => 'Y',
+            ])->get();
             return response()->json([
-                'message' => 'Successfully loaded teams!',
+                'message' => 'Successfully loaded boards!',
                 'state' => "S",
-                "data" => ["teams" => $teams],
+                "data" => ["boards" => $boards],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -85,47 +83,51 @@ class TeamService
         }
     }
 
-    public function searchTeams(Request $request)
+
+    public function showBoard(String $sid)
     {
         try {
-            if($request->title){
-                $teams = Team::where( [
-                        'del_yn' => 'N',
-                        'title' => $request->title,
-                    ]
-                )->get();
-            }
+            $board = Board::where( [
+                    'display_yn' => 'Y',
+                    'sid' => $sid,
+                ]
+            )->get();
+
             return response()->json([
-                'message' => 'Successfully search teams!',
+                'message' => 'Successfully loaded board!',
                 'state' => "S",
-                "data" => ["teams" => $teams],
+                "data" => ["board" => $board],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error search teams!',
+                'message' => 'Error loaded board!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
         }
     }
 
-    public function showTeam(String $sid)
+    public function deleteBoard(String $sid)
     {
         try {
-            $team = Team::where( [
+            $board = Board::where( [
                     'del_yn' => 'N',
                     'sid' => $sid,
                 ]
             )->get();
 
+            $now = date('Y-m-d H:i:s');
+            $board->display_yn = 'N';
+            $board->updated_at = $now;
+
             return response()->json([
-                'message' => 'Successfully loaded team!',
+                'message' => 'Successfully delete board!',
                 'state' => "S",
-                "data" => ["team" => $team],
+                "data" => ["board" => $board],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error loaded team!',
+                'message' => 'Error delete board!',
                 'state' => "E",
                 'error' => $e,
             ], 500);

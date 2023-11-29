@@ -114,7 +114,7 @@ class AuthService
             ])->first();
 
             if($user){
-                if(Auth::loginUsingId($user['id'])) {
+                if(Auth::loginUsingId($user['sid'])) {
                     $token = auth()->user()->createToken('gotcha')->plainTextToken;
                     return response()->json([
                         'message' => 'Successfully login!',

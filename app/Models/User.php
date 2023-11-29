@@ -19,11 +19,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $table='users';
-    protected $primaryKey='id';
+    protected $primaryKey='sid';
 
     //guarded 금지목록
     protected $guarded = [
-        'id',
+        'sid',
     ];
 
     //fillable 허용목록
