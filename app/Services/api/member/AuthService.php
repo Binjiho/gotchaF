@@ -27,6 +27,8 @@ class AuthService
             $user = new User([
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'sex' => $request->sex,
+                'age' => $request->age,
                 'social'=> isset($request->social) ? $request->social : null,
                 'created_at' => $now
             ]);

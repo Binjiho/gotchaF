@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class AuthServices
@@ -15,14 +16,14 @@ use Illuminate\Support\Facades\Storage;
  */
 class TeamService
 {
-    public function post(Request $request)
+    public function storeTeam(Request $request)
     {
         try {
             $now = date('Y-m-d H:i:s');
 
             $team = new Team;
             $team->title = $request->title;
-            $team->content = $request->content;
+            $team->contents = $request->contents;
             $team->region = $request->region;
             $team->limit_person = $request->limit_person;
             $team->sex = $request->sex;
@@ -63,5 +64,72 @@ class TeamService
         }
     }
 
+
+    public function indexTeams()
+    {
+        try {
+            $teams = Team::where( ['del_yn' => 'N' ])->get();
+//            $teams = DB::table('teams')->where( ['del_yn' => 'N' ])->get();
+
+            return response()->json([
+                'message' => 'Successfully loaded teams!',
+                'state' => "S",
+                "data" => ["teams" => $teams],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded teams!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function searchTeams(Request $request)
+    {
+        try {
+            if($request->title){
+                $teams = Team::where( [
+                        'del_yn' => 'N',
+                        'title' => $request->title,
+                    ]
+                )->get();
+            }
+            return response()->json([
+                'message' => 'Successfully search teams!',
+                'state' => "S",
+                "data" => ["teams" => $teams],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error search teams!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function showTeam(String $sid)
+    {
+        try {
+            $team = Team::where( [
+                    'del_yn' => 'N',
+                    'sid' => $sid,
+                ]
+            )->get();
+
+            return response()->json([
+                'message' => 'Successfully loaded team!',
+                'state' => "S",
+                "data" => ["team" => $team],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded team!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
 
 }

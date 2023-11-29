@@ -23,7 +23,7 @@ class Team extends Model
     //fillable 허용목록
     protected $fillable = [
         'title',
-        'content',
+        'contents',
         'region',
         'limit_person',
         'sex',

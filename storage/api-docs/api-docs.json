@@ -108,6 +108,16 @@
                                         "type": "string",
                                         "example": "1234"
                                     },
+                                    "sex": {
+                                        "description": "1:남성, 2:여성",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "age": {
+                                        "description": "나이",
+                                        "type": "string",
+                                        "example": "30"
+                                    },
                                     "social": {
                                         "description": "social타입 null가능",
                                         "type": "string",
@@ -220,12 +230,27 @@
             }
         },
         "/api/teams": {
+            "get": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 리스트 불러오기 (del_yn='n') ",
+                "operationId": "96d86695ce86b7ef00a0417e16d08e2c",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 생성",
-                "operationId": "2244563fc6dd9770ce5f2b9e5e5e9002",
+                "operationId": "05cf31c00b37de3c1186ef4cef4d2539",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -237,7 +262,7 @@
                                         "type": "string",
                                         "example": "갓챠"
                                     },
-                                    "content": {
+                                    "contents": {
                                         "description": "팀소개",
                                         "type": "string",
                                         "example": "내용"
@@ -278,6 +303,57 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/searchTeams": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 검색 (del_yn='n')",
+                "operationId": "7ac2d9a3dd4810d338bdcdd688ca11ce",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "팀이름",
+                                        "type": "string",
+                                        "example": "갓챠"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/{$sid}": {
+            "get": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 상세 불러오기 (del_yn='n') ",
+                "operationId": "0d59eebd57389b50eb958210308cf803",
                 "responses": {
                     "200": {
                         "description": "Success"

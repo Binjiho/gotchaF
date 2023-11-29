@@ -54,6 +54,8 @@ class AuthController extends BaseController
      *             @OA\Schema (
      *                 @OA\Property (property="email", type="string", description="email", example="jiho@naver.com"),
      *                 @OA\Property (property="password", type="string", description="password", example="1234"),
+     *                 @OA\Property (property="sex", type="string", description="1:남성, 2:여성", example="1"),
+     *                 @OA\Property (property="age", type="string", description="나이", example="30"),
      *                 @OA\Property (property="social", type="string", description="social타입 null가능", example="google"),
      *             )
      *         )

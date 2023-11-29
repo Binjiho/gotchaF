@@ -46,6 +46,12 @@ Route::prefix('/auth')->group(function () {
 
 });
 
+/*
+    Team
+*/
 Route::prefix('/teams')->group(function () {
-    Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'post']);
+    Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
+    Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
+    Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
+    Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
 });
