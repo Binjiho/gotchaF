@@ -21,6 +21,16 @@
       color: $gray7;
     }
   }
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+textarea.form-control {
+  &::placeholder {
+    color: $gray7;
+  }
 }
 
 .btn {

@@ -29,3 +29,16 @@ button {
   border: none;
   padding: 0;
 }
+
+main {
+  padding: 0 20px;
+  color: $gray10;
+}
+
+hr {
+  opacity: 1;
+}
+
+* {
+  caret-color: $green_sub2;
+}

@@ -14,3 +14,13 @@
     width: 24px;
   }
 }
+
+.middle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.right {
+  margin-left: auto;
+}
