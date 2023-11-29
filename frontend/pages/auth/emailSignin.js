@@ -32,7 +32,7 @@ export default function EmailSignin() {
             비밀번호 찾기
           </Button>
         </div>
-        <div className={`bottom-fixed btns  text-center`}>
+        <div className={`bottom-fixed btns text-center`}>
           <p className={`text-gray7 text-[14px] mb-[7px]`}>계정이 없으신가요?</p>
           <Button variant="text" className={`font-bold text-[16px] text-gray10`}>
             이메일로 회원가입
