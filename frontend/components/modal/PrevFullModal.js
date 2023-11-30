@@ -17,6 +17,7 @@ export default function PrevFullModal({ children, show, setShow }) {
         <div className={styles.middle}>{renderChildrenByType("middle")}</div>
         <div className={styles.right}>{renderChildrenByType("right")}</div>
       </header>
+      <div>{renderChildrenByType("content")}</div>
     </Modal>
   );
 }

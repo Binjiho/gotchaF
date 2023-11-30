@@ -33,6 +33,22 @@ textarea.form-control {
   }
 }
 
+.form-select {
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:focus {
+    box-shadow: none;
+    border-color: #000;
+  }
+
+  &.form-select-40 {
+    height: 40px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
 .btn {
   border: none;
 

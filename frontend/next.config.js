@@ -9,6 +9,10 @@ const nextConfig = {
         source: "/api/:path*",
         destination: `${process.env.API_HOST}/api/:path*`,
       },
+      {
+        source: "/map/:path*",
+        destination: `https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/:path*`,
+      },
     ];
   },
   webpack: config => {
