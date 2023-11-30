@@ -27,11 +27,11 @@ Route::prefix('/auth')->group(function () {
     });
     Route::get('callback/{provider}',[App\Http\Controllers\api\member\AuthController::class, 'callback']);
 
-    Route::get('snsSignup/{provider?}', function ($provider=null) {
+    Route::get('snsSignup/{provider?}', function ($email=null, $provider=null) {
         return response()->json([
             'message' => 'please sns Signup',
             'state' => "S",
-            'data' => $provider
+            'data' => ["email" => $email, "provider" => $provider],
         ], 200);
     })->name('snsSignup');
 

@@ -123,16 +123,17 @@ class AuthService
                     ], 200);
                 }
             }else{
-//                return redirect()->route('snsSignup',['provider'=>$provider]);
                 $user = Socialite::driver($provider)->user();
-                return response()->json([
-                    'message' => 'please sns Signup',
-                    'state' => "S",
-                    'data' => [
-                        "email" => $user->getEmail(),
-                        "provider" => $provider,
-                        ]
-                ], 200);
+                return redirect()->route('snsSignup',['email'=>$user->getEmail() , 'provider'=>$provider]);
+//                $user = Socialite::driver($provider)->user();
+//                return response()->json([
+//                    'message' => 'please sns Signup',
+//                    'state' => "S",
+//                    'data' => [
+//                        "email" => $user->getEmail(),
+//                        "provider" => $provider,
+//                        ]
+//                ], 200);
 
             }
         } catch (\Exception $e) {
