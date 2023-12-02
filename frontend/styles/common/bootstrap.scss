@@ -49,6 +49,12 @@ textarea.form-control {
   }
 }
 
+.form-label,
+.form-check-label {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
 .btn {
   border: none;
 
@@ -88,4 +94,12 @@ textarea.form-control {
     background: $gray5;
     color: #fff;
   }
+}
+
+.modal-bottom {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) !important;
+  margin: 0;
 }

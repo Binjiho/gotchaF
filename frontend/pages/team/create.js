@@ -3,8 +3,13 @@ import PrevHeader from "@/components/layout/PrevHeader";
 import { Button, Form } from "react-bootstrap";
 import UploadImage from "@/components/image/UploadImage";
 import AreaSelect from "@/components/team/AreaSelect";
+import GenderSelect from "@/components/team/GenderSelect";
 
-export default function SignIn() {
+export default function Create() {
+  const [cityType, setCityType] = useState([]);
+  const [detailCityType, setDetailCityType] = useState([]);
+  const [genderType, setGenderType] = useState("");
+
   return (
     <>
       <PrevHeader>
@@ -34,7 +39,14 @@ export default function SignIn() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <AreaSelect></AreaSelect>
+            <AreaSelect
+              cityType={cityType}
+              setCityType={setCityType}
+              detailCityType={detailCityType}
+              setDetailCityType={setDetailCityType}></AreaSelect>
+            <GenderSelect
+              genderType={genderType}
+              setGenderType={setGenderType}></GenderSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
             팀 이름과 사진은 개설 후에도 변경할 수 있어요

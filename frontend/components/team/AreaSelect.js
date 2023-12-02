@@ -3,14 +3,17 @@ import PrevFullModal from "@/components/modal/PrevFullModal";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Form } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
 
-export default function AreaSelect() {
+export default function AreaSelect({
+  cityType,
+  setCityType,
+  detailCityType,
+  setDetailCityType,
+}) {
   const [showModal, setShowModal] = useState(false);
-  const [cityList, setCityList] = useState(null);
-  const [detailCityList, setDetailCityList] = useState(null);
-  const [cityType, setCityType] = useState("");
-  const [detailCityType, setDetailCityType] = useState("");
-
+  const [cityList, setCityList] = useState([]);
+  const [detailCityList, setDetailCityList] = useState([]);
   const handleButtonClick = () => {
     setShowModal(true);
   };
@@ -28,7 +31,7 @@ export default function AreaSelect() {
   };
 
   const getDetailCityList = function () {
-    const city = cityType.substr(0, 2);
+    const city = cityType[0].code.substr(0, 2);
 
     axios({
       url: `/map/regcodes/`,
@@ -37,7 +40,12 @@ export default function AreaSelect() {
         regcode_pattern: `${city}*`,
       },
     }).then(res => {
-      setDetailCityList(res.data.regcodes);
+      const arr = res.data.regcodes;
+      arr.shift(); //시 제거
+
+      const pattern = /구$/;
+      const formatArr = arr.filter(item => !pattern.test(item.name));
+      setDetailCityList(formatArr);
     });
   };
 
@@ -47,53 +55,56 @@ export default function AreaSelect() {
   }, [showModal]);
 
   useEffect(() => {
-    if (!cityType) return;
+    if (!cityType[0]) return;
     getDetailCityList();
+    setDetailCityType([]);
   }, [cityType]);
+
+  useEffect(() => {
+    if (!detailCityType[0]?.code) return;
+    setShowModal(false);
+  }, [detailCityType]);
 
   return (
     <>
       <EditItem
         placeholder={`지역 선택`}
         title={`지역`}
+        value={detailCityType[0]?.name}
         onButtonClick={handleButtonClick}></EditItem>
       <PrevFullModal show={showModal} setShow={setShowModal}>
         <p type={`middle`}>지역 설정</p>
         <main type={`content`}>
-          <Form>
+          <Form className={`mt-3 flex flex-column gap-[16px]`}>
             <Form.Group controlId="control1">
               <Form.Label>시 선택</Form.Label>
-              <Form.Select
-                required
-                value={cityType}
-                size={40}
-                onChange={e => setCityType(e.target.value)}>
-                <option value="" disabled hidden>
-                  지역을 선택하세요
-                </option>
-                {cityList?.map(item => (
-                  <option value={item.code} key={item.code}>
-                    {item.name}
-                  </option>
-                ))}
-              </Form.Select>
+              <Typeahead
+                id={`cityType`}
+                labelKey="name"
+                onChange={setCityType}
+                options={cityList}
+                placeholder="지역을 선택하세요"
+                selected={cityType}
+                emptyLabel={`지역이 없습니다.`}
+                inputProps={{ required: true, className: "form-select form-select-40" }}
+              />
             </Form.Group>
             <Form.Group controlId="control2">
               <Form.Label>동 선택</Form.Label>
-              <Form.Select
-                required
-                value={detailCityType}
-                size={40}
-                onChange={e => setDetailCityType(e.target.value)}>
-                <option value="" disabled hidden>
-                  지역을 선택하세요
-                </option>
-                {detailCityList?.map(item => (
-                  <option value={item.code} key={item.code}>
-                    {item.name}
-                  </option>
-                ))}
-              </Form.Select>
+              <Typeahead
+                id={`detailCityType`}
+                labelKey="name"
+                onChange={setDetailCityType}
+                options={detailCityList}
+                placeholder="지역을 선택하세요"
+                selected={detailCityType}
+                disabled={!detailCityList.length}
+                emptyLabel={`지역이 없습니다.`}
+                inputProps={{
+                  required: true,
+                  className: "form-select form-select-40",
+                }}
+              />
             </Form.Group>
           </Form>
         </main>
