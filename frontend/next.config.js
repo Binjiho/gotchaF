@@ -15,6 +15,9 @@ const nextConfig = {
       },
     ];
   },
+  publicRuntimeConfig: {
+    backendUrl: process.env.API_HOST,
+  },
   webpack: config => {
     config.module.rules.push({
       test: /\.svg$/,
