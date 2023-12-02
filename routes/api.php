@@ -52,10 +52,15 @@ Route::prefix('/auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/teams')->group(function () {
-    Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
     Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
     Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
+        Route::post('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'signupTeam']);
+        Route::get('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'waitupTeam']);
+        Route::post('/confirm', [App\Http\Controllers\api\team\TeamAuthController::class, 'confirm']);
+    });
 });
 
 /*

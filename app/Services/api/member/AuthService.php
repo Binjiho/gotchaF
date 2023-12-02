@@ -3,6 +3,7 @@
 namespace App\Services\api\member;
 
 use App\Models\User;
+use App\Services\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
@@ -12,10 +13,12 @@ use Illuminate\Support\Facades\Auth;
  * Class AuthServices
  * @package App\Services
  */
-class AuthService
+class AuthService extends Services
 {
     public function signup(Request $request)
     {
+        $this->transaction();
+
         try {
             $request->validate([
                 'email' => 'required|string|email|max:255|unique:users',
@@ -26,6 +29,7 @@ class AuthService
 
             $user = new User([
                 'email' => $request->email,
+                'name' => $request->name,
                 'password' => bcrypt($request->password),
                 'sex' => $request->sex,
                 'age' => $request->age,
@@ -41,17 +45,14 @@ class AuthService
 //                return $sendMail;
 //            }
 
+            $this->dbCommit('유저 생성');
+
             return response()->json([
                 'message' => 'Successfully created user!',
                 'state' => "S",
             ], 200);
-//            return $this->returnJsonData('submit', $this->ajaxActionSubmit('#register-frm', route('register', ['step' => 'step3'])));
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error create user!',
-                'state' => "E",
-                'error' => $e,
-            ], 500);
+            return $this->dbRollback('Error created user!', $e);
         }
     }
 
@@ -74,7 +75,7 @@ class AuthService
                 return response()->json([
                     'message' => 'Successfully login!',
                     'state' => "S",
-                    'token' => $token
+                    'data' => ["token"=>$token],
                 ], 200);
             }
         } catch (\Exception $e) {

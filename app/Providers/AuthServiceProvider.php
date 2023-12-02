@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 //use Laravel\Passport\Passport;
 use Laravel\Sanctum\Sanctum;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,5 +34,9 @@ class AuthServiceProvider extends ServiceProvider
 //
 //        // personalAccessToken
 //        Passport::personalAccessTokensExpireIn(now()->addHours(6));
+
+        Auth::viaRequest('custom-token', function (Request $request) {
+            return User::where('token', $request->token)->first();
+        });
     }
 }
