@@ -10,7 +10,7 @@ export default function PrevHeader({ children }) {
   };
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${styles.fixed}`}>
       <button className={styles.prevBtn} onClick={router.back}>
         <PrevIcon />
       </button>

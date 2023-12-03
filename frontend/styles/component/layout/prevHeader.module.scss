@@ -5,6 +5,18 @@
   padding: 0 20px;
 }
 
+.fixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background: #fff;
+
+  & + main {
+    padding-top: 48px;
+  }
+}
+
 .prevBtn {
   background: transparent;
   border: none;

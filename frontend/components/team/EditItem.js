@@ -5,7 +5,7 @@ export default function EditItem({ placeholder, title, onButtonClick, value }) {
   return (
     <li
       className={
-        "flex justify-between align-items-center py-[17px] border-b-[1px] border-gray3"
+        "flex justify-between align-items-center py-[16px] border-b-[1px] border-gray3"
       }>
       <p className={`text-[15px] text-gray10 gap-[4px]`}>{title}</p>
       <Button variant={"text"} className={`flex`} onClick={onButtonClick}>

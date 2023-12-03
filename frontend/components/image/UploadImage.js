@@ -3,10 +3,8 @@ import { Form } from "react-bootstrap";
 import Image from "@/public/icons/tool/image.svg";
 import Camera from "@/public/icons/tool/camera.svg";
 
-export default function UploadImage() {
-  const [file, setFile] = useState();
+export default function UploadImage({ file, setFile }) {
   function handleChange(e) {
-    console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
   }
 
