@@ -79,5 +79,79 @@ class TeamAuthController extends BaseController
         return $this->teamAuthService->confirm($request);
     }
 
+    /**
+     * @OA\Post (
+     *     path="/api/teams/mendate",
+     *     tags={"팀"},
+     *     description="팀 리더 양도",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="tid", type="string", description="팀sid", example="4"),
+     *                 @OA\Property (property="uid", type="string", description="리더 위임 하려는 회원 sid", example="10"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function mendate(Request $request)
+    {
+        return $this->teamAuthService->mendate($request);
+    }
+
+    /**
+     * @OA\Post (
+     *     path="/api/teams/manager-member",
+     *     tags={"팀"},
+     *     description="팀 운영진 관리",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="tid", type="string", description="팀sid", example="4"),
+     *                 @OA\Property (property="uid", type="string", description="운영진 위임 하려는 회원 sid", example="10"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function manager(Request $request)
+    {
+        return $this->teamAuthService->manager($request);
+    }
+
+
+
+    /**
+     * @OA\Post (
+     *     path="/api/teams/delete-member",
+     *     tags={"팀"},
+     *     description="팀 회원 탈퇴",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="tid", type="string", description="팀sid", example="4"),
+     *                 @OA\Property (property="uid", type="string", description="탈퇴시키려 하는 회원 sid", example="10"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function deleteMember(Request $request)
+    {
+        return $this->teamAuthService->deleteMember($request);
+    }
+
 
 }
