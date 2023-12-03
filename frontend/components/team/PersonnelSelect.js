@@ -4,7 +4,7 @@ import { Modal, Button } from "react-bootstrap";
 
 function createNumberList() {
   const numberList = [];
-  for (let i = 1; i <= 100; i++) {
+  for (let i = 5; i <= 100; i++) {
     numberList.push(i);
   }
   return numberList;

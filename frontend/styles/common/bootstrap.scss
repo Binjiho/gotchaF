@@ -104,3 +104,22 @@ textarea.form-control {
   transform: translateX(-50%) !important;
   margin: 0;
 }
+
+.badge {
+  font-size: 11px;
+  padding: 0 10px;
+  font-weight: 500;
+  height: 20px;
+  display: flex;
+  align-items: center;
+
+  &.bg-secondary {
+    background: $gray2 !important;
+    color: $gray8;
+  }
+
+  &.bg-primary {
+    background: #ebf4ff !important;
+    color: $blue_primary;
+  }
+}

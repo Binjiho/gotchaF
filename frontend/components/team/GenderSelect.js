@@ -38,22 +38,18 @@ export default function GenderSelect({ genderType, setGenderType }) {
               variant={`text`}
               size={60}
               onClick={e => setGenderType(e.currentTarget.value)}>
-              {`${SEX_TYPE["0"]}`}
+              {`제한없음`}
             </Button>
             <Button
               value={SEX_TYPE.MAN}
               variant={`text`}
               size={60}
-              onClick={e =>
-                setGenderType(e.currentTarget.value)
-              }>{`${SEX_TYPE["1"]}`}</Button>
+              onClick={e => setGenderType(e.currentTarget.value)}>{`남성만`}</Button>
             <Button
               value={SEX_TYPE.WOMAN}
               variant={`text`}
               size={60}
-              onClick={e =>
-                setGenderType(e.currentTarget.value)
-              }>{`${SEX_TYPE["2"]}`}</Button>
+              onClick={e => setGenderType(e.currentTarget.value)}>{`여성만`}</Button>
           </div>
           <Button
             className={`bg-white text-blue_primary w-full rounded-[13px]`}

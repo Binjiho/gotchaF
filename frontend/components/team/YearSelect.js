@@ -4,10 +4,11 @@ import { Modal, Button } from "react-bootstrap";
 
 function createYearList() {
   const currentYear = new Date().getFullYear();
-  const startYear = currentYear - 80; // 80년 전 연도 계산
+  const startYear = currentYear - 35; // 35년 전 연도 계산
+  const endYear = currentYear - 20;
 
   const yearList = [];
-  for (let year = currentYear; year >= startYear; year--) {
+  for (let year = endYear; year >= startYear; year--) {
     yearList.push(year);
   }
 

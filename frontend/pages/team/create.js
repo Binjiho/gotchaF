@@ -60,7 +60,7 @@ export default function Create() {
     const data = {
       title: teamName,
       contents: teamContents,
-      region: detailCityType.name,
+      region: detailCityType[0].name,
       "limit_person": personnel,
       sex: genderType,
       "min_age": calculateAge(minYear),

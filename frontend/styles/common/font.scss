@@ -45,3 +45,9 @@
 .font-medium {
   font-weight: 500;
 }
+
+.text-overflow-dot {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

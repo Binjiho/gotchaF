@@ -1,8 +1,32 @@
 import PrevHeader from "@/components/layout/PrevHeader";
 import styles from "@/styles/page/auth.module.scss";
 import { Form, Button } from "react-bootstrap";
+import { useState } from "react";
+import { sendAnonymousPost } from "@/helper/api";
+import { setCookie } from "@/helper/cookies";
+import { useRouter } from "next/router";
 
 export default function EmailSignin() {
+  const [userId, setUserId] = useState("");
+  const [userPw, setUserPw] = useState("");
+  const router = useRouter();
+
+  const login = () => {
+    const data = {
+      email: userId,
+      password: userPw,
+      "sex": "1",
+      "age": "30",
+      "social": "google",
+    };
+
+    sendAnonymousPost("/api/auth/signin", data, res => {
+      console.log(res);
+      setCookie("accessToken", res.data.token);
+      router.push("/team");
+    });
+  };
+
   return (
     <>
       <PrevHeader></PrevHeader>
@@ -13,13 +37,24 @@ export default function EmailSignin() {
             type="text"
             className={`height-50`}
             placeholder={`아이디를 입력해주세요`}
+            required
+            value={userId}
+            onChange={e => setUserId(e.target.value)}
           />
           <Form.Control
             type="password"
             className={`height-50`}
             placeholder={`비밀번호를 입력해주세요`}
+            required
+            value={userPw}
+            onChange={e => setUserPw(e.target.value)}
           />
-          <Button className={`w-full`} variant="black" size="50">
+          <Button
+            className={`w-full`}
+            variant="black"
+            size="50"
+            onClick={login}
+            disabled={!userId || !userPw}>
             로그인
           </Button>
         </Form>

@@ -3,7 +3,6 @@ import axiosInstance, { addTokenToHeader } from "../utils/axiosInstance";
 import { REQUEST_HEADER_CONTENTS_JSON } from "@/constants/httpRequest";
 
 export const getAccessToken = async () => {
-  return "ss";
   return await getCookie("accessToken");
 };
 
@@ -65,22 +64,18 @@ export const requestGet = async (
       contentsType
     )
     .then(res => {
-      if (res?.data.message === "Success") {
-        if (typeof successFun === "function") {
-          successFun(res.data);
-        } else {
-          console.log(res.data);
-        }
+      if (typeof successFun === "function") {
+        successFun(res.data);
       } else {
-        if (typeof failureFun === "function") {
-          failureFun(res);
-        } else {
-          console.log(res);
-        }
+        console.log(res.data);
       }
     })
     .catch(error => {
-      console.error(error);
+      if (typeof failureFun === "function") {
+        failureFun(error);
+      } else {
+        console.log(error);
+      }
     });
 };
 
@@ -94,21 +89,17 @@ export const requestPost = async (
   axiosInstance
     .post(url, requestData, contentsType)
     .then(res => {
-      if (res?.data.message === "Success") {
-        if (typeof successFun === "function") {
-          successFun(res.data);
-        } else {
-          console.log(res.data);
-        }
+      if (typeof successFun === "function") {
+        successFun(res.data);
       } else {
-        if (typeof failureFun === "function") {
-          failureFun(res);
-        } else {
-          console.log(res);
-        }
+        console.log(res.data);
       }
     })
     .catch(error => {
-      console.error(error);
+      if (typeof failureFun === "function") {
+        failureFun(error);
+      } else {
+        console.log(error);
+      }
     });
 };

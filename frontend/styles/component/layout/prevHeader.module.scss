@@ -3,21 +3,24 @@
   display: flex;
   align-items: center;
   padding: 0 20px;
+  max-width: 500px;
 }
 
 .fixed {
   position: fixed;
-  left: 0;
+  left: 50%;
   top: 0;
   width: 100%;
   background: #fff;
+  transform: translateX(-50%);
 
   & + main {
     padding-top: 48px;
   }
 }
 
-.prevBtn {
+.prevBtn,
+.searchBtn {
   background: transparent;
   border: none;
   padding: 0;
@@ -25,6 +28,11 @@
   svg {
     width: 24px;
   }
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .middle {
