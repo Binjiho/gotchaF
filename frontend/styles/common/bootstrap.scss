@@ -55,6 +55,22 @@ textarea.form-control {
   font-size: 14px;
 }
 
+.input-group {
+  input + .input-group-text {
+    border-left: none;
+  }
+
+  input:focus + .input-group-text {
+    border-color: #000;
+  }
+
+  .input-group-text {
+    background: white;
+    border-color: $gray4;
+    border-radius: 3px;
+  }
+}
+
 .btn {
   border: none;
 

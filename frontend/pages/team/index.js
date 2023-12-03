@@ -7,7 +7,7 @@ import { Button, Spinner } from "react-bootstrap";
 import PlusIcon from "@/public/icons/system/add-line.svg";
 import { useRouter } from "next/router";
 
-export default function SignIn() {
+export default function Index() {
   const [teamList, setTeamList] = useState([]);
   const router = useRouter();
 
@@ -22,7 +22,7 @@ export default function SignIn() {
   }, []);
 
   const searchTeam = () => {
-    console.log("j");
+    router.push("/team/search");
   };
 
   return (
