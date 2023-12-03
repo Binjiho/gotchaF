@@ -1,9 +1,16 @@
 import { Badge } from "react-bootstrap";
 import { SEX_TYPE } from "@/constants/serviceConstants";
+import { useRouter } from "next/router";
 
 export default function TeamItem({ item }) {
+  const router = useRouter();
+
+  const detailTeam = () => {
+    router.push(`/team/${item.sid}`);
+  };
+
   return (
-    <div className={`flex gap-[16px] py-[10px]`}>
+    <div className={`flex gap-[16px] py-[10px]`} onClick={detailTeam}>
       <div
         className={`w-[62px] h-[62px] rounded-full overflow-hidden bg-gray2 flex-none`}>
         {item.file_path && (
