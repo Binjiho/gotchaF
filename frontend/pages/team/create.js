@@ -9,6 +9,8 @@ import PersonnelSelect from "@/components/team/PersonnelSelect";
 import { toast } from "react-toastify";
 import { sendPost } from "@/helper/api";
 import { calculateAge } from "@/helper/value";
+import { useRouter } from "next/router";
+import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 
 export default function Create() {
   const [teamName, setTeamName] = useState("");
@@ -21,6 +23,7 @@ export default function Create() {
   const [maxYear, setMaxYear] = useState("");
   const [personnel, setPersonnel] = useState("");
   const [formClear, setFormClear] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (!minYear || !maxYear) return;
@@ -57,19 +60,26 @@ export default function Create() {
   ]);
 
   const createTeam = () => {
-    const data = {
-      title: teamName,
-      contents: teamContents,
-      region: detailCityType[0].name,
-      "limit_person": personnel,
-      sex: genderType,
-      "min_age": calculateAge(minYear),
-      "max_age": calculateAge(maxYear),
-      "files[]": file,
-    };
-    sendPost("/api/teams", data, res => {
-      console.log(res);
-    });
+    const formData = new FormData();
+    formData.append("files[]", file);
+    formData.append("title", teamName);
+    formData.append("contents", teamContents);
+    formData.append("region", detailCityType[0].name);
+    formData.append("limit_person", personnel);
+    formData.append("sex", genderType);
+    formData.append("min_age", calculateAge(minYear));
+    formData.append("max_age", calculateAge(maxYear));
+
+    sendPost(
+      "/api/teams",
+      formData,
+      res => {
+        toast("팀이 생성되었습니다");
+        router.back();
+      },
+      () => {},
+      REQUEST_HEADER_CONTENTS_FORM
+    );
   };
 
   return (

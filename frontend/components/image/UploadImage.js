@@ -4,8 +4,11 @@ import Image from "@/public/icons/tool/image.svg";
 import Camera from "@/public/icons/tool/camera.svg";
 
 export default function UploadImage({ file, setFile }) {
+  const [image, setImage] = useState("");
+
   function handleChange(e) {
-    setFile(URL.createObjectURL(e.target.files[0]));
+    setImage(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
   }
 
   return (
@@ -30,7 +33,7 @@ export default function UploadImage({ file, setFile }) {
       {file && (
         <div
           className={`w-[100px] h-[100px] bg-gray3 rounded-[3px] overflow-hidden relative`}>
-          <img src={file} className={`object-cover w-full`} />
+          <img src={image} className={`object-cover w-full`} />
           <Form.Group
             controlId="formImage"
             className={`absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]`}>

@@ -61,7 +61,11 @@ export const requestGet = async (
       {
         params: requestData,
       },
-      contentsType
+      {
+        headers: {
+          "Content-Type": contentsType,
+        },
+      }
     )
     .then(res => {
       if (typeof successFun === "function") {
@@ -87,7 +91,11 @@ export const requestPost = async (
   contentsType = REQUEST_HEADER_CONTENTS_JSON
 ) => {
   axiosInstance
-    .post(url, requestData, contentsType)
+    .post(url, requestData, {
+      headers: {
+        "Content-Type": contentsType,
+      },
+    })
     .then(res => {
       if (typeof successFun === "function") {
         successFun(res.data);

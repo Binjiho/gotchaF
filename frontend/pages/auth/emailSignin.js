@@ -21,7 +21,6 @@ export default function EmailSignin() {
     };
 
     sendAnonymousPost("/api/auth/signin", data, res => {
-      console.log(res);
       setCookie("accessToken", res.data.token);
       router.push("/team");
     });
