@@ -132,7 +132,6 @@ class TeamService extends Services
     public function showTeam(String $sid)
     {
         try {
-//            ORM
             $team_info = Team::where( [
                     'del_yn' => 'N',
                     'sid' => $sid,
