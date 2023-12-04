@@ -13,10 +13,16 @@
   width: 100%;
   background: #fff;
   transform: translateX(-50%);
+  z-index: 100;
 
   & + main {
     padding-top: 48px;
   }
+}
+
+.transparent {
+  background: transparent;
+  color: #fff;
 }
 
 .prevBtn,

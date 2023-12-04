@@ -27,22 +27,51 @@ export default function Id() {
 
   return (
     <>
-      <PrevHeader></PrevHeader>
-      <main>
-        <div>
-          <img src="" alt="" />
+      <PrevHeader transparent={true}></PrevHeader>
+      <main className={`position-relative`}>
+        <div
+          className={`position-absolute left-0 top-0 h-[154px] w-full overflow-hidden`}>
+          {teamInfo && (
+            <>
+              <img
+                src={teamInfo.file_path}
+                alt=""
+                className={`position-absolute w-full h-full object-cover blur-sm`}
+              />
+              <div
+                className={`position-absolute w-full h-full bg-black opacity-50`}></div>
+            </>
+          )}
         </div>
         {teamInfo && (
-          <div>
-            <div>
-              <img src="" alt="" />
-              <div>
-                <Button variant={"text"} className={`text-gray9`}>
-                  <ShareIcon width={24}></ShareIcon>
-                </Button>
-                <Button variant={"text"} className={`text-gray9`}>
-                  <HeartIcon width={24}></HeartIcon>
-                </Button>
+          <div className={`pt-[80px] position-relative z-2`}>
+            <div className={`flex justify-between align-items-end mb-[14px]`}>
+              <div className={`w-[80px] h-[80px] rounded-full overflow-hidden`}>
+                <img
+                  src={teamInfo.file_path}
+                  alt=""
+                  className={`w-full h-full object-cover`}
+                />
+              </div>
+              <div className={`flex gap-[12px]`}>
+                {[
+                  {
+                    icon: ShareIcon,
+                    evt: null,
+                  },
+                  {
+                    icon: HeartIcon,
+                    evt: null,
+                  },
+                ].map((item, index) => (
+                  <Button
+                    variant={"text"}
+                    className={`text-gray9 flex align-items-center justify-content-center bg-gray2 h-[40px] w-[40px] rounded-full`}
+                    key={"btn-" + index}
+                    onClick={e => item.evt}>
+                    <item.icon width={20}></item.icon>
+                  </Button>
+                ))}
               </div>
             </div>
             <div>
