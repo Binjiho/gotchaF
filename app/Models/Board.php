@@ -28,7 +28,8 @@ class Board extends Model
         'title',
         'contents',
         'writer',
-        'file_name',
+        'file_originalname',
+        'file_realname',
         'file_path',
     ];
 }

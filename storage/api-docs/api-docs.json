@@ -179,6 +179,21 @@
                                         "description": "password",
                                         "type": "string",
                                         "example": "1234"
+                                    },
+                                    "sex": {
+                                        "description": "1:남성, 2:여성",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "age": {
+                                        "description": "나이",
+                                        "type": "string",
+                                        "example": "1993"
+                                    },
+                                    "social": {
+                                        "description": "social타입 null가능",
+                                        "type": "string",
+                                        "example": "google"
                                     }
                                 },
                                 "type": "object"
@@ -218,21 +233,6 @@
                                         "description": "password",
                                         "type": "string",
                                         "example": "1234"
-                                    },
-                                    "sex": {
-                                        "description": "1:남성, 2:여성",
-                                        "type": "string",
-                                        "example": "1"
-                                    },
-                                    "age": {
-                                        "description": "나이",
-                                        "type": "string",
-                                        "example": "30"
-                                    },
-                                    "social": {
-                                        "description": "social타입 null가능",
-                                        "type": "string",
-                                        "example": "google"
                                     }
                                 },
                                 "type": "object"
@@ -340,6 +340,235 @@
                 }
             }
         },
+        "/api/teams/signup/{sid}": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 가입",
+                "operationId": "4998efb6faed5e855e5777e1d5450ad7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "uid": {
+                                        "description": "가입하려는 회원아이디 token보내면 됨",
+                                        "type": "string",
+                                        "example": "token"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/waitup/{sid}": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 가입 신청 리스트 불러오기",
+                "operationId": "b240afed38b38427816c699612e3a7f0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/confirm": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 가입 승인",
+                "operationId": "7aed3afa508b3472b7d2fe1fd2234584",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "uid": {
+                                        "description": "가입하려는 회원sid",
+                                        "type": "string",
+                                        "example": "10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/mendate": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 리더 양도",
+                "operationId": "a0fafbbed0089e3a4bf5b0fa2a2188b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "4"
+                                    },
+                                    "uid": {
+                                        "description": "리더 위임 하려는 회원 sid",
+                                        "type": "string",
+                                        "example": "10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/manager-member": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 운영진 관리",
+                "operationId": "14a8bb637de7e59d7e16e004850cc5d2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "4"
+                                    },
+                                    "uid": {
+                                        "description": "운영진 위임 하려는 회원 sid",
+                                        "type": "string",
+                                        "example": "10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/delete-member": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 회원 탈퇴",
+                "operationId": "f2db7a3e4b26642c1bf5ba17c174ec9a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "4"
+                                    },
+                                    "uid": {
+                                        "description": "탈퇴시키려 하는 회원 sid",
+                                        "type": "string",
+                                        "example": "10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
         "/api/teams": {
             "get": {
                 "tags": [
@@ -402,6 +631,78 @@
                                         "description": "최대나이",
                                         "type": "string",
                                         "example": "40"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 수정",
+                "operationId": "794d639ab6add4192924d23397a29859",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "팀이름",
+                                        "type": "string",
+                                        "example": "갓챠"
+                                    },
+                                    "contents": {
+                                        "description": "팀소개",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "region": {
+                                        "description": "지역",
+                                        "type": "string",
+                                        "example": "강남구"
+                                    },
+                                    "limit_person": {
+                                        "description": "정원",
+                                        "type": "string",
+                                        "example": "1234"
+                                    },
+                                    "sex": {
+                                        "description": "성별",
+                                        "type": "string",
+                                        "example": "혼성:0, 남자:1, 여자:2"
+                                    },
+                                    "min_age": {
+                                        "description": "최소나이",
+                                        "type": "string",
+                                        "example": "2000"
+                                    },
+                                    "max_age": {
+                                        "description": "최대나이",
+                                        "type": "string",
+                                        "example": "1990"
+                                    },
+                                    "confirm_m": {
+                                        "description": "운영진 승인(Y/N)",
+                                        "type": "string",
+                                        "example": "Y"
                                     },
                                     "files[]": {
                                         "description": "이미지 input name=files[]",

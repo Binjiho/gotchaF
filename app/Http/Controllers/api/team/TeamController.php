@@ -63,8 +63,9 @@ class TeamController extends BaseController
      *                 @OA\Property (property="region", type="string", description="지역", example="강남구"),
      *                 @OA\Property (property="limit_person", type="string", description="정원", example="1234"),
      *                 @OA\Property (property="sex", type="string", description="성별", example="혼성:0, 남자:1, 여자:2"),
-     *                 @OA\Property (property="min_age", type="string", description="최소나이", example="20"),
-     *                 @OA\Property (property="max_age", type="string", description="최대나이", example="40"),
+     *                 @OA\Property (property="min_age", type="string", description="최소나이", example="2000"),
+     *                 @OA\Property (property="max_age", type="string", description="최대나이", example="1990"),
+     *                 @OA\Property (property="confirm_m", type="string", description="운영진 승인(Y/N)", example="Y"),
      *                 @OA\Property (property="files[]", type="file", description="이미지 input name=files[]", example="file.jpg"),
      *             )
      *         )

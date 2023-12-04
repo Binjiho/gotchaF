@@ -54,19 +54,22 @@ class TeamService extends Services
 
             if($request->hasFile('files')){
                 $s3_path = "gotcha/".$save_id."/thum";
+
                 foreach($request->file('files') as $file){
-                    $extension = $file->getClientOriginalExtension();
-                    $uuid = uniqid();
-                    $filename = $uuid. '_' . time() . '.' . $extension;
-                    $filepath = $s3_path . '/' . $filename;
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid. '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
 
-                    // S3에 파일 저장
-                    Storage::disk('s3')->put($s3_path, $file);
-
-                    $update_team = Team::find($save_id);
-                    $update_team->file_name = $file->getClientOriginalName();
-                    $update_team->file_path = Storage::disk('s3')->url($filepath);
-                    $update_team->save();
+                        $update_team = Team::find($save_id);
+                        $update_team->file_originalname = $file->getClientOriginalName();
+                        $update_team->file_realname = $filename;
+                        $update_team->file_path = Storage::disk('s3')->url($filepath);
+                        $update_team->save();
+                    }
                 }
             }
 
@@ -127,25 +130,30 @@ class TeamService extends Services
             if($request->hasFile('files')){
                 $s3_path = "gotcha/".$sid."/thum";
 
-//                //기존 이미지 삭제
-//                if($team->file_path){
-//                    $file_uploaded_name = $team->file_path;
-//                    $search_idx = strrpos('/',$file_uploaded_name);
-//                    Storage::disk('s3')->delete($s3_path, $file_uploaded_name);
-//                }
+                //기존 이미지 삭제
+                if($team->file_path){
+                    $file_uploaded_name = $team->file_realname;
+                    $file_uploaded_path = $s3_path."/".$file_uploaded_name;
+                    // Delete a file
+                    Storage::disk('s3')->delete($file_uploaded_path);
+                    // Delete multiple files
+                    // Storage::disk('s3')->delete([$fileName1, $fileName2]);
+                }
 
                 //새로운 이미지 저장
                 foreach($request->file('files') as $file){
-//                    $extension = $file->getClientOriginalExtension();
-                    $uuid = uniqid();
-                    $filename = $uuid. '_' . time();
-                    $filepath = $s3_path . '/' . $filename;
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid. '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
 
-                    // S3에 파일 저장
-                    Storage::disk('s3')->put($s3_path, $file);
-
-                    $team->file_name = $file->getClientOriginalName();
-                    $team->file_path = Storage::disk('s3')->url($filepath);
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
+                        $team->file_originalname = $file->getClientOriginalName();
+                        $team->file_realname = $filename;
+                        $team->file_path = Storage::disk('s3')->url($filepath);
+                    }
                 }
             }
 

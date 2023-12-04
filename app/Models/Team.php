@@ -29,7 +29,9 @@ class Team extends Model
         'sex',
         'min_age',
         'max_age',
-        'file_name',
+        'confirm_m',
+        'file_originalname',
+        'file_realname',
         'file_path',
     ];
 }

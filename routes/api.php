@@ -59,11 +59,13 @@ Route::prefix('/teams')->group(function () {
         Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
         Route::post('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
         Route::post('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'signupTeam']);
-        Route::get('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'waitupTeam']);
+        Route::post('/waitup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'waitupTeam']);
         Route::post('/confirm', [App\Http\Controllers\api\team\TeamAuthController::class, 'confirm']);
         Route::post('/mendate', [App\Http\Controllers\api\team\TeamAuthController::class, 'mendate']);
         Route::post('/delete-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'delete']);
         Route::post('/manager-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'manager']);
+        Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
+        Route::post('/board-gallery', [App\Http\Controllers\api\team\TeamController::class, 'gallery']);
     });
 });
 

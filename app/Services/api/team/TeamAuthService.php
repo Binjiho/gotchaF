@@ -39,14 +39,14 @@ class TeamAuthService extends Services
             ], 555);
         }
 
-        if($user->age > $team->max_age ) {
+        if($user->age < $team->max_age ) {
             return response()->json([
                 'message' => 'max age!',
                 'state' => "E",
             ], 555);
         }
 
-        if($user->age < $team->min_age) {
+        if($user->age > $team->min_age) {
             return response()->json([
                 'message' => 'min age!',
                 'state' => "E",
@@ -95,8 +95,41 @@ class TeamAuthService extends Services
     }
 
 
-    public function waitupTeam(String $sid)
+    public function waitupTeam(Request $request, String $sid)
     {
+        $user = $request->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 555);
+        }
+
+        $team = Team::where( ['del_yn' => 'N', 'sid' => $sid ])->first();
+        if(!$team){
+            return response()->json([
+                'message' => 'Error load Team!',
+                'state' => "E",
+            ], 555);
+        }
+
+        $confirm_user = Team_User::where( ['del_yn' => 'N', 'uid' => $user->sid ])->first();
+        if($team->confirm_m == 'N'){
+            if($confirm_user->level != 'L'){
+                return response()->json([
+                    'message' => 'Error confirm Level!',
+                    'state' => "E",
+                ], 555);
+            }
+        }else{
+            if($confirm_user->level == 'C' || $confirm_user->level == 'W'){
+                return response()->json([
+                    'message' => 'Error confirm Level!',
+                    'state' => "E",
+                ], 555);
+            }
+        }
+
         try {
             $wait_users = DB::table('team_users')
                 ->Join('users','users.sid','=','team_users.uid')
@@ -124,6 +157,14 @@ class TeamAuthService extends Services
         $this->transaction();
 
         try {
+            $user = $request->user();
+            if(!$user){
+                return response()->json([
+                    'message' => 'Error load User!',
+                    'state' => "E",
+                ], 555);
+            }
+
             $now = date('Y-m-d H:i:s');
 
             $wait_user = Team_User::where( [
