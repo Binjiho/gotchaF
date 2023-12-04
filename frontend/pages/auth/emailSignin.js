@@ -15,9 +15,6 @@ export default function EmailSignin() {
     const data = {
       email: userId,
       password: userPw,
-      "sex": "1",
-      "age": "30",
-      "social": "google",
     };
 
     sendAnonymousPost("/api/auth/signin", data, res => {
