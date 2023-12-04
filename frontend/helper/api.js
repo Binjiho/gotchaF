@@ -1,6 +1,7 @@
 import { getCookie } from "@/helper/cookies";
 import axiosInstance, { addTokenToHeader } from "../utils/axiosInstance";
 import { REQUEST_HEADER_CONTENTS_JSON } from "@/constants/httpRequest";
+import { toast } from "react-toastify";
 
 export const getAccessToken = async () => {
   return await getCookie("accessToken");
@@ -78,7 +79,7 @@ export const requestGet = async (
       if (typeof failureFun === "function") {
         failureFun(error);
       } else {
-        console.log(error);
+        toast(error.message);
       }
     });
 };
@@ -107,7 +108,7 @@ export const requestPost = async (
       if (typeof failureFun === "function") {
         failureFun(error);
       } else {
-        console.log(error);
+        toast(error.message);
       }
     });
 };

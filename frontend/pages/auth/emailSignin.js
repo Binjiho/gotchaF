@@ -44,6 +44,7 @@ export default function EmailSignin() {
             required
             value={userPw}
             onChange={e => setUserPw(e.target.value)}
+            autoComplete={"on"}
           />
           <Button
             className={`w-full`}
