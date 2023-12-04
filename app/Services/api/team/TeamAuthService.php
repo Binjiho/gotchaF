@@ -62,7 +62,7 @@ class TeamAuthService extends Services
             }
         }
 
-        $team_count = Team_User::where( ['del_yn' => 'N' ])->count();
+        $team_count = Team_User::where( ['del_yn' => 'N', 'sid' => $request->sid ])->count();
         if($team_count >= $team->limit_person) {
             return response()->json([
                 'message' => 'limit_person!',

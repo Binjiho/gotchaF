@@ -323,34 +323,34 @@ if (!function_exists('setListSeq')) {
 }
 
 // create Zip File
-if (!function_exists('setZipFile')) {
-    function setZipFile($data = [], string $file_name)
-    {
-        $zip = new \ZipArchive();
-
-        // 다운로드될 zip 파일 명
-        $file['file_name'] = $file_name;
-
-        // zip 아카이브 생성하기 위한 고유값
-        $file['file'] = time() . ".zip";
-
-        // zip 아카이브 생성 여부 확인
-        if($zip->open($file['file'], \ZipArchive::CREATE) !== true){
-            setFlashMessage('500');
-            return redirectCase('default');
-        }
-
-        // addFile ( 파일이 존재하는 경로, 저장될 이름 )
-        foreach ($data as $row) {
-            $zip->addFile(public_path($row->file_path), $row->file_name);
-        }
-
-        // 아카이브 닫아주기
-        $zip->close();
-
-        return $file;
-    }
-}
+//if (!function_exists('setZipFile')) {
+//    function setZipFile($data = [], string $file_name)
+//    {
+//        $zip = new \ZipArchive();
+//
+//        // 다운로드될 zip 파일 명
+//        $file['file_name'] = $file_name;
+//
+//        // zip 아카이브 생성하기 위한 고유값
+//        $file['file'] = time() . ".zip";
+//
+//        // zip 아카이브 생성 여부 확인
+//        if($zip->open($file['file'], \ZipArchive::CREATE) !== true){
+//            setFlashMessage('500');
+//            return redirectCase('default');
+//        }
+//
+//        // addFile ( 파일이 존재하는 경로, 저장될 이름 )
+//        foreach ($data as $row) {
+//            $zip->addFile(public_path($row->file_path), $row->file_name);
+//        }
+//
+//        // 아카이브 닫아주기
+//        $zip->close();
+//
+//        return $file;
+//    }
+//}
 
 // jsonUnicode 적용
 if (!function_exists('jsonUnicode')) {

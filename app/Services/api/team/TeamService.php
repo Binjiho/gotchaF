@@ -61,7 +61,7 @@ class TeamService extends Services
                     $filepath = $s3_path . '/' . $filename;
 
                     // S3에 파일 저장
-                    Storage::disk('s3')->put($filepath, $file);
+                    Storage::disk('s3')->put($s3_path, $file);
 
                     $update_team = Team::find($save_id);
                     $update_team->file_name = $file->getClientOriginalName();
@@ -85,12 +85,95 @@ class TeamService extends Services
     }
 
 
+    public function updateTeam(Request $request, String $sid)
+    {
+        $this->transaction();
+
+        $user = $request->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+        $leader_user = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+            'tid' => $sid,
+            'level' => 'L'
+        ])->first();
+        if(!$leader_user){
+            return response()->json([
+                'message' => 'Error load Leader User!',
+                'state' => "E",
+            ], 555);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $team = Team::where( ['del_yn' => 'N', 'sid' => $sid ])->first();
+
+            if($request->title) $team->title = $request->title;
+            if($request->contents) $team->contents = $request->contents;
+            if($request->region) $team->region = $request->region;
+            if($request->limit_person) $team->limit_person = $request->limit_person;
+            if($request->sex) $team->sex = $request->sex;
+            if($request->min_age) $team->min_age = $request->min_age;
+            if($request->max_age) $team->max_age = $request->max_age;
+
+            $team->updated_at = $now;
+
+            if($request->hasFile('files')){
+                $s3_path = "gotcha/".$sid."/thum";
+
+//                //기존 이미지 삭제
+//                if($team->file_path){
+//                    $file_uploaded_name = $team->file_path;
+//                    $search_idx = strrpos('/',$file_uploaded_name);
+//                    Storage::disk('s3')->delete($s3_path, $file_uploaded_name);
+//                }
+
+                //새로운 이미지 저장
+                foreach($request->file('files') as $file){
+//                    $extension = $file->getClientOriginalExtension();
+                    $uuid = uniqid();
+                    $filename = $uuid. '_' . time();
+                    $filepath = $s3_path . '/' . $filename;
+
+                    // S3에 파일 저장
+                    Storage::disk('s3')->put($s3_path, $file);
+
+                    $team->file_name = $file->getClientOriginalName();
+                    $team->file_path = Storage::disk('s3')->url($filepath);
+                }
+            }
+
+            $team->save();
+
+            $this->dbCommit('팀수정');
+
+            return response()->json([
+                'message' => 'Successfully updated team!',
+                'state' => "S",
+                "data" => [ "team" => $team ],
+            ], 200);
+        } catch (\Exception $e) {
+
+            return $this->dbRollback('Error updated team!',$e);
+
+        }
+    }
+
+
     public function indexTeams()
     {
         try {
             $teams = Team::where( ['del_yn' => 'N' ])->get();
-//            $teams = DB::table('teams')->where( ['del_yn' => 'N' ])->get();
-
+            foreach($teams as $team_idx => $team){
+                $team_count = Team_User::where( ['del_yn' => 'N', 'tid' => $team->sid ])->count();
+                $teams[$team_idx]['user_count'] = $team_count;
+            }
             return response()->json([
                 'message' => 'Successfully loaded teams!',
                 'state' => "S",
@@ -142,6 +225,7 @@ class TeamService extends Services
                 ->Join('team_users','users.sid','=','team_users.uid')
                 ->Join('teams','teams.sid','=','team_users.tid')
                 ->select('users.*')
+                ->where('teams.sid','=',$sid)
                 ->get();
 
             return response()->json([
