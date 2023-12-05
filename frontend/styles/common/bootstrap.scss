@@ -103,6 +103,36 @@ textarea.form-control {
     }
   }
 
+  &.btn-green-primary {
+    background: $green_primary;
+    color: #fff;
+
+    &:active {
+      background: #82e7afff;
+      color: #fff;
+    }
+  }
+
+  &.btn-green-sub {
+    background: #f5faf7;
+    color: $green_primary;
+
+    &:active {
+      background: #82e7afff;
+      color: $green_primary;
+    }
+  }
+
+  &.btn-gray2 {
+    background: $gray2;
+    color: $gray9;
+
+    &:active {
+      background: #f5f5f5;
+      color: $gray9;
+    }
+  }
+
   &.btn-text {
     padding: 0;
   }
@@ -142,4 +172,32 @@ textarea.form-control {
 
 .spinner-border {
   color: $green_primary;
+}
+
+.nav {
+  &.nav-underline {
+    flex-wrap: nowrap;
+    justify-content: space-around;
+
+    .nav-item {
+      width: 100%;
+    }
+
+    .nav-link {
+      color: $gray6;
+      font-size: 16px;
+      font-weight: 500;
+      padding-bottom: 15px;
+      width: 100%;
+      text-align: center;
+
+      &.active {
+        color: $gray10;
+      }
+    }
+  }
+}
+
+.tab-content {
+  padding-bottom: 80px;
 }
