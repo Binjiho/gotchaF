@@ -10,6 +10,7 @@ import { calculateAge } from "@/helper/value";
 import LinkHeader from "@/components/btn/LinkHeader";
 import RecommendBtn from "@/components/btn/RecommendBtn";
 import NoContentText from "@/components/noContent/noContentText";
+import TeamMemberItem from "@/components/team/TeamMemberItem";
 
 export default function Id() {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function Id() {
   const getTeam = function () {
     sendGet(`/api/teams/${teamId}`, null, res => {
       setTeamInfo(res.data.team_info[0]);
-      setTeamUser(res.data.team_user);
+      setTeamUser(res.data.team_users);
     });
   };
 
@@ -158,6 +159,15 @@ export default function Id() {
               </div>
               <div>
                 <LinkHeader title={"멤버"} className={`pt-[50px] mb-[18px]`}></LinkHeader>
+                {teamUser && (
+                  <div className={`flex flex-column gap-[20px] mb-[40px]`}>
+                    {teamUser?.map((item, index) => (
+                      <TeamMemberItem
+                        item={item}
+                        key={`member-${index}`}></TeamMemberItem>
+                    ))}
+                  </div>
+                )}
                 <RecommendBtn
                   title={`새로운 멤버를 초대해 보세요.`}
                   content={`SNS나 문자, 링크로 공유하고 쉽게 초대하세요.`}
