@@ -3,6 +3,9 @@
 namespace App\Services\api\board;
 
 use App\Models\Board;
+use App\Models\Team;
+use App\Models\Team_User;
+use App\Services\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
@@ -13,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
  * Class AuthServices
  * @package App\Services
  */
-class BoardService
+class BoardService extends Services
 {
     public function storeBoard(Request $request)
     {
@@ -131,6 +134,98 @@ class BoardService
                 'state' => "E",
                 'error' => $e,
             ], 500);
+        }
+    }
+
+    public function storeGallery(Request $request, String $sid)
+    {
+        $this->transaction();
+
+        $user = $request->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+        $leader_user = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+            'tid' => $sid,
+            'level' => 'L'
+        ])->first();
+        if(!$leader_user){
+            return response()->json([
+                'message' => 'Error load Leader User!',
+                'state' => "E",
+            ], 555);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $board = new Board;
+            $board->ccode = 2;
+            $board->tid = $sid;
+            $board->uid = $user->sid;
+            $board->title = "팀이미지";
+            $board->contents = "팀이미지";
+            $board->writer = $user->name;
+            $board->created_at = $now;
+
+            if($request->hasFile('files')){
+                $s3_path = "gotcha/".$sid."/gallery";
+
+                foreach($request->file('files') as $file){
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid. '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
+
+                        $board->file_originalname = $file->getClientOriginalName();
+                        $board->file_realname = $filename;
+                        $board->file_path = Storage::disk('s3')->url($filepath);
+                    }
+                }
+            }
+
+            $board->save();
+
+            $this->dbCommit('팀 갤러리 이미지 생성');
+
+            return response()->json([
+                'message' => 'Successfully created teamImage!',
+                'state' => "S",
+                "data" => [ "board" => $board ],
+            ], 200);
+        } catch (\Exception $e) {
+
+            return $this->dbRollback('Error created teamImage!',$e);
+
+        }
+    }
+
+    public function indexGallery(String $sid)
+    {
+        try {
+            $boards = Board::where( [
+                'del_yn' => 'N',
+                'ccode' => 2,
+                'tid' => $sid
+            ])->get();
+
+            return response()->json([
+                'message' => 'Successfully load teamImage!',
+                'state' => "S",
+                "data" => [ "boards" => $boards ],
+            ], 200);
+        } catch (\Exception $e) {
+
+            return $this->dbRollback('Error load teamImage!',$e);
+
         }
     }
 

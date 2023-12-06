@@ -79,4 +79,11 @@ Route::prefix('/boards')->group(function () {
     Route::get('', [App\Http\Controllers\api\board\BoardController::class, 'indexBoards']);
     Route::get('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showBoard']);
     Route::patch('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateBoard']);
+
+    Route::get('/board-gallery/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'indexGallery']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
+        Route::post('/board-gallery/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'storeGallery']);
+    });
 });

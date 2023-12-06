@@ -157,6 +157,60 @@
                 }
             }
         },
+        "/api/boards/board-gallery/{sid}": {
+            "get": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "팀 갤러리 사진 리스트",
+                "operationId": "31cddd1990c1b8f0ffaf81cff73f56dd",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "팀 갤러리 사진 생성",
+                "operationId": "f6b476a6ce3ef53d7955bb15ecd2d891",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "sid": {
+                                        "description": "팀sid",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
         "/api/auth/signup": {
             "post": {
                 "tags": [

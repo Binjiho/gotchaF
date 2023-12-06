@@ -85,4 +85,42 @@ class BoardController extends Controller
     {
         return $this->boardService->deleteBoard($sid);
     }
+
+    /**
+     * @OA\Post (
+     *     path="/api/boards/board-gallery/{sid}",
+     *     tags={"게시판"},
+     *     description="팀 갤러리 사진 생성",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="sid", type="string", description="팀sid", example="1"),
+     *                 @OA\Property (property="files[]", type="file", description="이미지 input name=files[]", example="file.jpg"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function storeGallery(Request $request, String $sid)
+    {
+        return $this->boardService->storeGallery($request, $sid);
+    }
+
+    /**
+     * @OA\Get (
+     *     path="/api/boards/board-gallery/{sid}",
+     *     tags={"게시판"},
+     *     description="팀 갤러리 사진 리스트",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function indexGallery(String $sid)
+    {
+        return $this->boardService->indexGallery($sid);
+    }
 }
