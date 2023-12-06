@@ -29,6 +29,7 @@ export default function AreaSelect({ address, setAddress }) {
   }, [showModal]);
 
   useEffect(() => {
+    if (!address[0]?.code) return;
     setShowModal(false);
   }, [address]);
 
@@ -37,7 +38,7 @@ export default function AreaSelect({ address, setAddress }) {
       <EditItem
         placeholder={`지역 선택`}
         title={`지역`}
-        value={address}
+        value={address[0]?.name}
         onButtonClick={handleButtonClick}></EditItem>
       <PrevFullModal show={showModal} setShow={setShowModal}>
         <p type={`middle`}>지역 설정</p>
@@ -47,7 +48,7 @@ export default function AreaSelect({ address, setAddress }) {
               <Typeahead
                 id={`cityType`}
                 labelKey="name"
-                onChange={e => setAddress}
+                onChange={setAddress}
                 options={addressList}
                 placeholder="지역을 선택하세요"
                 selected={address}

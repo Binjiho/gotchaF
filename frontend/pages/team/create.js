@@ -16,7 +16,7 @@ export default function Create() {
   const [teamName, setTeamName] = useState("");
   const [teamContents, setTeamContents] = useState("");
   const [file, setFile] = useState(null);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState([]);
   const [genderType, setGenderType] = useState("");
   const [minYear, setMinYear] = useState("");
   const [maxYear, setMaxYear] = useState("");
