@@ -16,8 +16,7 @@ export default function Create() {
   const [teamName, setTeamName] = useState("");
   const [teamContents, setTeamContents] = useState("");
   const [file, setFile] = useState(null);
-  const [cityType, setCityType] = useState([]);
-  const [detailCityType, setDetailCityType] = useState([]);
+  const [address, setAddress] = useState("");
   const [genderType, setGenderType] = useState("");
   const [minYear, setMinYear] = useState("");
   const [maxYear, setMaxYear] = useState("");
@@ -39,7 +38,7 @@ export default function Create() {
       !teamName ||
       !teamContents ||
       !file ||
-      !detailCityType ||
+      !address ||
       !genderType ||
       !minYear ||
       !maxYear ||
@@ -48,23 +47,14 @@ export default function Create() {
       return;
 
     setFormClear(true);
-  }, [
-    teamName,
-    teamContents,
-    file,
-    detailCityType,
-    genderType,
-    minYear,
-    maxYear,
-    personnel,
-  ]);
+  }, [teamName, teamContents, file, address, genderType, minYear, maxYear, personnel]);
 
   const createTeam = () => {
     const formData = new FormData();
     formData.append("files[]", file);
     formData.append("title", teamName);
     formData.append("contents", teamContents);
-    formData.append("region", detailCityType[0].name);
+    formData.append("region", address);
     formData.append("limit_person", personnel);
     formData.append("sex", genderType);
     formData.append("min_age", calculateAge(minYear));
@@ -119,11 +109,7 @@ export default function Create() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <AreaSelect
-              cityType={cityType}
-              setCityType={setCityType}
-              detailCityType={detailCityType}
-              setDetailCityType={setDetailCityType}></AreaSelect>
+            <AreaSelect address={address} setAddress={setAddress}></AreaSelect>
             <GenderSelect
               genderType={genderType}
               setGenderType={setGenderType}></GenderSelect>
