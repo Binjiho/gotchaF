@@ -201,3 +201,52 @@ textarea.form-control {
 .tab-content {
   padding-bottom: 80px;
 }
+
+//select-box
+.rbt {
+  &:first-child {
+    position: relative;
+    &::after {
+      content: "";
+      display: block;
+      @include maskIcon("/icons/tool/search.svg", 20px, #8f8f92);
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  input {
+    padding-left: 40px !important;
+    background: #f5f5f5;
+    border-radius: 8px !important;
+    overflow: hidden;
+
+    &:focus {
+      background: #f5f5f5 !important;
+    }
+  }
+
+  .rbt-menu {
+    background: #fff;
+  }
+
+  .rbt-close {
+    position: relative;
+    margin: auto 5px auto 0;
+    &::after {
+      content: "";
+      display: block;
+      @include maskIcon("/icons/system/close-line.svg", 24px, #8f8f92);
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    & > * {
+      display: none;
+    }
+  }
+}

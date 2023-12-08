@@ -23,6 +23,27 @@ body > * {
   height: 100%;
 }
 
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #082f491a #ffffff;
+  caret-color: $green_sub2;
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #082f491a;
+  border-radius: 10px;
+  border: 4px solid #ffffff;
+}
+
 button {
   background: none;
   color: #000;
@@ -39,6 +60,7 @@ hr {
   opacity: 1;
 }
 
-* {
-  caret-color: $green_sub2;
+textarea {
+  resize: none !important;
+  outline: none;
 }

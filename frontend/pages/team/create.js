@@ -54,7 +54,7 @@ export default function Create() {
     formData.append("files[]", file);
     formData.append("title", teamName);
     formData.append("contents", teamContents);
-    formData.append("region", address);
+    formData.append("region", address[0].name);
     formData.append("limit_person", personnel);
     formData.append("sex", genderType);
     formData.append("min_age", calculateAge(minYear));
@@ -104,8 +104,9 @@ export default function Create() {
               as={`textarea`}
               placeholder={`팀 소개글이나 대표 사이트를 입력해주세요. (최대 100자)`}
               value={teamContents}
+              rows={4}
               onChange={e => setTeamContents(e.target.value)}
-              className={`p-0 border-0 rounded-0 text-[14px]`}></Form.Control>
+              className={`p-0 border-0 rounded-0 text-[14px] mb-[20px]`}></Form.Control>
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>

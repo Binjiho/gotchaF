@@ -54,6 +54,8 @@ export default function AreaSelect({ address, setAddress }) {
                 selected={address}
                 emptyLabel={`지역이 없습니다.`}
                 inputProps={{ required: true, className: "form-select form-select-40" }}
+                autoFocus
+                clearButton
               />
             </Form.Group>
           </Form>
