@@ -64,10 +64,10 @@ export default function Id() {
                         icon: ShareIcon,
                         evt: null,
                       },
-                      {
-                        icon: HeartIcon,
-                        evt: null,
-                      },
+                      // {
+                      //   icon: HeartIcon,
+                      //   evt: null,
+                      // },
                     ].map((item, index) => (
                       <Button
                         variant={"text"}
@@ -80,13 +80,7 @@ export default function Id() {
                   </div>
                 </div>
                 <div className={`pt-[20px]`}>
-                  <p
-                    className={`text-[20px] font-bold mb-[6px] flex gap-[6px] align-items-center`}>
-                    {teamInfo.title}
-                    <Badge pill bg="primary">
-                      모집중
-                    </Badge>
-                  </p>
+                  <p className={`text-[20px] font-bold mb-[6px]`}>{teamInfo.title}</p>
                   <div className={`flex align-items-center gap-[6px]`}>
                     <ul className={`flex gap-[3px] text-[12px] align-items-center`}>
                       <li>{teamInfo.region}</li>
@@ -101,6 +95,9 @@ export default function Id() {
                         {`${calculateAge(teamInfo.min_age)}~${calculateAge(
                           teamInfo.max_age
                         )}세`}
+                      </Badge>
+                      <Badge pill bg="primary">
+                        모집중
                       </Badge>
                     </div>
                   </div>

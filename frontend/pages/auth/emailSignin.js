@@ -1,15 +1,19 @@
 import PrevHeader from "@/components/layout/PrevHeader";
 import styles from "@/styles/page/auth.module.scss";
 import { Form, Button } from "react-bootstrap";
-import { useState } from "react";
-import { sendAnonymousPost } from "@/helper/api";
+import { useEffect, useState } from "react";
+import { sendAnonymousPost, sendGet } from "@/helper/api";
 import { setCookie } from "@/helper/cookies";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/actions/userActions";
 
 export default function EmailSignin() {
   const [userId, setUserId] = useState("");
   const [userPw, setUserPw] = useState("");
+  const [userToken, setUserToken] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const login = () => {
     const data = {
@@ -19,6 +23,19 @@ export default function EmailSignin() {
 
     sendAnonymousPost("/api/auth/signin", data, res => {
       setCookie("accessToken", res.data.token);
+      setUserToken(res.data.token);
+    });
+  };
+
+  useEffect(() => {
+    if (!userToken) return;
+    getUserInfo(userToken);
+  }, [userToken]);
+
+  const getUserInfo = token => {
+    sendGet(`/api/auth/user`, { token: token }, res => {
+      dispatch(setUser(res));
+      setCookie("user", JSON.stringify(res), 7);
       router.push("/team");
     });
   };
