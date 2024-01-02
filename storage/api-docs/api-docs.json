@@ -211,6 +211,147 @@
                 }
             }
         },
+        "/api/competitions": {
+            "get": {
+                "tags": [
+                    "대회"
+                ],
+                "description": "대회 리스트 불러오기 ",
+                "operationId": "326a5e95dd0e507b25f242a08c275db2",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "대회"
+                ],
+                "description": "대회 생성",
+                "operationId": "1bd0e57d4ea073be465faec070f45819",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tid": {
+                                        "description": "호스트 팀아이디",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "uid": {
+                                        "description": "호스트 유저아이디(토큰으로 getUser후 userId전달)",
+                                        "type": "string",
+                                        "example": "3"
+                                    },
+                                    "kind": {
+                                        "description": "대회 종목(0:축구, 1:풋살)",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "type": {
+                                        "description": "대회 타입(0:리그, 1:컵)",
+                                        "type": "string",
+                                        "example": "0"
+                                    },
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "region": {
+                                        "description": "지역",
+                                        "type": "string",
+                                        "example": "서울시 노원구"
+                                    },
+                                    "limit_team ": {
+                                        "description": "팀제한수",
+                                        "type": "string",
+                                        "example": "6"
+                                    },
+                                    "person_vs ": {
+                                        "description": "경기인원",
+                                        "type": "string",
+                                        "example": "5:5,11:11 형태로 구분"
+                                    },
+                                    "regist_sdate": {
+                                        "description": "모집시작일",
+                                        "type": "string",
+                                        "example": "2024-01-01 00:00:00"
+                                    },
+                                    "regist_edate": {
+                                        "description": "모집마감일",
+                                        "type": "string",
+                                        "example": "2024-01-30 00:00:00"
+                                    },
+                                    "yoil": {
+                                        "description": "경기선호요일",
+                                        "type": "string",
+                                        "example": "0,1,2 (0:일,1:월,2:화 콤마 형태로 구분)"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/competitions/{$sid}": {
+            "get": {
+                "tags": [
+                    "대회"
+                ],
+                "description": "대회 상세 불러오기",
+                "operationId": "30f141549b61a110c7cad53de8986fa0",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "대회"
+                ],
+                "description": "대회 삭제 (display_yn='n') ",
+                "operationId": "e94ed23f7400edbe144c362f35c29036",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
         "/api/auth/signup": {
             "post": {
                 "tags": [
