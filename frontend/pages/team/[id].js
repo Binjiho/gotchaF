@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { sendGet } from "@/helper/api";
 import { useRouter } from "next/router";
 import PrevHeader from "@/components/layout/PrevHeader";
-import { Badge, Button, Tabs, Tab, Nav, Spinner } from "react-bootstrap";
+import { Badge, Button, Tabs, Tab, Nav, Spinner, Carousel } from "react-bootstrap";
 import { SEX_TYPE } from "@/constants/serviceConstants";
 import ShareIcon from "@/public/icons/social/share-line.svg";
 import HeartIcon from "@/public/icons/social/heart-line.svg";
@@ -12,11 +12,13 @@ import LinkHeader from "@/components/btn/LinkHeader";
 import RecommendBtn from "@/components/btn/RecommendBtn";
 import NoContentText from "@/components/noContent/noContentText";
 import TeamMemberItem from "@/components/team/TeamMemberItem";
+import NoticeItem from "@/components/team/NoticeItem";
 
 export default function Id() {
   const router = useRouter();
   const [teamInfo, setTeamInfo] = useState(null);
   const [teamUser, setTeamUser] = useState([]);
+  const [teamNotice, setTeamNotice] = useState([]);
   const teamId = router.query.id;
 
   const getTeam = function () {
@@ -26,9 +28,16 @@ export default function Id() {
     });
   };
 
+  const getNotice = function () {
+    sendGet(`/api/boards`, null, res => {
+      setTeamNotice(res.data.boards);
+    });
+  };
+
   useEffect(() => {
     if (!teamId) return;
     getTeam();
+    getNotice();
   }, [teamId]);
 
   return (
@@ -128,14 +137,30 @@ export default function Id() {
                         title={"공지사항"}
                         active={() => {}}
                         className={`pt-[30px] mb-[18px]`}></LinkHeader>
-                      <RecommendBtn
-                        title={`공지사항을 작성해보세요.`}
-                        content={`팀 내 규정 및 매너 수칙 등을 작성하고 멤버들과 공유하세요.`}
-                        btnVariant={"gray2"}
-                        btnMessage={`글쓰기`}
-                        active={() => {}}></RecommendBtn>
-                      <NoContentText
-                        title={`작성된 공지사항이 없습니다.`}></NoContentText>
+
+                      {teamNotice.length ? (
+                        <Carousel>
+                          {teamNotice.map(item => (
+                            <Carousel.Item key={item.sid}>
+                              <NoticeItem item={item}></NoticeItem>
+                            </Carousel.Item>
+                          ))}
+                          <Carousel.Item>
+                            <NoticeItem item={teamNotice[0]}></NoticeItem>
+                          </Carousel.Item>
+                        </Carousel>
+                      ) : (
+                        <>
+                          <RecommendBtn
+                            title={`공지사항을 작성해보세요.`}
+                            content={`팀 내 규정 및 매너 수칙 등을 작성하고 멤버들과 공유하세요.`}
+                            btnVariant={"gray2"}
+                            btnMessage={`글쓰기`}
+                            active={() => {}}></RecommendBtn>
+                          <NoContentText
+                            title={`작성된 공지사항이 없습니다.`}></NoContentText>
+                        </>
+                      )}
                     </div>
                     <div>
                       <LinkHeader

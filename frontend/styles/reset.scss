@@ -27,6 +27,7 @@ body > * {
   scrollbar-width: auto;
   scrollbar-color: #082f491a #ffffff;
   caret-color: $green_sub2;
+  word-break: keep-all;
 }
 
 *::-webkit-scrollbar {

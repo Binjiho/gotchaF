@@ -28,11 +28,11 @@
   &::after {
     content: "";
     display: block;
-    width: 100vh;
+    width: 100vw;
     max-width: $max-layout;
     height: 100%;
     position: absolute;
-    left: -20px;
+    left: 0;
     z-index: -1;
     background: linear-gradient(
       180deg,
