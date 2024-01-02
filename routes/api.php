@@ -71,6 +71,20 @@ Route::prefix('/teams')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| COMPETITION
+|--------------------------------------------------------------------------
+*/
+Route::prefix('/competitions')->group(function () {
+    Route::get('', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']);
+    Route::get('/{sid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('', [App\Http\Controllers\api\competition\CompetitionController::class, 'storeCompetition']);
+        Route::post('/{sid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'updateCompetition']);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
 | BOARD
 |--------------------------------------------------------------------------
 */
@@ -80,7 +94,7 @@ Route::prefix('/boards')->group(function () {
     Route::get('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showBoard']);
     Route::patch('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateBoard']);
 
-    Route::get('/board-gallery/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'indexGallery']);
+    Route::get('/board-gallery/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'indexG allery']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
