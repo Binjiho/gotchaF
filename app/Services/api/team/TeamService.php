@@ -232,7 +232,7 @@ class TeamService extends Services
             $team_users = DB::table('users')
                 ->Join('team_users','users.sid','=','team_users.uid')
                 ->Join('teams','teams.sid','=','team_users.tid')
-                ->select('users.*')
+                ->select('users.*','team_users.level')
                 ->where('teams.sid','=',$sid)
                 ->get();
 

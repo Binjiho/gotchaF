@@ -82,7 +82,7 @@
                                     "tid": {
                                         "description": "팀아이디",
                                         "type": "string",
-                                        "example": "10"
+                                        "example": "1"
                                     },
                                     "uid": {
                                         "description": "유저아이디(토큰으로 getUser후 userId전달)",
@@ -125,13 +125,13 @@
                 }
             }
         },
-        "/api/boards/{$sid}": {
+        "/api/boards/{$tid}": {
             "get": {
                 "tags": [
                     "게시판"
                 ],
                 "description": "게시판 상세 불러오기",
-                "operationId": "c6803aa5b017be6a9d8a7f40c31f5d7f",
+                "operationId": "c8c604715b2c2d1071e709fb144055d4",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -146,7 +146,7 @@
                     "게시판"
                 ],
                 "description": "게시판 삭제 (display_yn='n') ",
-                "operationId": "94c4064a192b592563b0a75e8b3a2659",
+                "operationId": "6990e5d079edc2d15d6a7abef526a160",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -157,13 +157,13 @@
                 }
             }
         },
-        "/api/boards/board-gallery/{sid}": {
+        "/api/boards/board-gallery/{tid}": {
             "get": {
                 "tags": [
                     "게시판"
                 ],
                 "description": "팀 갤러리 사진 리스트",
-                "operationId": "31cddd1990c1b8f0ffaf81cff73f56dd",
+                "operationId": "7c3dd583e4326428b7efb52f2b9af98b",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -178,15 +178,15 @@
                     "게시판"
                 ],
                 "description": "팀 갤러리 사진 생성",
-                "operationId": "f6b476a6ce3ef53d7955bb15ecd2d891",
+                "operationId": "f0fd7af58803f36991231d6f16fcd4a8",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "sid": {
-                                        "description": "팀sid",
+                                    "tid": {
+                                        "description": "팀아이디",
                                         "type": "string",
                                         "example": "1"
                                     },

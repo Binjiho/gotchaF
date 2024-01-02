@@ -45,16 +45,16 @@ class BoardService extends Services
                     // S3에 파일 저장
                     Storage::disk('s3')->put($filepath, $file);
 
-                    $update_board = Board::find($save_id);
-                    $update_board->file_name = $file->getClientOriginalName();
-                    $update_board->file_path = Storage::disk('s3')->url($filepath);
-                    $update_board->save();
+                    $board = Board::find($save_id);
+                    $board->file_name = $file->getClientOriginalName();
+                    $board->file_path = Storage::disk('s3')->url($filepath);
+                    $board->save();
                 }
             }
             return response()->json([
                 'message' => 'Successfully created board!',
                 'state' => "S",
-                "data" => [ "board" => $update_board , "save_id"=>$save_id ],
+                "data" => [ "board" => $board ],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -87,14 +87,21 @@ class BoardService extends Services
     }
 
 
-    public function showBoard(String $sid)
+    public function showBoard(String $tid)
     {
         try {
             $board = Board::where( [
                     'display_yn' => 'Y',
-                    'sid' => $sid,
+                    'tid' => $tid,
                 ]
             )->get();
+
+            if(!$board){
+                return response()->json([
+                    'message' => 'Error load Board!',
+                    'state' => "E",
+                ], 500);
+            }
 
             return response()->json([
                 'message' => 'Successfully loaded board!',
@@ -110,14 +117,20 @@ class BoardService extends Services
         }
     }
 
-    public function deleteBoard(String $sid)
+    public function deleteBoard(String $tid)
     {
         try {
             $board = Board::where( [
                     'del_yn' => 'N',
-                    'sid' => $sid,
+                    'tid' => $tid,
                 ]
             )->get();
+            if(!$board){
+                return response()->json([
+                    'message' => 'Error load Board!',
+                    'state' => "E",
+                ], 500);
+            }
 
             $now = date('Y-m-d H:i:s');
             $board->display_yn = 'N';
@@ -137,7 +150,7 @@ class BoardService extends Services
         }
     }
 
-    public function storeGallery(Request $request, String $sid)
+    public function storeGallery(Request $request, String $tid)
     {
         $this->transaction();
 
@@ -151,7 +164,7 @@ class BoardService extends Services
         $leader_user = Team_User::where( [
             'del_yn' => 'N',
             'uid' => $user->sid,
-            'tid' => $sid,
+            'tid' => $tid,
             'level' => 'L'
         ])->first();
         if(!$leader_user){
@@ -166,7 +179,7 @@ class BoardService extends Services
 
             $board = new Board;
             $board->ccode = 2;
-            $board->tid = $sid;
+            $board->tid = $tid;
             $board->uid = $user->sid;
             $board->title = "팀이미지";
             $board->contents = "팀이미지";
@@ -174,7 +187,7 @@ class BoardService extends Services
             $board->created_at = $now;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/".$sid."/gallery";
+                $s3_path = "gotcha/".$tid."/gallery";
 
                 foreach($request->file('files') as $file){
                     if ($file->isValid()) {
@@ -208,13 +221,13 @@ class BoardService extends Services
         }
     }
 
-    public function indexGallery(String $sid)
+    public function indexGallery(String $tid)
     {
         try {
             $boards = Board::where( [
                 'del_yn' => 'N',
                 'ccode' => 2,
-                'tid' => $sid
+                'tid' => $tid
             ])->get();
 
             return response()->json([
