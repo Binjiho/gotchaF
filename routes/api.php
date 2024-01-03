@@ -75,11 +75,12 @@ Route::prefix('/teams')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/competitions')->group(function () {
-    Route::get('', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']);
-    Route::get('/{sid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
+    Route::get('', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']); //전체
+    Route::post('/index', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetitionWithSorting']); //대회 소팅 리스트
+    Route::get('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [App\Http\Controllers\api\competition\CompetitionController::class, 'storeCompetition']);
-        Route::post('/{sid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'updateCompetition']);
+        Route::post('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'updateCompetition']);
     });
 });
 
@@ -91,13 +92,13 @@ Route::prefix('/competitions')->group(function () {
 Route::prefix('/boards')->group(function () {
     Route::post('', [App\Http\Controllers\api\board\BoardController::class, 'storeBoard']);
     Route::get('', [App\Http\Controllers\api\board\BoardController::class, 'indexBoards']);
-    Route::get('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showBoard']);
-    Route::patch('/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateBoard']);
+    Route::get('/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'showBoard']);
+    Route::patch('/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'updateBoard']);
 
-    Route::get('/board-gallery/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'indexG allery']);
+    Route::get('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexG allery']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
-        Route::post('/board-gallery/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'storeGallery']);
+        Route::post('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'storeGallery']);
     });
 });
