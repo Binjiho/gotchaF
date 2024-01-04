@@ -58,4 +58,5 @@
   display: -webkit-box;
   -webkit-line-clamp: 2; /* 보여줄 최대 줄 수 */
   -webkit-box-orient: vertical;
+  word-break: break-all;
 }

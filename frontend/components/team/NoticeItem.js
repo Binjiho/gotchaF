@@ -2,7 +2,7 @@ import MemberProfile from "@/components/team/MemberProfile";
 
 export default function NoticeItem({ item }) {
   return (
-    <div className={`border border-gray3 rounded-[3px] p-[14px] w-full`}>
+    <div className={`border !border-gray3 rounded-[5px] p-[14px] w-full h-[128px]`}>
       <div>
         <div className={`flex gap-[9px] align-items-center`}>
           <MemberProfile img={null} role={1} size={24}></MemberProfile>
@@ -10,7 +10,7 @@ export default function NoticeItem({ item }) {
         </div>
       </div>
       <div className={`flex gap-[12px] mt-[10px]`}>
-        <div className={`w-[calc(100%-76px)]`}>
+        <div className={`flex-[1_1_calc(100%-76px)]`}>
           <p className={`text-[14px] font-medium mb-[4px] text-overflow-dot`}>
             {item.title}
           </p>

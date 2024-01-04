@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { sendGet } from "@/helper/api";
 import { useRouter } from "next/router";
 import PrevHeader from "@/components/layout/PrevHeader";
-import { Badge, Button, Tabs, Tab, Nav, Spinner, Carousel } from "react-bootstrap";
+import { Badge, Button, Tab, Nav, Spinner } from "react-bootstrap";
 import { SEX_TYPE } from "@/constants/serviceConstants";
 import ShareIcon from "@/public/icons/social/share-line.svg";
 import HeartIcon from "@/public/icons/social/heart-line.svg";
@@ -13,6 +13,7 @@ import RecommendBtn from "@/components/btn/RecommendBtn";
 import NoContentText from "@/components/noContent/noContentText";
 import TeamMemberItem from "@/components/team/TeamMemberItem";
 import NoticeItem from "@/components/team/NoticeItem";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Id() {
   const router = useRouter();
@@ -29,8 +30,8 @@ export default function Id() {
   };
 
   const getNotice = function () {
-    sendGet(`/api/boards`, null, res => {
-      setTeamNotice(res.data.boards);
+    sendGet(`/api/boards/${teamId}`, null, res => {
+      setTeamNotice(res.data.board);
     });
   };
 
@@ -139,16 +140,15 @@ export default function Id() {
                         className={`pt-[30px] mb-[18px]`}></LinkHeader>
 
                       {teamNotice.length ? (
-                        <Carousel>
+                        <Swiper
+                          spaceBetween={10}
+                          slidesPerView={teamNotice.length === 1 ? 1 : 1.2}>
                           {teamNotice.map(item => (
-                            <Carousel.Item key={item.sid}>
+                            <SwiperSlide key={item.sid}>
                               <NoticeItem item={item}></NoticeItem>
-                            </Carousel.Item>
+                            </SwiperSlide>
                           ))}
-                          <Carousel.Item>
-                            <NoticeItem item={teamNotice[0]}></NoticeItem>
-                          </Carousel.Item>
-                        </Carousel>
+                        </Swiper>
                       ) : (
                         <>
                           <RecommendBtn
