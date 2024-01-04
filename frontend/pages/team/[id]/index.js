@@ -12,10 +12,10 @@ import LinkHeader from "@/components/btn/LinkHeader";
 import RecommendBtn from "@/components/btn/RecommendBtn";
 import NoContentText from "@/components/noContent/noContentText";
 import TeamMemberItem from "@/components/team/TeamMemberItem";
-import NoticeItem from "@/components/team/NoticeItem";
+import NoticeCardItem from "@/components/team/NoticeCardItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-export default function Id() {
+export default function Index() {
   const router = useRouter();
   const [teamInfo, setTeamInfo] = useState(null);
   const [teamUser, setTeamUser] = useState([]);
@@ -145,7 +145,7 @@ export default function Id() {
                           slidesPerView={teamNotice.length === 1 ? 1 : 1.2}>
                           {teamNotice.map(item => (
                             <SwiperSlide key={item.sid}>
-                              <NoticeItem item={item}></NoticeItem>
+                              <NoticeCardItem item={item}></NoticeCardItem>
                             </SwiperSlide>
                           ))}
                         </Swiper>

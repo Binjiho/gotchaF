@@ -1,17 +1,13 @@
 import MemberProfile from "@/components/team/MemberProfile";
-import { printDateTimeFormat } from "@/helper/value";
 
-export default function NoticeItem({ item }) {
+export default function NoticeCardItem({ item }) {
   return (
-    <div className={`rounded-[5px] py-[20px] w-full h-[128px]`}>
-      <div className={`flex justify-between align-items-center`}>
+    <div className={`border !border-gray3 rounded-[5px] p-[14px] w-full h-[128px]`}>
+      <div>
         <div className={`flex gap-[9px] align-items-center`}>
-          <MemberProfile img={null} size={20}></MemberProfile>
+          <MemberProfile img={null} role={1} size={24}></MemberProfile>
           <p className={`text-gray10 text-[13px]`}>{item.writer}</p>
         </div>
-        <p className={`text-[13px] text-gray7`}>
-          {printDateTimeFormat(item.created_at, "MM월 dd일")}
-        </p>
       </div>
       <div className={`flex gap-[12px] mt-[10px]`}>
         <div className={`flex-[1_1_calc(100%-76px)]`}>
