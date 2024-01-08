@@ -18,14 +18,35 @@ use Illuminate\Support\Facades\Storage;
  */
 class BoardService extends Services
 {
-    public function storeBoard(Request $request)
+    public function storeNotice(Request $request, String $tid)
     {
         try {
+            $user = $request->user();
+            if(!$user){
+                return response()->json([
+                    'message' => 'Error load User!',
+                    'state' => "E",
+                ], 500);
+            }
+
+            $leader_user = Team_User::where( [
+                'del_yn' => 'N',
+                'uid' => $user->sid,
+                'tid' => $tid,
+                'level' => 'L'
+            ])->first();
+            if(!$leader_user){
+                return response()->json([
+                    'message' => 'Error load Leader User!',
+                    'state' => "E",
+                ], 555);
+            }
+
             $now = date('Y-m-d H:i:s');
 
             $board = new Board;
-            $board->ccode = $request->ccode;
-            $board->tid = $request->tid;
+            $board->ccode = 1;
+            $board->tid = $tid;
             $board->uid = $request->uid;
             $board->title = $request->title;
             $board->contents = $request->contents;
@@ -35,7 +56,7 @@ class BoardService extends Services
             $save_id = $board->sid;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/boards/".$save_id;
+                $s3_path = "gotcha/".$tid."/notice";
                 foreach($request->file('files') as $file){
                     $extension = $file->getClientOriginalExtension();
                     $uuid = uniqid();
@@ -52,13 +73,13 @@ class BoardService extends Services
                 }
             }
             return response()->json([
-                'message' => 'Successfully created board!',
+                'message' => 'Successfully created board Notice!',
                 'state' => "S",
                 "data" => [ "board" => $board ],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error create board!',
+                'message' => 'Error create board Notice!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
@@ -66,20 +87,23 @@ class BoardService extends Services
     }
 
 
-    public function indexBoards()
+    public function indexNotice(String $tid)
     {
         try {
             $boards = Board::where( [
+                'ccode' => 1,
+                'tid' => $tid,
                 'display_yn' => 'Y',
+                'del_yn' => 'N',
             ])->get();
             return response()->json([
-                'message' => 'Successfully loaded boards!',
+                'message' => 'Successfully loaded board Notices!',
                 'state' => "S",
                 "data" => ["boards" => $boards],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error loaded teams!',
+                'message' => 'Error loaded board Notices!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
@@ -87,68 +111,130 @@ class BoardService extends Services
     }
 
 
-    public function showBoard(String $tid)
+    public function showNotice(String $tid, String $sid)
     {
         try {
             $board = Board::where( [
                     'display_yn' => 'Y',
-                    'tid' => $tid,
-                ]
-            )->get();
-
-            if(!$board){
-                return response()->json([
-                    'message' => 'Error load Board!',
-                    'state' => "E",
-                ], 500);
-            }
-
-            return response()->json([
-                'message' => 'Successfully loaded board!',
-                'state' => "S",
-                "data" => ["board" => $board],
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error loaded board!',
-                'state' => "E",
-                'error' => $e,
-            ], 500);
-        }
-    }
-
-    public function deleteBoard(String $tid)
-    {
-        try {
-            $board = Board::where( [
                     'del_yn' => 'N',
                     'tid' => $tid,
+                    'sid' => $sid,
                 ]
-            )->get();
+            )->first();
+
             if(!$board){
                 return response()->json([
-                    'message' => 'Error load Board!',
+                    'message' => 'Error load Notice!',
                     'state' => "E",
                 ], 500);
             }
 
-            $now = date('Y-m-d H:i:s');
-            $board->display_yn = 'N';
-            $board->updated_at = $now;
-
             return response()->json([
-                'message' => 'Successfully delete board!',
+                'message' => 'Successfully loaded Notice!',
                 'state' => "S",
                 "data" => ["board" => $board],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error delete board!',
+                'message' => 'Error loaded Notice!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
         }
     }
+
+
+    public function updateNotice(Request $request, String $tid, String $sid)
+    {
+        try {
+            $user = $request->user();
+            if(!$user){
+                return response()->json([
+                    'message' => 'Error load User!',
+                    'state' => "E",
+                ], 500);
+            }
+
+            $leader_user = Team_User::where( [
+                'del_yn' => 'N',
+                'uid' => $user->sid,
+                'tid' => $tid,
+                'level' => 'L'
+            ])->first();
+            if(!$leader_user){
+                return response()->json([
+                    'message' => 'Error load Leader User!',
+                    'state' => "E",
+                ], 555);
+            }
+
+            $board = Board::where( [
+                    'display_yn' => 'Y',
+                    'del_yn' => 'N',
+                    'tid' => $tid,
+                    'sid' => $sid,
+                ]
+            )->first();
+            if(!$board){
+                return response()->json([
+                    'message' => 'Error load Board Notice!',
+                    'state' => "E",
+                ], 500);
+            }
+
+            $this->transaction();
+
+            $now = date('Y-m-d H:i:s');
+
+            if($request->title) $board->title = $request->title;
+            if($request->contents) $board->contents = $request->contents;
+            if($request->del_yn) $board->del_yn = $request->del_yn;
+
+            $board->updated_at = $now;
+
+            if($request->hasFile('files')){
+                $s3_path = "gotcha/".$tid."/notice";
+
+                //기존 이미지 삭제
+                if($board->file_path){
+                    $file_uploaded_name = $board->file_realname;
+                    $file_uploaded_path = $s3_path."/".$file_uploaded_name;
+                    // Delete a file
+                    Storage::disk('s3')->delete($file_uploaded_path);
+                }
+
+                //새로운 이미지 저장
+                foreach($request->file('files') as $file){
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid. '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
+
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
+                        $board->file_originalname = $file->getClientOriginalName();
+                        $board->file_realname = $filename;
+                        $board->file_path = Storage::disk('s3')->url($filepath);
+                    }
+                }
+            }
+
+            $board->save();
+
+            $this->dbCommit('팀 공지사항 수정 및 삭제');
+
+            return response()->json([
+                'message' => 'Successfully update delete Notice!',
+                'state' => "S",
+                "data" => ["board" => $board],
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error update delete Notice!',$e);
+        }
+    }
+
+
 
     public function storeGallery(Request $request, String $tid)
     {

@@ -28,6 +28,8 @@ class Board extends Model
         'title',
         'contents',
         'writer',
+        'display_yn',
+        'del_yn',
         'file_originalname',
         'file_realname',
         'file_path',

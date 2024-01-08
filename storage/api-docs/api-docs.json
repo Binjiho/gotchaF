@@ -46,117 +46,6 @@
                 }
             }
         },
-        "/api/boards": {
-            "get": {
-                "tags": [
-                    "게시판"
-                ],
-                "description": "게시판 리스트 불러오기 ",
-                "operationId": "32c7fbb9637323911cc7990fca76884d",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "게시판"
-                ],
-                "description": "게시판 생성",
-                "operationId": "eb66231aa97ca0c6a48b31e2367278fa",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "ccode": {
-                                        "description": "팀게시판:1",
-                                        "type": "string",
-                                        "example": "1"
-                                    },
-                                    "tid": {
-                                        "description": "팀아이디",
-                                        "type": "string",
-                                        "example": "1"
-                                    },
-                                    "uid": {
-                                        "description": "유저아이디(토큰으로 getUser후 userId전달)",
-                                        "type": "string",
-                                        "example": "234"
-                                    },
-                                    "title": {
-                                        "description": "제목",
-                                        "type": "string",
-                                        "example": "제목"
-                                    },
-                                    "contents": {
-                                        "description": "내용",
-                                        "type": "string",
-                                        "example": "내용"
-                                    },
-                                    "writer": {
-                                        "description": "작성자",
-                                        "type": "string",
-                                        "example": "작성자"
-                                    },
-                                    "files[]": {
-                                        "description": "이미지 input name=files[]",
-                                        "type": "file",
-                                        "example": "file.jpg"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            }
-        },
-        "/api/boards/{$tid}": {
-            "get": {
-                "tags": [
-                    "게시판"
-                ],
-                "description": "게시판 상세 불러오기",
-                "operationId": "c8c604715b2c2d1071e709fb144055d4",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            },
-            "patch": {
-                "tags": [
-                    "게시판"
-                ],
-                "description": "게시판 삭제 (display_yn='n') ",
-                "operationId": "6990e5d079edc2d15d6a7abef526a160",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            }
-        },
         "/api/boards/board-gallery/{tid}": {
             "get": {
                 "tags": [
@@ -189,6 +78,129 @@
                                         "description": "팀아이디",
                                         "type": "string",
                                         "example": "1"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-notice/{tid}": {
+            "get": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "팀 공지사항 리스트",
+                "operationId": "49189282bc743233e6317d0d294d8b33",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "팀 공지사항 생성",
+                "operationId": "bdf815c25e141dad5bea342ba0904d14",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-notice/{tid}/{sid}": {
+            "get": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "게시판 상세 불러오기",
+                "operationId": "5310f80bceb9bbd5a7e9d6f03fca9cc7",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "팀 공지사항 게시판 수정 및 삭제",
+                "operationId": "d85a7182310f75209bbaa30698520da0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "del_yn": {
+                                        "description": "삭제유무",
+                                        "type": "string",
+                                        "example": "Y"
                                     },
                                     "files[]": {
                                         "description": "이미지 input name=files[]",
