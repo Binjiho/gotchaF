@@ -136,7 +136,7 @@ export default function Index() {
                     <div>
                       <LinkHeader
                         title={"공지사항"}
-                        active={() => {}}
+                        active={() => router.push(`/team/${teamId}/notice`)}
                         className={`pt-[30px] mb-[18px]`}></LinkHeader>
 
                       {teamNotice.length ? (

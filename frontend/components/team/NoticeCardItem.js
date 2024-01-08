@@ -1,8 +1,17 @@
 import MemberProfile from "@/components/team/MemberProfile";
+import { useRouter } from "next/router";
 
 export default function NoticeCardItem({ item }) {
+  const router = useRouter();
+
+  const goNoticePage = sid => {
+    router.push(`/notice/${sid}`);
+  };
+
   return (
-    <div className={`border !border-gray3 rounded-[5px] p-[14px] w-full h-[128px]`}>
+    <div
+      className={`border !border-gray3 rounded-[5px] p-[14px] w-full h-[128px] cursor-pointer`}
+      onClick={() => goNoticePage(item.sid)}>
       <div>
         <div className={`flex gap-[9px] align-items-center`}>
           <MemberProfile img={null} role={1} size={24}></MemberProfile>
