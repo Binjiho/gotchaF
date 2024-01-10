@@ -685,6 +685,40 @@
                 }
             }
         },
+        "/api/mypage/thum": {
+            "post": {
+                "tags": [
+                    "마이페이지"
+                ],
+                "description": "회원 프로필사진 업데이트",
+                "operationId": "bdb3c3f47e0285551cec64f02054aae4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "files[]": {
+                                        "description": "파일",
+                                        "type": "file",
+                                        "example": "볼리비아.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
         "/api/teams/signup/{sid}": {
             "post": {
                 "tags": [

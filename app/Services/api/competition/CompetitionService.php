@@ -98,7 +98,8 @@ class CompetitionService extends Services
              */
             $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
 
-            $comps = $query->get();
+            $comps = $query->paginate(10);
+//            $comps = $query->get();
 
             foreach($comps as $comp_idx => $comp) {
                 $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();
@@ -154,7 +155,8 @@ class CompetitionService extends Services
              */
             $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
 
-            $comps = $query->get();
+            $comps = $query->paginate(10);
+//            $comps = $query->get();
 
             foreach($comps as $comp_idx => $comp) {
                 $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();

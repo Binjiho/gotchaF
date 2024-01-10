@@ -48,14 +48,25 @@ Route::prefix('/auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
+| MyPage
+|--------------------------------------------------------------------------
+*/
+Route::prefix('/mypage')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/thum', [App\Http\Controllers\api\member\MemberController::class, 'storeThum']);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
 | TEAM
 |--------------------------------------------------------------------------
 */
 Route::prefix('/teams')->group(function () {
     Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
-    Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
         Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
         Route::post('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
         Route::post('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'signupTeam']);

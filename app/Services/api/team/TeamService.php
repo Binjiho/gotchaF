@@ -177,7 +177,9 @@ class TeamService extends Services
     public function indexTeams()
     {
         try {
-            $teams = Team::where( ['del_yn' => 'N' ])->get();
+//            $teams = Team::where( ['del_yn' => 'N' ])->get();
+            $teams = Team::where( ['del_yn' => 'N' ])->paginate(10);
+
             foreach($teams as $team_idx => $team){
                 $team_count = Team_User::where( ['del_yn' => 'N', 'tid' => $team->sid ])->count();
                 $teams[$team_idx]['user_count'] = $team_count;
@@ -223,6 +225,17 @@ class TeamService extends Services
     public function showTeam(String $sid)
     {
         try {
+            $user = auth()->user();
+            $user_level = Team_User::where( [
+                'del_yn' => 'N',
+                'uid' => $user->sid,
+                'tid' => $sid,
+            ])->first();
+
+            if(!$user_level){
+                $user_level = 'W'; //대기 상태로 일단 보여줌
+            }
+
             $team_info = Team::where( [
                     'del_yn' => 'N',
                     'sid' => $sid,
@@ -240,6 +253,7 @@ class TeamService extends Services
                 'message' => 'Successfully loaded team!',
                 'state' => "S",
                 "data" => [
+                    "user_level" => $user_level->level,
                     "team_info" => $team_info,
                     "team_users" => $team_users,
                 ],
