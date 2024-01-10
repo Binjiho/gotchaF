@@ -92,6 +92,8 @@ Route::prefix('/competitions')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [App\Http\Controllers\api\competition\CompetitionController::class, 'storeCompetition']);
         Route::post('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'updateCompetition']);
+
+        Route::post('/apply/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'applyCompetition']);
     });
 });
 

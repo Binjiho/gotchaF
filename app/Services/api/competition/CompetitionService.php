@@ -5,6 +5,7 @@ namespace App\Services\api\competition;
 use App\Models\Competition;
 
 use App\Models\Competition_Team;
+use App\Models\Team_User;
 use App\Models\User;
 use App\Services\Services;
 use Illuminate\Http\Request;
@@ -20,10 +21,16 @@ class CompetitionService extends Services
     public $data = array();
     public function storeCompetition(Request $request)
     {
-        $user = $request->user();
-        if(!$user){
+        $user = auth()->user();
+        $user_level = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+            'tid' => $request->tid,
+        ])->first();
+
+        if($user_level->level != 'L'){
             return response()->json([
-                'message' => 'Error load User!',
+                'message' => '팀의 리더만 경기를 만들 수 있습니다.',
                 'state' => "E",
             ], 500);
         }
@@ -35,7 +42,7 @@ class CompetitionService extends Services
 
             $comp = new Competition();
             $comp->tid = $request->tid;
-            $comp->uid = $request->uid;
+            $comp->uid = $user->sid;
             $comp->kind = $request->kind;
             $comp->type = $request->type;
             $comp->title = $request->title;
@@ -69,6 +76,18 @@ class CompetitionService extends Services
                     $comp->save();
                 }
             }
+
+            /**
+             * 경기 생성 시, competition_teams 테이블에도 db저장
+             * 경기 주최자 무조건 L(리더)
+             */
+            $comp_team = new Competition_Team();
+
+            $comp_team->cid = $save_id;
+            $comp_team->tid = $request->tid;
+            $comp_team->level = 'L';
+            $comp_team->created_at = $now;
+            $comp_team->save();
 
             $data = [
                 "result" => $comp,
@@ -309,5 +328,77 @@ class CompetitionService extends Services
         }
     }
 
+    public function applyCompetition(String $cid)
+    {
+        $user = auth()->user();
+        $user_level = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+        ])->first();
+
+        if(!$user_level){
+            return response()->json([
+                'message' => '팀의 리더가 아닙니다!',
+                'state' => "E",
+            ], 500);
+        }
+
+        $comp_registered = Competition_Team::where( [
+            'del_yn' => 'N',
+            'tid' => $user_level->tid,
+        ])->first();
+
+        if($comp_registered){
+            return response()->json([
+                'message' => '이미 시합에 참여하였습니다!',
+                'state' => "E",
+            ], 500);
+        }
+
+        $comp = Competition::where( [
+            'del_yn' => 'N',
+            'sid' => $cid,
+        ])->first()->limit_team;
+
+        $comp_registered_cnt = Competition_Team::where( [
+            'del_yn' => 'N',
+            'cid' => $cid,
+        ])->count();
+
+        if($comp <= $comp_registered_cnt){
+            return response()->json([
+                'message' => '시합 모집 정원이 초과하였습니다!',
+                'state' => "E",
+            ], 500);
+        }
+
+        try {
+            $this->transaction();
+
+            $now = date('Y-m-d H:i:s');
+
+            $comp_team = new Competition_Team();
+
+            $comp_team->cid = $cid;
+            $comp_team->tid = $user_level->tid;
+            $comp_team->level = 'C';
+            $comp_team->created_at = $now;
+            $comp_team->save();
+
+            $data = [
+                "result" => $comp_team,
+            ];
+
+            $this->dbCommit('경기 참여');
+
+            return response()->json([
+                'message' => 'Successfully apply Competition!',
+                'state' => "S",
+                "data" => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error apply Competition!',$e);
+        }
+    }
 
 }

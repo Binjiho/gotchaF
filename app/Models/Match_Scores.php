@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Competition_Team extends Model
+class Match_Scores extends Model
 {
     use HasFactory;
 
-    protected $table='competition_teams';
+    protected $table='match_scores';
 
     public $timestamps = false; // timestamps 활성화 여부 (created_at 및 updated_at 컬럼)
 
@@ -22,9 +22,11 @@ class Competition_Team extends Model
 
     //fillable 허용목록
     protected $fillable = [
-        'cid',
+        'mid',
         'tid',
-        'level',
-        'tot_score',
+        'round',
+        'step',
+        'score',
+        'del_yn',
     ];
 }

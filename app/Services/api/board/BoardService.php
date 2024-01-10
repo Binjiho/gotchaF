@@ -92,21 +92,16 @@ class BoardService extends Services
         try {
             $boards = DB::table('boards')
                 ->join('users', 'boards.uid', '=', 'users.sid')
-                ->select('boards.*', 'users.file_path as user_thum')
+                ->join('team_users', function ($join) use ($tid) {
+                    $join->on('users.sid', '=', 'team_users.uid')
+                        ->where('team_users.tid', '=', $tid);
+                })
+                ->select('boards.*', 'users.file_path as user_thum', 'team_users.level')
                 ->where('boards.ccode', '=', '1')
                 ->where('boards.tid', '=', $tid)
                 ->where('boards.display_yn', '=', 'Y')
                 ->where('boards.del_yn', '=', 'N')
                 ->paginate(10);
-
-            foreach ($boards as $board){
-                $level = DB::table('team_users')
-                    ->select('team_users.level')
-                    ->where('team_users.uid', '=', $board->uid)
-                    ->where('team_users.tid', '=', $tid)
-                    ->first();
-                $board->level = $level->level;
-            }
 
             return response()->json([
                 'message' => 'Successfully loaded board Notices!',

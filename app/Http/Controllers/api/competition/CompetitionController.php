@@ -19,14 +19,13 @@ class CompetitionController extends Controller
      * @OA\Post (
      *     path="/api/competitions",
      *     tags={"대회"},
-     *     description="대회 생성",
+     *     description="대회 생성(팀의 리더만 대회를 생성 할 수 있음)",
      *      @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema (
      *                 @OA\Property (property="tid", type="string", description="호스트 팀아이디", example="1"),
-     *                 @OA\Property (property="uid", type="string", description="호스트 유저아이디(토큰으로 getUser후 userId전달)", example="3"),
      *                 @OA\Property (property="kind", type="string", description="대회 종목(0:축구, 1:풋살)", example="1"),
      *                 @OA\Property (property="type", type="string", description="대회 타입(0:리그, 1:컵)", example="0"),
      *                 @OA\Property (property="title", type="string", description="제목", example="제목"),
@@ -149,6 +148,29 @@ class CompetitionController extends Controller
     public function updateCompetition(String $cid, Request $request)
     {
         return $this->compService->updateCompetition($cid, $request);
+    }
+
+    /**
+     * @OA\Post (
+     *     path="/api/competitions/apply/{cid}",
+     *     tags={"대회"},
+     *     description="대회 참여 신청",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="cid", type="string", description="참여 경기의 sid", example="1"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function applyCompetition(String $cid)
+    {
+        return $this->compService->applyCompetition($cid);
     }
 
 }
