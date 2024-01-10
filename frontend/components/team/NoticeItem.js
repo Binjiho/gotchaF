@@ -1,9 +1,18 @@
 import MemberProfile from "@/components/team/MemberProfile";
 import { printDateTimeFormat } from "@/helper/value";
+import { useRouter } from "next/router";
 
 export default function NoticeItem({ item }) {
+  const router = useRouter();
+
+  const goNoticePage = sid => {
+    router.push(`/notice/${sid}`);
+  };
+
   return (
-    <div className={`rounded-[5px] py-[20px] w-full h-[128px]`}>
+    <div
+      className={`rounded-[5px] py-[20px] w-full h-[128px] cursor-pointer`}
+      onClick={() => goNoticePage(item.sid)}>
       <div className={`flex justify-between align-items-center`}>
         <div className={`flex gap-[9px] align-items-center`}>
           <MemberProfile img={null} size={20}></MemberProfile>
