@@ -196,6 +196,34 @@ textarea.form-control {
       }
     }
   }
+
+  &.nav-pills {
+    background: $gray2;
+    padding: 3px 5px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
+    flex-wrap: nowrap;
+
+    .nav-item {
+      width: 100%;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      padding-top: 7px;
+      padding-bottom: 7px;
+      color: $gray7;
+      width: 100%;
+      text-align: center;
+
+      &.active {
+        background: black;
+        color: white;
+      }
+    }
+  }
 }
 
 .tab-content {

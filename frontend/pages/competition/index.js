@@ -34,7 +34,7 @@ export default function Index() {
   }, [competitionType]);
 
   const searchTeam = () => {
-    router.push("/team/search");
+    router.push("/competition/search");
   };
 
   const getCompetitionList = () => {
@@ -64,6 +64,20 @@ export default function Index() {
         </div>
       </SearchHeader>
       <main>
+        <Nav variant="pills" className={`mt-[20px]`}>
+          <Nav.Item>
+            <Nav.Link eventKey="link-1">전체</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link-2">모집중</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link-3">진행중</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link-4">종료된</Nav.Link>
+          </Nav.Item>
+        </Nav>
         <div className={`mt-[32px]`}>
           {!competitionList.length && (
             <div className={"text-center"}>
