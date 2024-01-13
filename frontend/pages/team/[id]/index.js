@@ -24,14 +24,14 @@ export default function Index() {
 
   const getTeam = function () {
     sendGet(`/api/teams/${teamId}`, null, res => {
-      setTeamInfo(res.data.team_info[0]);
-      setTeamUser(res.data.team_users);
+      // setTeamInfo(res.data.team_info[0]);
+      // setTeamUser(res.data.team_users);
     });
   };
 
   const getNotice = function () {
     sendGet(`/api/boards/${teamId}`, null, res => {
-      setTeamNotice(res.data.board);
+      // setTeamNotice(res.data.board);
     });
   };
 

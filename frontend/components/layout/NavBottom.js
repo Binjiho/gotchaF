@@ -27,7 +27,7 @@ export default function NavBottom() {
       title: "대회",
       icon: CupIcon,
       activeIcon: CupFillIcon,
-      link: "/cup",
+      link: "/competition",
     },
     {
       title: "팀",

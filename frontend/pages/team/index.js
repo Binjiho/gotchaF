@@ -6,15 +6,28 @@ import NavBottom from "@/components/layout/NavBottom";
 import { Button, Spinner } from "react-bootstrap";
 import PlusIcon from "@/public/icons/system/add-line.svg";
 import { useRouter } from "next/router";
+import { setupInfiniteScroll } from "@/helper/scrollLoader";
+//스크롤 추후 적용 필요
+
+const searchFilter = {
+  current_page: 1,
+  per_page: 3,
+};
 
 export default function Index() {
   const [teamList, setTeamList] = useState([]);
   const router = useRouter();
 
   const getTeamList = function () {
-    sendGet("/api/teams/", null, res => {
-      setTeamList(res.data.teams);
-    });
+    sendGet(
+      "/api/teams/",
+      {
+        ...searchFilter,
+      },
+      res => {
+        setTeamList(res.data.teams.data);
+      }
+    );
   };
 
   useEffect(() => {
@@ -24,6 +37,10 @@ export default function Index() {
   const searchTeam = () => {
     router.push("/team/search");
   };
+
+  // setupInfiniteScroll(() => {
+  //   getTeamList();
+  // });
 
   return (
     <div>

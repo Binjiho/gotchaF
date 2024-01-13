@@ -49,6 +49,18 @@ export const sendAnonymousPost = async (
   requestPost(url, requestData, successFun, failureFun, contentsType);
 };
 
+export const sendAnonymousGet = async (
+  url,
+  requestData,
+  successFun = null,
+  failureFun = null,
+  contentsType = REQUEST_HEADER_CONTENTS_JSON
+) => {
+  addTokenToHeader(null);
+
+  requestGet(url, requestData, successFun, failureFun, contentsType);
+};
+
 export const requestGet = async (
   url,
   requestData,
