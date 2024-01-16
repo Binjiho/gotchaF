@@ -1,20 +1,24 @@
 import { useState } from "react";
-import { sendPost } from "@/helper/api";
+import { sendAnonymousPost } from "@/helper/api";
 import { Form, InputGroup } from "react-bootstrap";
-import { useRouter } from "next/router";
 import PrevHeader from "@/components/layout/PrevHeader";
 import SearchIcon from "@/public/icons/tool/search.svg";
 import CompetitionItem from "@/components/competition/CompetitionItem";
 
 export default function Search() {
-  const [teamList, setTeamList] = useState([]);
+  const [competitionList, setCompetitionList] = useState([]);
   const [title, setTitle] = useState("");
   const [isSearch, setIsSearch] = useState(false);
 
-  const getTeamList = function () {
+  const getCompetitionList = function () {
     const data = {
-      title: title,
+      search: title,
     };
+
+    sendAnonymousPost("/api/competitions/search/", data, res => {
+      setCompetitionList(res.data.result.data);
+      setIsSearch(true);
+    });
   };
 
   return (
@@ -35,7 +39,7 @@ export default function Search() {
               onKeyPress={e => {
                 if (e.key === "Enter") {
                   e.preventDefault();
-                  getTeamList();
+                  getCompetitionList();
                 }
               }}
               className={`border-l-0 !py-[15px] !pl-[10px] bg-gray2 [&:focus]:bg-gray2`}
@@ -43,10 +47,10 @@ export default function Search() {
           </InputGroup>
         </Form>
         <div className={`pt-[20px]`}>
-          {teamList.map((item, index) => (
+          {competitionList.map((item, index) => (
             <CompetitionItem key={`team-${index}`} item={item}></CompetitionItem>
           ))}
-          {isSearch && !teamList.length && (
+          {isSearch && !competitionList.length && (
             <p className={`text-gray9 text-center`}>검색 결과가 없습니다.</p>
           )}
         </div>

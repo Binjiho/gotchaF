@@ -3,6 +3,7 @@ import { calculateAge, printDateTimeFormat } from "@/helper/value";
 import { useEffect, useState } from "react";
 import TimeBadge from "@/components/competition/TimeBadge";
 import TimeIcon from "@/public/icons/system/time-line.svg";
+import { COMPETITION_KIND } from "@/constants/serviceConstants";
 
 export default function CompetitionItem({ item }) {
   const [isProgress, setIsProgress] = useState(false);
@@ -48,13 +49,13 @@ export default function CompetitionItem({ item }) {
   }
 
   return (
-    <div className={`border-b !border-b-gray4 pb-[22px]`}>
+    <div className={`border-b !border-b-gray4 py-[22px]`}>
       <div className={`flex gap-[5px]`}>
         <Badge pill bg="secondary" size={12}>
           {item.region}
         </Badge>
         <Badge pill bg="secondary" size={12}>
-          축구
+          {COMPETITION_KIND[item.kind]}
         </Badge>
         <Badge pill bg="secondary">
           {item.person_vs}
@@ -69,7 +70,7 @@ export default function CompetitionItem({ item }) {
       </div>
       <div className={`mt-[12px] flex gap-[20px]`}>
         <div className={`w-full`}>
-          <h3 className={`text-[15px]`}>{item.title || "제목이 없습니다"}</h3>
+          <h3 className={`text-[15px]`}>{item.title}</h3>
           <p
             className={`text-[14px] text-gray9 mt-[8px] flex align-items-center gap-[3px] `}>
             <span>{printDateTimeFormat(item.event_sdate, "M.d(E)")} 시작</span>

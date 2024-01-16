@@ -3,3 +3,45 @@ export const replaceSpacesWithDot = inputString => {
   let replacedString = inputString.replace(/\s/g, "·");
   return replacedString;
 };
+
+export const replaceQueryPage = (obj = {}, router) => {
+  const query = removeEmptyObject({ ...obj });
+
+  let location = {
+    query: query,
+  };
+
+  router.replace(location, undefined, { shallow: true });
+};
+
+export const removeEmptyObject = obj => {
+  const res = { ...obj };
+
+  if (obj && Object.keys(obj).length !== 0) {
+    Object.keys(res).forEach(key => {
+      if (!res[key] && res[key] !== 0) {
+        delete res[key];
+      }
+    });
+  }
+  return res;
+};
+
+export const getParameter = key => {
+  return "";
+  // return new URLSearchParams(location.search).get(key);
+};
+
+export const convertIntObj = obj => {
+  const res = {};
+  for (const key in obj) {
+    res[key] = {};
+    if (/[,a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣]/.test(obj[key])) {
+      res[key] = obj[key];
+    } else {
+      const parsed = parseInt(obj[key], 10);
+      res[key] = isNaN(parsed) ? obj[key] : parsed;
+    }
+  }
+  return res;
+};

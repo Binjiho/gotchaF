@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { sendPost } from "@/helper/api";
+import { sendAnonymousPost } from "@/helper/api";
 import TeamItem from "@/components/team/TeamItem";
 import { Form, InputGroup } from "react-bootstrap";
-import { useRouter } from "next/router";
 import PrevHeader from "@/components/layout/PrevHeader";
 import SearchIcon from "@/public/icons/tool/search.svg";
 
@@ -16,7 +15,7 @@ export default function Search() {
       title: title,
     };
 
-    sendPost("/api/teams/searchTeams/", data, res => {
+    sendAnonymousPost("/api/teams/searchTeams/", data, res => {
       setTeamList(res.data.teams);
       setIsSearch(true);
     });

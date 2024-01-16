@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { sendGet } from "@/helper/api";
+import { sendAnonymousGet } from "@/helper/api";
 import SearchHeader from "@/components/layout/SearchHeader";
 import TeamItem from "@/components/team/TeamItem";
 import NavBottom from "@/components/layout/NavBottom";
-import { Button, Spinner } from "react-bootstrap";
-import PlusIcon from "@/public/icons/system/add-line.svg";
+import { Spinner } from "react-bootstrap";
 import { useRouter } from "next/router";
-import { setupInfiniteScroll } from "@/helper/scrollLoader";
+import FloatAddBtn from "@/components/btn/FloatAddBtn";
 //스크롤 추후 적용 필요
 
 const searchFilter = {
@@ -19,7 +18,7 @@ export default function Index() {
   const router = useRouter();
 
   const getTeamList = function () {
-    sendGet(
+    sendAnonymousGet(
       "/api/teams/",
       {
         ...searchFilter,
@@ -49,24 +48,19 @@ export default function Index() {
       </SearchHeader>
       <main className={`pb-20`}>
         <div className={`pt-[20px] pb-[50px]`}>
-          {!teamList.length && (
+          {!teamList ? (
             <div className={"text-center"}>
               <Spinner></Spinner>
             </div>
+          ) : !teamList.length ? (
+            <div className={"text-center text-gray8 my-[50px]"}>팀이 없습니다.</div>
+          ) : (
+            teamList.map((item, index) => (
+              <TeamItem key={`team-${index}`} item={item}></TeamItem>
+            ))
           )}
-          {teamList.map((item, index) => (
-            <TeamItem key={`team-${index}`} item={item}></TeamItem>
-          ))}
         </div>
-        <div
-          className={`w-full fixed bottom-[82px] flex max-w-[500px] left-[50%] translate-x-[-50%]`}>
-          <Button
-            className={`bg-green_primary text-white rounded-[23px] h-[46px] pl-[15px] pr-[18px] flex align-items-center shadow-[0px_3px_10px_0px_rgba(0,_0,_0,_0.15)] ml-auto mr-[20px]`}
-            onClick={() => router.push("/team/create")}>
-            <PlusIcon width={24} />
-            <span className={`text-[16px]`}>팀만들기</span>
-          </Button>
-        </div>
+        <FloatAddBtn path={"/team/create"} text={"팀만들기"}></FloatAddBtn>
       </main>
       <NavBottom></NavBottom>
     </div>

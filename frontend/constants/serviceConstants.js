@@ -17,3 +17,24 @@ export const TEAM_MEMBER_LEVEL = {
   COMMON: "C",
   WAITING_JOIN: "W",
 };
+
+export const COMPETITION_TYPE = {
+  LEAGUE: 1,
+  CUP: 2,
+  1: "LEAGUE",
+  2: "CUP",
+};
+
+export const COMPETITION_SORTING = {
+  ALL: 0,
+  PRE: "pre",
+  ING: "ing",
+  END: "end",
+};
+
+export const COMPETITION_KIND = {
+  SOCCER: 1,
+  FUTSAL: 2,
+  1: "축구",
+  2: "풋살",
+};
