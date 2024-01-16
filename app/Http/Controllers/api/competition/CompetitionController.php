@@ -66,15 +66,15 @@ class CompetitionController extends Controller
     }
     /**
      * @OA\Post (
-     *     path="/api/competitions/index",
+     *     path="/api/competitions/search",
      *     tags={"대회"},
-     *     description="대회 리스트 불러오기 with Sorting ",
+     *     description="대회 리스트 불러오기 검색 ",
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema (
-     *                  @OA\Property (property="sorting", type="string", description="대회 리스트 소팅(모집중:pre/진행중:ing/종료된:end)", example="pre"),
+     *                  @OA\Property (property="search", type="string", description="대회 검색(경기 title)", example="짧은"),
      *              )
      *          )
      *      ),
@@ -82,9 +82,9 @@ class CompetitionController extends Controller
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function indexCompetitionWithSorting(Request $request)
+    public function searchCompetition(Request $request)
     {
-        return $this->compService->indexCompetitionWithSorting($request);
+        return $this->compService->searchCompetition($request);
     }
 
     /**

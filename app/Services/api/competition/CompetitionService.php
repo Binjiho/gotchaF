@@ -173,30 +173,18 @@ class CompetitionService extends Services
         }
     }
 
-    public function indexCompetitionWithSorting(Request $request)
+    public function searchCompetition(Request $request)
     {
         try {
             $query = DB::table('competitions')
-                ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day , ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn"))
+                ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day, ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn
+                , ( CASE
+                    WHEN regist_edate >= NOW() THEN '모집중'
+                    WHEN event_edate < NOW() THEN '대회종료'
+                    WHEN event_sdate < NOW() AND event_edate >= NOW() THEN '진행중'
+                    ELSE '대회준비중' END ) AS state"))
+                ->where('title', 'like','%'.$request->title.'%')
                 ->where('del_yn', '=','N');
-//            User::selectRaw("'*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day'")
-            /**
-             * 모집중:pre/진행중:ing/종료된:end
-             */
-            switch($request['sorting']){
-                case 'pre':
-                    $query->where('regist_edate', '>', now());
-                    break;
-                case 'ing':
-                    $query->where('event_sdate', '<', now());
-                    $query->where('event_edate', '>=', now());
-                    break;
-                case 'end':
-                    $query->where('event_edate', '<', now());
-                    break;
-                default:
-                    break;
-            }
 
             /**
              * 최근등록순->종료 하위 순
@@ -204,26 +192,24 @@ class CompetitionService extends Services
             $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
 
             $comps = $query->paginate(10);
-//            $comps = $query->get();
 
             foreach($comps as $comp_idx => $comp) {
                 $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();
                 $comps[$comp_idx]->team_count = $team_count;
             }
 
-
             $data = [
                 "result" => $comps,
             ];
 
             return response()->json([
-                'message' => 'Successfully loaded Competitions!',
+                'message' => 'Successfully searched Competitions!',
                 'state' => "S",
                 "data" => $data,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error loaded Competitions!',
+                'message' => 'Error searched Competitions!',
                 'state' => "E",
                 'error' => $e,
             ], 500);

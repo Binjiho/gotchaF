@@ -87,7 +87,7 @@ Route::prefix('/teams')->group(function () {
 */
 Route::prefix('/competitions')->group(function () {
     Route::get('{type?}{sorting?}', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']); //전체
-//    Route::post('/index', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetitionWithSorting']); //대회 소팅 리스트
+    Route::post('/search', [App\Http\Controllers\api\competition\CompetitionController::class, 'searchCompetition']); //대회 검색
     Route::get('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [App\Http\Controllers\api\competition\CompetitionController::class, 'storeCompetition']);
