@@ -4,7 +4,6 @@ namespace App\Http\Controllers\api\competition;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Board;
 use App\Services\api\competition\CompetitionService;
 
 class CompetitionController extends Controller
@@ -171,6 +170,29 @@ class CompetitionController extends Controller
     public function applyCompetition(String $cid)
     {
         return $this->compService->applyCompetition($cid);
+    }
+
+    /**
+     * @OA\Post (
+     *     path="/api/competitions/start/{cid}",
+     *     tags={"대회"},
+     *     description="대회 경기 시작",
+     *      @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema (
+     *                 @OA\Property (property="cid", type="string", description="참여 경기의 sid", example="1"),
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function startCompetition(String $cid)
+    {
+        return $this->compService->startCompetition($cid);
     }
 
 }

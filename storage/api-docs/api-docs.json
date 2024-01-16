@@ -224,21 +224,6 @@
             }
         },
         "/api/competitions": {
-            "get": {
-                "tags": [
-                    "대회"
-                ],
-                "description": "대회 리스트 불러오기 ",
-                "operationId": "326a5e95dd0e507b25f242a08c275db2",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            },
             "post": {
                 "tags": [
                     "대회"
@@ -337,23 +322,40 @@
                 }
             }
         },
-        "/api/competitions/index": {
+        "/api/competitions?type=1&sorting": {
+            "get": {
+                "tags": [
+                    "대회"
+                ],
+                "description": "대회 리스트 불러오기 [type=>0:리그,1:컵] [sorting =>pre:진행전,ing:진행중,end:종료된]",
+                "operationId": "d056644719313e2bceed8a24f7efebdd",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/competitions/search": {
             "post": {
                 "tags": [
                     "대회"
                 ],
-                "description": "대회 리스트 불러오기 with Sorting ",
-                "operationId": "54eb9c06ec3e76a38ad9328c3373fd0a",
+                "description": "대회 리스트 불러오기 검색 ",
+                "operationId": "78c2be161c404439dab2300f20c20f62",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "sorting": {
-                                        "description": "대회 리스트 소팅(모집중:pre/진행중:ing/종료된:end)",
+                                    "search": {
+                                        "description": "대회 검색(경기 title)",
                                         "type": "string",
-                                        "example": "pre"
+                                        "example": "짧은"
                                     }
                                 },
                                 "type": "object"
@@ -504,6 +506,40 @@
                 ],
                 "description": "대회 참여 신청",
                 "operationId": "c6521a2ae14ec2ca7eea1715abc0f41e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cid": {
+                                        "description": "참여 경기의 sid",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/competitions/start/{cid}": {
+            "post": {
+                "tags": [
+                    "대회"
+                ],
+                "description": "대회 경기 시작",
+                "operationId": "cf7fea8e5fa7d61d9d765222af8bde42",
                 "requestBody": {
                     "required": true,
                     "content": {

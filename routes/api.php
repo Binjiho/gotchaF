@@ -94,7 +94,17 @@ Route::prefix('/competitions')->group(function () {
         Route::post('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'updateCompetition']);
 
         Route::post('/apply/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'applyCompetition']);
+        Route::post('/start/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'startCompetition']);
     });
+});
+
+/*
+|--------------------------------------------------------------------------
+| MATCH
+|--------------------------------------------------------------------------
+*/
+Route::prefix('/matches')->group(function () {
+
 });
 
 /*
