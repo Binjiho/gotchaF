@@ -224,6 +224,18 @@ class TeamService extends Services
 
     public function showTeam(String $sid)
     {
+        $team_info = Team::where( [
+            'del_yn' => 'N',
+            'sid' => $sid,
+        ])->get();
+        if(!$team_info){
+            return response()->json([
+                'message' => '해당하는 팀정보가 없습니다!',
+                'state' => "E",
+                'error' => $sid,
+            ], 500);
+        }
+
         try {
             $user = auth()->user();
             $user_level = Team_User::where( [
@@ -234,13 +246,9 @@ class TeamService extends Services
 
             if(!$user_level){
                 $user_level = 'W'; //대기 상태로 일단 보여줌
+            }else{
+                $user_level = $user_level->level;
             }
-
-            $team_info = Team::where( [
-                    'del_yn' => 'N',
-                    'sid' => $sid,
-                ]
-            )->get();
 
             $team_users = DB::table('users')
                 ->Join('team_users','users.sid','=','team_users.uid')
@@ -253,7 +261,7 @@ class TeamService extends Services
                 'message' => 'Successfully loaded team!',
                 'state' => "S",
                 "data" => [
-                    "user_level" => $user_level->level,
+                    "user_level" => $user_level,
                     "team_info" => $team_info,
                     "team_users" => $team_users,
                 ],

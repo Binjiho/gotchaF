@@ -53,16 +53,16 @@ class CompetitionController extends Controller
 
     /**
      * @OA\Get (
-     *     path="/api/competitions",
+     *     path="/api/competitions?type=1&sorting",
      *     tags={"대회"},
-     *     description="대회 리스트 불러오기 ",
+     *     description="대회 리스트 불러오기 [type=>0:리그,1:컵] [sorting =>pre:진행전,ing:진행중,end:종료된]",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function indexCompetition()
+    public function indexCompetition(Request $request)
     {
-        return $this->compService->indexCompetition();
+        return $this->compService->indexCompetition($request);
     }
     /**
      * @OA\Post (

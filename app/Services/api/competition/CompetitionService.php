@@ -106,19 +106,48 @@ class CompetitionService extends Services
     }
 
 
-    public function indexCompetition()
+    public function indexCompetition(Request $request)
     {
+        //type=>0:리그,1:컵
+        if(!$request->type){
+            $type = 0;
+        }else{
+            $type = $request->type;
+        }
         try {
             $query = DB::table('competitions')
-                ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day, ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn"))
+                ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day, ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn
+                , ( CASE
+                    WHEN regist_edate >= NOW() THEN '모집중'
+                    WHEN event_edate < NOW() THEN '대회종료'
+                    WHEN event_sdate < NOW() AND event_edate >= NOW() THEN '진행중'
+                    ELSE '대회준비중' END ) AS state"))
+                ->where('type', '=',$type)
                 ->where('del_yn', '=','N');
+            /**
+             * 모집중:pre/진행중:ing/종료된:end
+             */
+            switch($request->sorting) {
+                case 'pre':
+                    $query->where('regist_edate', '>', now());
+                    break;
+                case 'ing':
+                    $query->where('event_sdate', '<', now());
+                    $query->where('event_edate', '>=', now());
+                    break;
+                case 'end':
+                    $query->where('event_edate', '<', now());
+                    break;
+                default:
+                    break;
+            }
+
             /**
              * 최근등록순->종료 하위 순
              */
             $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
 
             $comps = $query->paginate(10);
-//            $comps = $query->get();
 
             foreach($comps as $comp_idx => $comp) {
                 $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();
