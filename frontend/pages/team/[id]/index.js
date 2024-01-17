@@ -17,6 +17,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCookie } from "@/helper/cookies";
 import { toast } from "react-toastify";
+import { shareNowUrl } from "@/helper/UIHelper";
 
 export default function Index() {
   const router = useRouter();
@@ -27,24 +28,35 @@ export default function Index() {
   const user = useSelector(state => state.user);
   const [isSendJoin, setIsSendJoin] = useState(false);
   const [isLeader, setIsLeader] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   const getTeam = function () {
     sendGet(`/api/teams/${teamId}`, null, res => {
       setTeamInfo(res.data.team_info[0]);
       setIsSendJoin(res.data.team_users.find(item => item.sid === user.sid));
-      setIsLeader(
-        res.data.team_users.find(
-          item =>
-            item.sid === user.sid &&
-            (item.level === TEAM_MEMBER_LEVEL.LEADER ||
-              item.level === TEAM_MEMBER_LEVEL.MANAGEMENT)
-        )
-      );
-      setNowTeamUser(
-        res.data.team_users.filter(item => {
-          return item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN;
-        })
-      );
+
+      const nowTeam = [];
+
+      res.data.team_users.map(item => {
+        if (item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN) {
+          nowTeam.push(item);
+        }
+
+        if (item.sid === user.sid) {
+          if (
+            item.level === TEAM_MEMBER_LEVEL.LEADER ||
+            item.level === TEAM_MEMBER_LEVEL.MANAGEMENT
+          ) {
+            setIsLeader(true);
+          }
+
+          if (item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN) {
+            setIsMember(true);
+          }
+        }
+      });
+
+      setNowTeamUser(nowTeam);
     });
   };
 
@@ -74,10 +86,18 @@ export default function Index() {
     });
   };
 
+  const goTeamSetting = () => {
+    router.push(`/team/${teamId}/setting`);
+  };
+
   return (
     <>
       <PrevHeader transparent={true}>
-        <Button variant={`text`} type={`right`} className={`text-current`}>
+        <Button
+          variant={`text`}
+          type={`right`}
+          className={`text-current`}
+          onClick={goTeamSetting}>
           <MoreVerticalIcon width={24} />
         </Button>
       </PrevHeader>
@@ -233,11 +253,13 @@ export default function Index() {
                           ))}
                         </div>
                       )}
-                      <RecommendBtn
-                        title={`새로운 멤버를 초대해 보세요.`}
-                        content={`SNS나 문자, 링크로 공유하고 쉽게 초대하세요.`}
-                        btnMessage={`멤버 초대하기`}
-                        active={() => {}}></RecommendBtn>
+                      {isMember && (
+                        <RecommendBtn
+                          title={`새로운 멤버를 초대해 보세요.`}
+                          content={`SNS나 문자, 링크로 공유하고 쉽게 초대하세요.`}
+                          btnMessage={`멤버 초대하기`}
+                          active={shareNowUrl}></RecommendBtn>
+                      )}
                       {isLeader && (
                         <RecommendBtn
                           title={`운영진 멤버를 선정하고 권한을 설정하세요.`}

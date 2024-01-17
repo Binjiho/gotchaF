@@ -6,7 +6,7 @@ import MemberProfile from "@/components/team/MemberProfile";
 import { printDateTimeFormat } from "@/helper/value";
 import { Button } from "react-bootstrap";
 import StateLine from "@/public/icons/system/shate-line.svg";
-import { toast } from "react-toastify";
+import { shareNowUrl } from "@/helper/UIHelper";
 
 export default function NoticeId() {
   const router = useRouter();
@@ -24,24 +24,6 @@ export default function NoticeId() {
     if (!noticeId) return;
     getNotice();
   }, [noticeId]);
-
-  const share = () => {
-    const shareObject = {
-      title: `${notice.title}`,
-      url: window.location.href,
-    };
-
-    if (navigator.share) {
-      navigator
-        .share(shareObject)
-        .then(() => {})
-        .catch(err => {
-          console.log(err);
-        });
-    } else {
-      toast("페이지 공유를 지원하지 않습니다.");
-    }
-  };
 
   return (
     <>
@@ -72,7 +54,7 @@ export default function NoticeId() {
                 variant={`text`}
                 size={50}
                 className={`border !border-gray4 rounded-[3px] w-full flex align-items-center justify-center gap-[6px]`}
-                onClick={share}>
+                onClick={shareNowUrl}>
                 <StateLine width={18}></StateLine>
                 <span className={`text-[15px] font-bold`}>공유</span>
               </Button>

@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export const replaceSpacesWithDot = inputString => {
   // 정규식을 사용하여 문자열에서 중간 공백을 '·'로 바꿉니다.
   let replacedString = inputString.replace(/\s/g, "·");
@@ -44,4 +46,22 @@ export const convertIntObj = obj => {
     }
   }
   return res;
+};
+
+export const shareNowUrl = () => {
+  const shareObject = {
+    title: `같차`,
+    url: window.location.href,
+  };
+
+  if (navigator.share) {
+    navigator
+      .share(shareObject)
+      .then(() => {})
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    toast("페이지 공유를 지원하지 않습니다.");
+  }
 };

@@ -41,3 +41,24 @@
     max-width: $max-layout;
   }
 }
+
+.hr-label {
+  height: 52px;
+  width: 100%;
+  position: relative;
+  border-color: transparent;
+  overflow: visible;
+  z-index: 1;
+
+  &::after {
+    content: "";
+    background: $gray2;
+    width: 100vw;
+    height: 100%;
+    position: absolute;
+    left: -20px;
+    top: 0;
+    max-width: $max-layout;
+    z-index: -1;
+  }
+}
