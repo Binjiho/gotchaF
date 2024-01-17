@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { sendGet } from "@/helper/api";
+import { sendAnonymousGet, sendGet, sendPost } from "@/helper/api";
 import { useRouter } from "next/router";
 import PrevHeader from "@/components/layout/PrevHeader";
 import { Badge, Button, Tab, Nav, Spinner } from "react-bootstrap";
-import { SEX_TYPE } from "@/constants/serviceConstants";
+import { SEX_TYPE, TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
 import ShareIcon from "@/public/icons/social/share-line.svg";
 import HeartIcon from "@/public/icons/social/heart-line.svg";
 import MoreVerticalIcon from "@/public/icons/system/more-vertical.svg";
@@ -14,24 +14,34 @@ import NoContentText from "@/components/noContent/noContentText";
 import TeamMemberItem from "@/components/team/TeamMemberItem";
 import NoticeCardItem from "@/components/team/NoticeCardItem";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useDispatch, useSelector } from "react-redux";
+import { getCookie } from "@/helper/cookies";
+import { toast } from "react-toastify";
 
 export default function Index() {
   const router = useRouter();
   const [teamInfo, setTeamInfo] = useState(null);
-  const [teamUser, setTeamUser] = useState([]);
+  const [nowTeamUser, setNowTeamUser] = useState([]);
   const [teamNotice, setTeamNotice] = useState([]);
   const teamId = router.query.id;
+  const user = useSelector(state => state.user);
+  const [isSendJoin, setIsSendJoin] = useState(false);
 
   const getTeam = function () {
     sendGet(`/api/teams/${teamId}`, null, res => {
-      // setTeamInfo(res.data.team_info[0]);
-      // setTeamUser(res.data.team_users);
+      setTeamInfo(res.data.team_info[0]);
+      setIsSendJoin(res.data.team_users.find(item => item.sid === user.sid));
+      setNowTeamUser(
+        res.data.team_users.filter(item => {
+          return item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN;
+        })
+      );
     });
   };
 
   const getNotice = function () {
-    sendGet(`/api/boards/${teamId}`, null, res => {
-      // setTeamNotice(res.data.board);
+    sendAnonymousGet(`/api/boards/board-notice/${teamId}`, null, res => {
+      setTeamNotice(res.data.boards.data);
     });
   };
 
@@ -40,6 +50,20 @@ export default function Index() {
     getTeam();
     getNotice();
   }, [teamId]);
+
+  const joinTeam = async () => {
+    const token = await getCookie("accessToken");
+
+    const data = {
+      tid: teamId,
+      uid: token,
+    };
+
+    sendPost(`/api/teams/signup/${teamId}`, data, res => {
+      toast("팀 가입신청을 보냈습니다.");
+      getTeam();
+    });
+  };
 
   return (
     <>
@@ -117,7 +141,7 @@ export default function Index() {
                   </div>
                 </div>
               </div>
-
+              {/*탭 start*/}
               <Tab.Container id="left-tabs-example" defaultActiveKey="home">
                 <Nav variant="underline">
                   <Nav.Item>
@@ -184,9 +208,9 @@ export default function Index() {
                       <LinkHeader
                         title={"멤버"}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
-                      {teamUser && (
+                      {nowTeamUser && (
                         <div className={`flex flex-column gap-[20px] mb-[40px]`}>
-                          {teamUser?.map((item, index) => (
+                          {nowTeamUser?.map((item, index) => (
                             <TeamMemberItem
                               item={item}
                               key={`member-${index}`}></TeamMemberItem>
@@ -211,6 +235,18 @@ export default function Index() {
                   <Tab.Pane eventKey="gallery">Second tab content</Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
+              {/*탭 end*/}
+              {user && !isSendJoin && (
+                <div className={`bottom-fixed btns bg-white`}>
+                  <Button
+                    className={`w-full`}
+                    variant="green-primary"
+                    size="50"
+                    onClick={() => joinTeam()}>
+                    가입하기
+                  </Button>
+                </div>
+              )}
             </>
           ) : (
             <div className={"text-center pt-4"}>
