@@ -26,11 +26,20 @@ export default function Index() {
   const teamId = router.query.id;
   const user = useSelector(state => state.user);
   const [isSendJoin, setIsSendJoin] = useState(false);
+  const [isLeader, setIsLeader] = useState(false);
 
   const getTeam = function () {
     sendGet(`/api/teams/${teamId}`, null, res => {
       setTeamInfo(res.data.team_info[0]);
       setIsSendJoin(res.data.team_users.find(item => item.sid === user.sid));
+      setIsLeader(
+        res.data.team_users.find(
+          item =>
+            item.sid === user.sid &&
+            (item.level === TEAM_MEMBER_LEVEL.LEADER ||
+              item.level === TEAM_MEMBER_LEVEL.MANAGEMENT)
+        )
+      );
       setNowTeamUser(
         res.data.team_users.filter(item => {
           return item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN;
@@ -175,14 +184,17 @@ export default function Index() {
                         </Swiper>
                       ) : (
                         <>
-                          <RecommendBtn
-                            title={`공지사항을 작성해보세요.`}
-                            content={`팀 내 규정 및 매너 수칙 등을 작성하고 멤버들과 공유하세요.`}
-                            btnVariant={"gray2"}
-                            btnMessage={`글쓰기`}
-                            active={() => {}}></RecommendBtn>
-                          <NoContentText
-                            title={`작성된 공지사항이 없습니다.`}></NoContentText>
+                          {isLeader ? (
+                            <RecommendBtn
+                              title={`공지사항을 작성해보세요.`}
+                              content={`팀 내 규정 및 매너 수칙 등을 작성하고 멤버들과 공유하세요.`}
+                              btnVariant={"gray2"}
+                              btnMessage={`글쓰기`}
+                              active={() => {}}></RecommendBtn>
+                          ) : (
+                            <NoContentText
+                              title={`작성된 공지사항이 없습니다.`}></NoContentText>
+                          )}
                         </>
                       )}
                     </div>
@@ -191,18 +203,22 @@ export default function Index() {
                         title={"경기 일정"}
                         active={() => {}}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
-                      <RecommendBtn
-                        title={`경기를 시작해보세요.`}
-                        content={
-                          <>
-                            대회를 만들거나 참여해 경기를 시작해보세요.
-                            <br />
-                            대회가 아닌 내부팀 연습 경기로도 일정을 만들 수 있어요!
-                          </>
-                        }
-                        btnMessage={`경기 시작하기`}
-                        active={() => {}}></RecommendBtn>
-                      <NoContentText title={`아직 경기 일정이 없습니다.`}></NoContentText>
+                      {isLeader ? (
+                        <RecommendBtn
+                          title={`경기를 시작해보세요.`}
+                          content={
+                            <>
+                              대회를 만들거나 참여해 경기를 시작해보세요.
+                              <br />
+                              대회가 아닌 내부팀 연습 경기로도 일정을 만들 수 있어요!
+                            </>
+                          }
+                          btnMessage={`경기 시작하기`}
+                          active={() => {}}></RecommendBtn>
+                      ) : (
+                        <NoContentText
+                          title={`아직 경기 일정이 없습니다.`}></NoContentText>
+                      )}
                     </div>
                     <div>
                       <LinkHeader
@@ -222,13 +238,15 @@ export default function Index() {
                         content={`SNS나 문자, 링크로 공유하고 쉽게 초대하세요.`}
                         btnMessage={`멤버 초대하기`}
                         active={() => {}}></RecommendBtn>
-                      <RecommendBtn
-                        title={`운영진 멤버를 선정하고 권한을 설정하세요.`}
-                        content={`공지사항 작성, 경기 만들기 등 팀의 일을 함께 할 운영진을 선정하고 권한을 설정하세요.`}
-                        btnMessage={`팀 설정 관리`}
-                        btnVariant={"green-sub"}
-                        className={"mt-[10px]"}
-                        active={() => {}}></RecommendBtn>
+                      {isLeader && (
+                        <RecommendBtn
+                          title={`운영진 멤버를 선정하고 권한을 설정하세요.`}
+                          content={`공지사항 작성, 경기 만들기 등 팀의 일을 함께 할 운영진을 선정하고 권한을 설정하세요.`}
+                          btnMessage={`팀 설정 관리`}
+                          btnVariant={"green-sub"}
+                          className={"mt-[10px]"}
+                          active={() => {}}></RecommendBtn>
+                      )}
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="record">Second tab content</Tab.Pane>

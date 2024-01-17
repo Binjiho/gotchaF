@@ -12,8 +12,8 @@ export default function Notice() {
   const teamId = router.query.id;
 
   const getNotice = function () {
-    sendGet(`/api/boards/${teamId}`, null, res => {
-      setTeamNotice(res.data.board);
+    sendGet(`/api/boards/board-notice/${teamId}`, null, res => {
+      setTeamNotice(res.data.boards.data);
     });
   };
 

@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 
 export default function NoticeItem({ item }) {
   const router = useRouter();
+  const teamId = router.query.id;
 
   const goNoticePage = sid => {
-    router.push(`/notice/${sid}`);
+    router.push(`/team/${teamId}/notice/${sid}`);
   };
 
   return (
