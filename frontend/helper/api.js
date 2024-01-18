@@ -37,6 +37,21 @@ export const sendPost = async (
   }
 };
 
+export const sendPatch = async (
+  url,
+  requestData,
+  successFun = null,
+  failureFun = null,
+  contentsType = REQUEST_HEADER_CONTENTS_JSON
+) => {
+  const accessToken = await getAccessToken();
+  addTokenToHeader(accessToken);
+
+  if (accessToken !== null) {
+    requestPatch(url, requestData, successFun, failureFun, contentsType);
+  }
+};
+
 export const sendAnonymousPost = async (
   url,
   requestData,
@@ -105,6 +120,35 @@ export const requestPost = async (
 ) => {
   axiosInstance
     .post(url, requestData, {
+      headers: {
+        "Content-Type": contentsType,
+      },
+    })
+    .then(res => {
+      if (typeof successFun === "function") {
+        successFun(res.data);
+      } else {
+        console.log(res.data);
+      }
+    })
+    .catch(error => {
+      if (typeof failureFun === "function") {
+        failureFun(error);
+      } else {
+        toast(error.message);
+      }
+    });
+};
+
+export const requestPatch = async (
+  url,
+  requestData,
+  successFun = null,
+  failureFun = null,
+  contentsType = REQUEST_HEADER_CONTENTS_JSON
+) => {
+  axiosInstance
+    .patch(url, requestData, {
       headers: {
         "Content-Type": contentsType,
       },

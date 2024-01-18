@@ -120,6 +120,17 @@ textarea.form-control {
     }
   }
 
+  &.btn-green-primary-line {
+    background: #fff;
+    color: $green_primary;
+    border: 1px solid $green_primary;
+
+    &:active {
+      background: #82e7afff;
+      color: #fff;
+    }
+  }
+
   &.btn-green-sub {
     background: $green-sub;
     color: $green_primary;
@@ -127,6 +138,16 @@ textarea.form-control {
     &:active {
       background: #82e7afff;
       color: $green_primary;
+    }
+  }
+
+  &.btn-red-primary {
+    background: $red_primary;
+    color: #fff;
+
+    &:active {
+      background: #f88876ff;
+      color: #fff;
     }
   }
 
