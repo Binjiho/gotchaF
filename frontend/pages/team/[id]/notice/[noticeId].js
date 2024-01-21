@@ -37,7 +37,10 @@ export default function NoticeId() {
           <>
             <div
               className={`flex gap-[9px] align-items-center border-b-[1px] border-gray2 py-[15px]`}>
-              <MemberProfile img={null} role={""} size={38}></MemberProfile>
+              <MemberProfile
+                img={notice.user_thum}
+                role={notice.level}
+                size={38}></MemberProfile>
               <div className={`flex flex-column `}>
                 <p className={`text-gray10 text-[13px]`}>{notice.writer}</p>
                 <span className={`text-[12px] text-gray7`}>

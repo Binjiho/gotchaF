@@ -3,7 +3,7 @@ import StarIcon from "@/public/icons/label/label_star.svg";
 import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
 
 export default function MemberProfile({ img, role = "", size = 24 }) {
-  const iconSize = size === 42 ? 20 : size === 24 ? 12 : 10;
+  const iconSize = size === 42 ? 20 : size === 24 ? 12 : size / 2;
 
   return (
     <div className={`position-relative w-fit`}>

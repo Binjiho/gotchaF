@@ -43,8 +43,10 @@ export default function Create() {
       !minYear ||
       !maxYear ||
       !personnel
-    )
+    ) {
+      setFormClear(false);
       return;
+    }
 
     setFormClear(true);
   }, [teamName, teamContents, file, address, genderType, minYear, maxYear, personnel]);
@@ -78,7 +80,7 @@ export default function Create() {
         <div type={"right"}>
           <Button
             variant={"text"}
-            className={`text-[15px] text-green_primary bg-white [&:disabled]:!text-gray-700`}
+            className={`text-[15px] text-green_primary bg-white [&:disabled]:!text-gray7`}
             disabled={!formClear}
             onClick={createTeam}>
             완료

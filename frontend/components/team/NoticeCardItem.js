@@ -15,7 +15,7 @@ export default function NoticeCardItem({ item }) {
       onClick={() => goNoticePage(item.sid)}>
       <div>
         <div className={`flex gap-[9px] align-items-center`}>
-          <MemberProfile img={null} role={1} size={24}></MemberProfile>
+          <MemberProfile img={item.user_thum} role={item.level} size={24}></MemberProfile>
           <p className={`text-gray10 text-[13px]`}>{item.writer}</p>
         </div>
       </div>

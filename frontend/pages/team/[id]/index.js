@@ -210,7 +210,9 @@ export default function Index() {
                               content={`팀 내 규정 및 매너 수칙 등을 작성하고 멤버들과 공유하세요.`}
                               btnVariant={"gray2"}
                               btnMessage={`글쓰기`}
-                              active={() => {}}></RecommendBtn>
+                              active={() =>
+                                router.push(`/team/${teamId}/notice/create`)
+                              }></RecommendBtn>
                           ) : (
                             <NoContentText
                               title={`작성된 공지사항이 없습니다.`}></NoContentText>
