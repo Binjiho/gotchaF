@@ -186,6 +186,7 @@ textarea.form-control {
   height: 20px;
   display: flex;
   align-items: center;
+  line-height: 18px;
 
   &.bg-secondary {
     background: $gray2 !important;
@@ -195,6 +196,10 @@ textarea.form-control {
   &.bg-primary {
     background: #ebf4ff !important;
     color: $blue_primary;
+  }
+
+  &[size="12"] {
+    font-size: 12px;
   }
 }
 
