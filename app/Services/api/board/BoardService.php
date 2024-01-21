@@ -21,6 +21,7 @@ class BoardService extends Services
     public function storeNotice(Request $request, String $tid)
     {
         try {
+
             $user = $request->user();
             if(!$user){
                 return response()->json([
@@ -47,10 +48,10 @@ class BoardService extends Services
             $board = new Board;
             $board->ccode = 1;
             $board->tid = $tid;
-            $board->uid = $request->uid;
+            $board->uid = $user->sid;
             $board->title = $request->title;
             $board->contents = $request->contents;
-            $board->writer = $request->writer;
+            $board->writer = $user->name;
             $board->created_at = $now;
             $board->save();
             $save_id = $board->sid;
@@ -67,23 +68,25 @@ class BoardService extends Services
                     Storage::disk('s3')->put($filepath, $file);
 
                     $board = Board::find($save_id);
-                    $board->file_name = $file->getClientOriginalName();
+                    $board->file_originalname = $file->getClientOriginalName();
+                    $board->file_realname = $filename;;
                     $board->file_path = Storage::disk('s3')->url($filepath);
                     $board->save();
                 }
             }
+
+
+            $this->dbCommit('경기 생성');
+
             return response()->json([
                 'message' => 'Successfully created board Notice!',
                 'state' => "S",
                 "data" => [ "board" => $board ],
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error create board Notice!',
-                'state' => "E",
-                'error' => $e,
-            ], 500);
+            return $this->dbRollback('Error board Notice!',$e);
         }
+
     }
 
 

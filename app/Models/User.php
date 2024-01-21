@@ -31,6 +31,8 @@ class User extends Authenticatable
         'name',
         'password',
         'social',
+        'position',
+        'htel',
         'sex',
         'age',
     ];

@@ -183,7 +183,7 @@ class CompetitionService extends Services
                     WHEN event_edate < NOW() THEN '대회종료'
                     WHEN event_sdate < NOW() AND event_edate >= NOW() THEN '진행중'
                     ELSE '대회준비중' END ) AS state"))
-                ->where('title', 'like','%'.$request->title.'%')
+                ->where('title', 'like','%'.$request->search.'%')
                 ->where('del_yn', '=','N');
 
             /**

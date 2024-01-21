@@ -30,6 +30,15 @@ class TeamAuthService extends Services
             ], 555);
         }
 
+        $already_team_signup = Team_User::where( ['del_yn' => 'N', 'uid' => $user->sid ])->first();
+        if($already_team_signup){
+            return response()->json([
+                'message' => '이미 팀에 가입되어있는 회원입니다.',
+                'state' => "E",
+            ], 555);
+        }
+
+
         $team = Team::where( ['del_yn' => 'N', 'sid' => $request->sid ])->first();
 
         if(!$team){
@@ -113,7 +122,14 @@ class TeamAuthService extends Services
             ], 555);
         }
 
-        $confirm_user = Team_User::where( ['del_yn' => 'N', 'uid' => $user->sid ])->first();
+        $confirm_user = Team_User::where( ['del_yn' => 'N', 'uid' => $user->sid, 'tid' => $sid ])->first();
+        if(!$confirm_user){
+            return response()->json([
+                'message' => '팀유저가 아닙니다!',
+                'state' => "E",
+            ], 555);
+        }
+
         if($team->confirm_m == 'N'){
             if($confirm_user->level != 'L'){
                 return response()->json([

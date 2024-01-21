@@ -7,6 +7,7 @@ use App\Models\Team_User;
 use App\Models\User;
 use App\Services\Services;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Socialite\Facades\Socialite;
@@ -18,6 +19,33 @@ use Illuminate\Support\Facades\Auth;
  */
 class MemberService extends Services
 {
+    public function myInfo(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            $team_users = DB::table('users')
+                ->leftJoin('team_users','users.sid','=','team_users.uid')
+                ->leftJoin('teams','teams.sid','=','team_users.tid')
+                ->select('teams.sid','team_users.level')
+                ->where('users.sid','=',$user->sid)
+                ->first();
+
+            return response()->json([
+                'message' => 'Successfully loaded myInfo!',
+                'state' => "S",
+                "data" => [
+                    "result" => $team_users,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded myInfo!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
     public function storeThum(Request $request)
     {
         try {

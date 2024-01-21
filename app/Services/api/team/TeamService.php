@@ -90,8 +90,6 @@ class TeamService extends Services
 
     public function updateTeam(Request $request, String $sid)
     {
-        $this->transaction();
-
         $user = $request->user();
         if(!$user){
             return response()->json([
@@ -113,6 +111,8 @@ class TeamService extends Services
         }
 
         try {
+            $this->transaction();
+
             $now = date('Y-m-d H:i:s');
 
             $team = Team::where( ['del_yn' => 'N', 'sid' => $sid ])->first();
@@ -237,21 +237,12 @@ class TeamService extends Services
         }
 
         try {
-            $user = auth()->user();
-            $user_level = Team_User::where( [
-                'del_yn' => 'N',
-                'uid' => $user->sid,
-                'tid' => $sid,
-            ])->first();
-
-            if(!$user_level){
-                $user_level = 'W'; //대기 상태로 일단 보여줌
-            }else{
-                $user_level = $user_level->level;
-            }
 
             $team_users = DB::table('users')
-                ->Join('team_users','users.sid','=','team_users.uid')
+                ->join('team_users', function ($join) {
+                    $join->on('users.sid', '=', 'team_users.uid')
+                        ->where('team_users.level', '<>', 'W');
+                })
                 ->Join('teams','teams.sid','=','team_users.tid')
                 ->select('users.*','team_users.level')
                 ->where('teams.sid','=',$sid)
@@ -261,7 +252,6 @@ class TeamService extends Services
                 'message' => 'Successfully loaded team!',
                 'state' => "S",
                 "data" => [
-                    "user_level" => $user_level,
                     "team_info" => $team_info,
                     "team_users" => $team_users,
                 ],
@@ -272,6 +262,41 @@ class TeamService extends Services
                 'state' => "E",
                 'error' => $e,
             ], 500);
+        }
+    }
+
+    public function deleteTeam(String $tid)
+    {
+        $now = date('Y-m-d H:i:s');
+
+        $team_info = Team::where( [
+            'del_yn' => 'N',
+            'sid' => $tid,
+        ])->get();
+        if(!$team_info){
+            return response()->json([
+                'message' => '해당하는 팀정보가 없습니다!',
+                'state' => "E",
+            ], 500);
+        }
+
+        try {
+            $this->transaction();
+
+            $team_info->del_yn = 'Y';
+            $team_info->updated_at = $now;
+            $team_info->save();
+
+            $team_users = DB::table('team_users')->where('team_users.tid', '=', $tid)->delete();
+
+            $this->dbCommit('팀삭제');
+
+            return response()->json([
+                'message' => 'Successfully deleted team!',
+                'state' => "S",
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error deleted team!',$e);
         }
     }
 
