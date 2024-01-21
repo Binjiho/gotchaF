@@ -53,8 +53,10 @@ Route::prefix('/auth')->group(function () {
 */
 Route::prefix('/mypage')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/', [App\Http\Controllers\api\member\MemberController::class, 'myInfo']);
-        Route::post('/thum', [App\Http\Controllers\api\member\MemberController::class, 'storeThum']);
+        Route::get('', [App\Http\Controllers\api\mypage\MypageController::class, 'indexMypage']);
+        Route::get('/detail', [App\Http\Controllers\api\mypage\MypageController::class, 'showMypage']);
+        Route::post('', [App\Http\Controllers\api\mypage\MypageController::class, 'updateUser']);
+        Route::post('/thum', [App\Http\Controllers\api\mypage\MypageController::class, 'storeThum']);
     });
 });
 

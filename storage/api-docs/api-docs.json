@@ -760,13 +760,82 @@
                 }
             }
         },
-        "/api/mypage/": {
+        "/api/mypage": {
             "get": {
                 "tags": [
                     "마이페이지"
                 ],
                 "description": "토큰으로 사용자 팀 정보 얻기(팀sid,level)",
-                "operationId": "0f152180842623f7376f265eb154b73a",
+                "operationId": "f11acf8c0f3b4b010ffcc10710074bee",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "마이페이지"
+                ],
+                "description": "유저 정보 수정",
+                "operationId": "d376d2617ff94aa5311e0bbbab4d3212",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "이름",
+                                        "type": "string",
+                                        "example": "테스터"
+                                    },
+                                    "position": {
+                                        "description": "선호 포지션 0:전체,1:공격수,2:중원,3:수비수,4:골키퍼",
+                                        "type": "string",
+                                        "example": "0"
+                                    },
+                                    "sex": {
+                                        "description": "1:남성, 2:여성",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "age": {
+                                        "description": "나이",
+                                        "type": "string",
+                                        "example": "1993"
+                                    },
+                                    "htel": {
+                                        "description": "휴대폰번호",
+                                        "type": "string",
+                                        "example": "010-1234-1234"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/mypage/detail": {
+            "get": {
+                "tags": [
+                    "마이페이지"
+                ],
+                "description": "토큰으로 사용자 디테일 정보 얻기",
+                "operationId": "f775197c9c7230add000c41ca4a28aeb",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -783,7 +852,7 @@
                     "마이페이지"
                 ],
                 "description": "회원 프로필사진 업데이트",
-                "operationId": "bdb3c3f47e0285551cec64f02054aae4",
+                "operationId": "32effcd3b5b772fbfc3f9c1cb4070f0c",
                 "requestBody": {
                     "required": true,
                     "content": {
