@@ -7,6 +7,7 @@ import { setCookie } from "@/helper/cookies";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/actions/userActions";
+import { toast } from "react-toastify";
 
 export default function EmailSignin() {
   const [userId, setUserId] = useState("");
@@ -22,6 +23,11 @@ export default function EmailSignin() {
     };
 
     sendAnonymousPost("/api/auth/signin", data, res => {
+      if (!res?.data?.token) {
+        toast("잘못된 아이디이거나 비밀번호 입니다.");
+        return;
+      }
+
       setCookie("accessToken", res.data.token);
       setUserToken(res.data.token);
     });
