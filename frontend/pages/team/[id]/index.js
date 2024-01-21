@@ -31,7 +31,7 @@ export default function Index() {
   const [isMember, setIsMember] = useState(false);
 
   const getTeam = function () {
-    sendGet(`/api/teams/${teamId}`, null, res => {
+    sendAnonymousGet(`/api/teams/${teamId}`, null, res => {
       setTeamInfo(res.data.team_info[0]);
       setIsSendJoin(res.data.team_users.find(item => item.sid === user.sid));
 
@@ -155,9 +155,7 @@ export default function Index() {
                         {SEX_TYPE[teamInfo.sex]}
                       </Badge>
                       <Badge pill bg="secondary">
-                        {`${calculateAge(teamInfo.min_age)}~${calculateAge(
-                          teamInfo.max_age
-                        )}세`}
+                        {`${teamInfo.min_age}~${teamInfo.max_age}세`}
                       </Badge>
                       <Badge pill bg="primary">
                         모집중
@@ -278,7 +276,7 @@ export default function Index() {
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}
-              {user && !isSendJoin && (
+              {user && !isSendJoin && !user.tid && (
                 <div className={`bottom-fixed btns bg-white`}>
                   <Button
                     className={`w-full`}

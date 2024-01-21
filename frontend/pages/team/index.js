@@ -60,7 +60,7 @@ export default function Index() {
             ))
           )}
         </div>
-        <FloatAddBtn path={"/team/create"} text={"팀만들기"}></FloatAddBtn>
+        <FloatAddBtn path={"/team/create"} text={"팀만들기"} isNav></FloatAddBtn>
       </main>
       <NavBottom></NavBottom>
     </div>

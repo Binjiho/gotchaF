@@ -1,10 +1,10 @@
 import PrevHeader from "@/components/layout/PrevHeader";
-import { Button } from "react-bootstrap";
 import TodoLineIcon from "@/public/icons/other/todo-line.svg";
 import { useEffect, useState } from "react";
 import { sendGet } from "@/helper/api";
 import { useRouter } from "next/router";
 import NoticeItem from "@/components/team/NoticeItem";
+import FloatAddBtn from "@/components/btn/FloatAddBtn";
 
 export default function Notice() {
   const router = useRouter();
@@ -44,6 +44,9 @@ export default function Notice() {
                 <hr className={`hr-line`} />
               </div>
             ))}
+            <FloatAddBtn
+              path={`/team/${teamId}/notice/create`}
+              text={"글쓰기"}></FloatAddBtn>
           </>
         )}
       </main>

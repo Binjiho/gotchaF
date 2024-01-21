@@ -40,8 +40,8 @@ export default function EmailSignin() {
 
   const getUserInfo = token => {
     sendGet(`/api/auth/user`, { token: token }, res => {
-      dispatch(setUser(res));
-      setCookie("user", JSON.stringify(res), 7);
+      dispatch(setUser(res.data.result));
+      setCookie("user", JSON.stringify(res.data.result), 7);
       router.push("/");
     });
   };

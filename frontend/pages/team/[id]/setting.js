@@ -2,10 +2,45 @@ import PrevHeader from "@/components/layout/PrevHeader";
 import EditItem from "@/components/team/EditItem";
 import EditLabel from "@/components/team/EditLabel";
 import { useRouter } from "next/router";
+import { useModal } from "@/context/ModalContext";
+import { sendPost } from "@/helper/api";
+import { toast } from "react-toastify";
 
 export default function Setting() {
   const router = useRouter();
   const teamId = router.query.id;
+  const { openModal } = useModal();
+
+  const transConfirm = item => {
+    const modalContent = (
+      <div className={`text-center`}>
+        <strong className={`text-[18px]`}>팀을 삭제하시겠습니까?</strong>
+        <p className={`text-[14px] mt-[10px]`}>삭제 후에는 복구가 불가능합니다.</p>
+      </div>
+    );
+
+    openModal(
+      modalContent,
+      async () => {
+        await deleteTeam(item);
+      },
+      () => {
+        return;
+      }
+    );
+  };
+
+  const deleteTeam = () => {
+    sendPost(
+      `/api/teams/delete-team/${teamId}`,
+      null,
+      res => {
+        toast("팀이 삭제되었습니다");
+        router.back();
+      },
+      () => {}
+    );
+  };
 
   return (
     <>
@@ -37,7 +72,10 @@ export default function Setting() {
           onButtonClick={() => router.push(`/team/${teamId}/edit/leader`)}></EditItem>
 
         <hr className={`hr-line`} />
-        <EditItem title={`팀 삭제하기`} style={`text-red_primary`}></EditItem>
+        <EditItem
+          title={`팀 삭제하기`}
+          style={`text-red_primary`}
+          onButtonClick={transConfirm}></EditItem>
       </main>
     </>
   );
