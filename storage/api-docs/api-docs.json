@@ -590,6 +590,16 @@
                                         "type": "string",
                                         "example": "1234"
                                     },
+                                    "name": {
+                                        "description": "이름",
+                                        "type": "string",
+                                        "example": "테스터"
+                                    },
+                                    "position": {
+                                        "description": "선호 포지션 0:전체,1:공격수,2:중원,3:수비수,4:골키퍼",
+                                        "type": "string",
+                                        "example": "0"
+                                    },
                                     "sex": {
                                         "description": "1:남성, 2:여성",
                                         "type": "string",
@@ -740,6 +750,23 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/mypage/": {
+            "get": {
+                "tags": [
+                    "마이페이지"
+                ],
+                "description": "토큰으로 사용자 팀 정보 얻기(팀sid,level)",
+                "operationId": "0f152180842623f7376f265eb154b73a",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -1095,13 +1122,15 @@
                         "description": "Fail"
                     }
                 }
-            },
+            }
+        },
+        "/api/teams/{tid}": {
             "patch": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 수정",
-                "operationId": "794d639ab6add4192924d23397a29859",
+                "operationId": "20ee685556340bdf1fddbdf6ac85681b",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1210,6 +1239,23 @@
                 ],
                 "description": "팀 상세 불러오기",
                 "operationId": "0d59eebd57389b50eb958210308cf803",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/delete-team/{tid}": {
+            "post": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 삭제",
+                "operationId": "f17aabfa46bcd7eddd7021f8199921fa",
                 "responses": {
                     "200": {
                         "description": "Success"

@@ -53,6 +53,7 @@ Route::prefix('/auth')->group(function () {
 */
 Route::prefix('/mypage')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/', [App\Http\Controllers\api\member\MemberController::class, 'myInfo']);
         Route::post('/thum', [App\Http\Controllers\api\member\MemberController::class, 'storeThum']);
     });
 });
@@ -64,16 +65,17 @@ Route::prefix('/mypage')->group(function () {
 */
 Route::prefix('/teams')->group(function () {
     Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
+    Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
         Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
-        Route::post('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
+        Route::patch('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
         Route::post('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'signupTeam']);
         Route::post('/waitup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'waitupTeam']);
         Route::post('/confirm', [App\Http\Controllers\api\team\TeamAuthController::class, 'confirm']);
         Route::post('/mendate', [App\Http\Controllers\api\team\TeamAuthController::class, 'mendate']);
-        Route::post('/delete-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'delete']);
+        Route::post('/delete-team/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'deleteTeam']);
+//        Route::post('/delete-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'delete']);
         Route::post('/manager-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'manager']);
         Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
         Route::post('/board-gallery', [App\Http\Controllers\api\team\TeamController::class, 'gallery']);

@@ -17,6 +17,20 @@ class MemberController extends BaseController
     }
 
     /**
+     * @OA\Get (
+     *     path="/api/mypage/",
+     *     tags={"마이페이지"},
+     *     description="토큰으로 사용자 팀 정보 얻기(팀sid,level)",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function myInfo(Request $request)
+    {
+        return $this->memberService->myInfo($request);
+    }
+
+    /**
      * @OA\Post (
      *     path="/api/mypage/thum",
      *     tags={"마이페이지"},

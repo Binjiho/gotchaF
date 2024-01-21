@@ -50,7 +50,7 @@ class TeamController extends BaseController
 
     /**
      * @OA\Patch  (
-     *     path="/api/teams",
+     *     path="/api/teams/{tid}",
      *     tags={"팀"},
      *     description="팀 수정",
      *      @OA\RequestBody(
@@ -130,6 +130,20 @@ class TeamController extends BaseController
     public function showTeam(String $sid)
     {
         return $this->teamService->showTeam($sid);
+    }
+
+    /**
+     * @OA\Post (
+     *     path="/api/teams/delete-team/{tid}",
+     *     tags={"팀"},
+     *     description="팀 삭제",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function deleteTeam(Request $request)
+    {
+        return $this->teamService->deleteTeam($request);
     }
 
 }

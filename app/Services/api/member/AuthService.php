@@ -2,9 +2,11 @@
 
 namespace App\Services\api\member;
 
+use App\Models\Team_User;
 use App\Models\User;
 use App\Services\Services;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +33,7 @@ class AuthService extends Services
                 'email' => $request->email,
                 'name' => $request->name,
                 'password' => bcrypt($request->password),
+                'position' => $request->position,
                 'sex' => $request->sex,
                 'age' => $request->age,
                 'social'=> isset($request->social) ? $request->social : null,
@@ -140,6 +143,33 @@ class AuthService extends Services
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'callback failed!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function user(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            $team_users = DB::table('users')
+                ->leftJoin('team_users','users.sid','=','team_users.uid')
+                ->select('team_users.tid','team_users.level','users.*')
+                ->where('users.sid','=',$user->sid)
+                ->first();
+
+            return response()->json([
+                'message' => 'Successfully loaded myInfo!',
+                'state' => "S",
+                "data" => [
+                    "result" => $team_users,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded myInfo!',
                 'state' => "E",
                 'error' => $e,
             ], 500);

@@ -30,6 +30,8 @@ class AuthController extends BaseController
      *             @OA\Schema (
      *                 @OA\Property (property="email", type="string", description="email", example="jiho@naver.com"),
      *                 @OA\Property (property="password", type="string", description="password", example="1234"),
+     *                 @OA\Property (property="name", type="string", description="이름", example="테스터"),
+     *                  @OA\Property (property="position", type="string", description="선호 포지션 0:전체,1:공격수,2:중원,3:수비수,4:골키퍼", example="0"),
      *                  @OA\Property (property="sex", type="string", description="1:남성, 2:여성", example="1"),
      *                  @OA\Property (property="age", type="string", description="나이", example="1993"),
      *                  @OA\Property (property="social", type="string", description="social타입 null가능", example="google"),
@@ -113,7 +115,8 @@ class AuthController extends BaseController
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+//        return response()->json($request->user());
+        return $this->authService->user($request);
     }
 
 
