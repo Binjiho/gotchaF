@@ -3,9 +3,9 @@ import { sendGet, sendPost } from "@/helper/api";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import TodoLineIcon from "@/public/icons/other/todo-line.svg";
-import MemberProfile from "@/components/team/MemberProfile";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import TeamMemberItem from "@/components/team/TeamMemberItem";
 
 export default function Join() {
   const router = useRouter();
@@ -72,11 +72,7 @@ export default function Join() {
               <div
                 key={item.sid}
                 className={`flex justify-between align-items-center py-[10px]`}>
-                <MemberProfile img={null} role={""} size={42}></MemberProfile>
-                <div className={`ml-[16px] mr-auto flex flex-column`}>
-                  <p className={`text-[14px] font-medium`}>{item.name}</p>
-                  <span className={`text-[13px] text-[#A2A6A9]`}>공격수</span>
-                </div>
+                <TeamMemberItem item={item}></TeamMemberItem>
                 {item.access ? (
                   <Button
                     variant="gray2"

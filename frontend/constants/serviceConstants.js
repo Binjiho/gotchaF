@@ -38,3 +38,11 @@ export const COMPETITION_KIND = {
   1: "축구",
   2: "풋살",
 };
+
+export const TEAM_POSITION = {
+  0: "전체",
+  1: "공격수",
+  2: "중원",
+  3: "수비수",
+  4: "골키퍼",
+};
