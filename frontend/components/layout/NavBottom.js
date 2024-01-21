@@ -21,7 +21,7 @@ export default function NavBottom() {
       title: "홈",
       icon: HomeIcon,
       activeIcon: HomeFillIcon,
-      link: "/",
+      link: "/home",
     },
     {
       title: "대회",

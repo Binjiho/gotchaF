@@ -5,7 +5,7 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/auth/signin");
+    router.replace("/home");
   });
   return <div></div>;
 }

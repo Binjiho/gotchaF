@@ -42,7 +42,7 @@ export default function EmailSignin() {
     sendGet(`/api/auth/user`, { token: token }, res => {
       dispatch(setUser(res));
       setCookie("user", JSON.stringify(res), 7);
-      router.push("/team");
+      router.push("/");
     });
   };
 
