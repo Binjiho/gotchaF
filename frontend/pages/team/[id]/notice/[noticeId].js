@@ -51,6 +51,9 @@ export default function NoticeId() {
             <div className={`pt-[20px]`}>
               <h3 className={`text-[18px] text-gray10 font-medium`}>{notice.title}</h3>
               <p className={`pt-[20px] text-[15px] text-gray10`}>{notice.contents}</p>
+              <div className={`mt-[20px]`}>
+                <img src={notice.file_path} alt="" className={`w-full`} />
+              </div>
             </div>
             <div className={`mt-[30px] pb-[50px]`}>
               <Button
