@@ -1,25 +1,19 @@
 <?php
 
-namespace App\Services\api\member;
+namespace App\Services\api\mypage;
 
-use App\Models\Board;
-use App\Models\Team_User;
-use App\Models\User;
 use App\Services\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Socialite\Facades\Socialite;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class AuthServices
  * @package App\Services
  */
-class MemberService extends Services
+class MypageService extends Services
 {
-    public function myInfo(Request $request)
+    public function indexMypage()
     {
         try {
             $user = auth()->user();
@@ -46,6 +40,64 @@ class MemberService extends Services
             ], 500);
         }
     }
+
+    public function showMypage()
+    {
+        try {
+            $user = auth()->user();
+
+            return response()->json([
+                'message' => 'Successfully loaded myInfo!',
+                'state' => "S",
+                "data" => [
+                    "result" => $user,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded myInfo!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function updateUser(Request $request)
+    {
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+
+        try {
+            $this->transaction();
+
+            $now = date('Y-m-d H:i:s');
+
+            if($request->name) $user->name = $request->name;
+            if($request->position) $user->position = $request->position;
+            if($request->sex) $user->sex = $request->sex;
+            if($request->age) $user->age = $request->age;
+            if($request->htel) $user->htel = $request->htel;
+
+            $user->updated_at = $now;
+
+            $user->save();
+
+            $this->dbCommit('유저 수정');
+
+            return response()->json([
+                'message' => 'Successfully updated user!',
+                'state' => "S",
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error updated user!', $e);
+        }
+    }
+
     public function storeThum(Request $request)
     {
         try {
