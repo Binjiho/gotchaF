@@ -71,7 +71,7 @@ Route::prefix('/teams')->group(function () {
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
-        Route::patch('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
+        Route::post('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
         Route::post('/signup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'signupTeam']);
         Route::post('/waitup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'waitupTeam']);
         Route::post('/confirm', [App\Http\Controllers\api\team\TeamAuthController::class, 'confirm']);

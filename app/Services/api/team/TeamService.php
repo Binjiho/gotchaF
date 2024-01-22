@@ -267,12 +267,23 @@ class TeamService extends Services
 
     public function deleteTeam(String $tid)
     {
-        $now = date('Y-m-d H:i:s');
+        $user = auth()->user();
+        $user_level = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+            'tid' => $tid,
+        ])->first();
+        if($user_level->level != 'L'){
+            return response()->json([
+                'message' => '팀의 리더만 팀을 삭제할 수 있습니다.',
+                'state' => "E",
+            ], 500);
+        }
 
         $team_info = Team::where( [
             'del_yn' => 'N',
             'sid' => $tid,
-        ])->get();
+        ])->first();
         if(!$team_info){
             return response()->json([
                 'message' => '해당하는 팀정보가 없습니다!',
@@ -283,11 +294,19 @@ class TeamService extends Services
         try {
             $this->transaction();
 
+            $now = date('Y-m-d H:i:s');
+
             $team_info->del_yn = 'Y';
             $team_info->updated_at = $now;
             $team_info->save();
 
-            $team_users = DB::table('team_users')->where('team_users.tid', '=', $tid)->delete();
+//            Team_User::where('team_users.tid', '=', $tid)->delete();
+            $team_users = Team_User::where('team_users.tid', '=', $tid)->get();
+            foreach ($team_users as $team_user){
+                $team_user->del_yn = 'Y';
+                $team_user->updated_at = $now;
+                $team_user->save();
+            }
 
             $this->dbCommit('팀삭제');
 

@@ -48,14 +48,14 @@ class TeamAuthService extends Services
             ], 555);
         }
 
-        if($user->age < $team->max_age ) {
+        if($user->age/*1995*/ < $team->max_age/*1993*/ ) {
             return response()->json([
                 'message' => 'max age!',
                 'state' => "E",
             ], 555);
         }
 
-        if($user->age > $team->min_age) {
+        if($user->age/*1995*/ > $team->min_age/*2000*/) {
             return response()->json([
                 'message' => 'min age!',
                 'state' => "E",
