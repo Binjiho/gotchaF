@@ -1165,12 +1165,12 @@
                                     "min_age": {
                                         "description": "최소나이",
                                         "type": "string",
-                                        "example": "20"
+                                        "example": "2000"
                                     },
                                     "max_age": {
                                         "description": "최대나이",
                                         "type": "string",
-                                        "example": "40"
+                                        "example": "1993"
                                     },
                                     "files[]": {
                                         "description": "이미지 input name=files[]",
@@ -1194,12 +1194,12 @@
             }
         },
         "/api/teams/{tid}": {
-            "patch": {
+            "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 수정",
-                "operationId": "20ee685556340bdf1fddbdf6ac85681b",
+                "operationId": "df5edf59192ee28ff95892d5bc282164",
                 "requestBody": {
                     "required": true,
                     "content": {
