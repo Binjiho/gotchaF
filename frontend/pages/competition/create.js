@@ -8,14 +8,16 @@ import { calculateAge } from "@/helper/value";
 import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import UploadCover from "@/components/image/UploadCover";
-import TeamLengthSelect from "@/components/team/TeamLengthSelect";
+import EditItemSelect from "@/components/team/EditItemSelect";
+import { competitionKindList, teamLengthList } from "@/constants/UiConstants";
 
 export default function Create() {
   const [teamName, setTeamName] = useState("");
   const [title, setTitle] = useState("");
   const [file, setFile] = useState(null);
   const [address, setAddress] = useState([]);
-  const [teamLength, setTeamLength] = useState([]);
+  const [teamLength, setTeamLength] = useState("");
+  const [competitionKind, setCompetitionKind] = useState("");
 
   const [genderType, setGenderType] = useState("");
   const [minYear, setMinYear] = useState("");
@@ -101,14 +103,22 @@ export default function Create() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <TeamLengthSelect
+            <EditItemSelect
+              placeholder={`팀 수 선택`}
+              title={`참가팀 수`}
               value={teamLength}
               setValue={setTeamLength}
-              title={"참가팀 수"}></TeamLengthSelect>
+              list={teamLengthList()}></EditItemSelect>
             <AreaSelect
               value={address}
               setValue={setAddress}
               title={"경기 희망 지역"}></AreaSelect>
+            <EditItemSelect
+              placeholder={`종목 선택`}
+              title={`종목`}
+              value={competitionKind}
+              setValue={setCompetitionKind}
+              list={competitionKindList}></EditItemSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
             팀 이름과 사진은 개설 후에도 변경할 수 있어요

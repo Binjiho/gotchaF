@@ -3,14 +3,13 @@ import PrevHeader from "@/components/layout/PrevHeader";
 import { Button, Form } from "react-bootstrap";
 import UploadImage from "@/components/image/UploadImage";
 import AreaSelect from "@/components/team/AreaSelect";
-import GenderSelect from "@/components/team/GenderSelect";
-import YearSelect from "@/components/team/YearSelect";
-import PersonnelSelect from "@/components/team/PersonnelSelect";
 import { toast } from "react-toastify";
 import { sendPost } from "@/helper/api";
 import { calculateAge } from "@/helper/value";
 import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
+import EditItemSelect from "@/components/team/EditItemSelect";
+import { genderTypeList, yearList, personnelList } from "@/constants/UiConstants";
 
 export default function Create() {
   const [teamName, setTeamName] = useState("");
@@ -113,16 +112,30 @@ export default function Create() {
           <hr className={`hr-line`} />
           <ul>
             <AreaSelect value={address} setValue={setAddress} title={"지역"}></AreaSelect>
-            <GenderSelect value={genderType} setValue={setGenderType}></GenderSelect>
-            <YearSelect
+            <EditItemSelect
+              placeholder={`성별 선택`}
+              title={`성별`}
+              value={genderType}
+              setValue={setGenderType}
+              list={genderTypeList}></EditItemSelect>
+            <EditItemSelect
+              placeholder={`나이 선택`}
+              title={`최소나이`}
               value={minYear}
               setValue={setMinYear}
-              title={`최소나이`}></YearSelect>
-            <YearSelect
+              list={yearList()}></EditItemSelect>
+            <EditItemSelect
+              placeholder={`나이 선택`}
+              title={`최대나이`}
               value={maxYear}
               setValue={setMaxYear}
-              title={`최대나이`}></YearSelect>
-            <PersonnelSelect value={personnel} setValue={setPersonnel}></PersonnelSelect>
+              list={yearList()}></EditItemSelect>
+            <EditItemSelect
+              placeholder={`정원 선택`}
+              title={`정원`}
+              value={personnel}
+              setValue={setPersonnel}
+              list={personnelList()}></EditItemSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
             팀 이름과 사진은 개설 후에도 변경할 수 있어요
