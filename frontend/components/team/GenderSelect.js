@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { SEX_TYPE } from "@/constants/serviceConstants";
 import EditItemSelect from "@/components/team/EditItemSelect";
 
-export default function GenderSelect({ genderType, setGenderType }) {
+export default function GenderSelect({ value, setValue }) {
   const list = [
     {
       value: SEX_TYPE.ALL,
@@ -23,8 +23,8 @@ export default function GenderSelect({ genderType, setGenderType }) {
       <EditItemSelect
         placeholder={`성별 선택`}
         title={`성별`}
-        value={genderType}
-        setValue={setGenderType}
+        value={value}
+        setValue={setValue}
         list={list}></EditItemSelect>
     </>
   );

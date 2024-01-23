@@ -130,20 +130,16 @@ export default function Index() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <GenderSelect
-              genderType={genderType}
-              setGenderType={setGenderType}></GenderSelect>
+            <GenderSelect value={genderType} setValue={setGenderType}></GenderSelect>
             <YearSelect
-              year={minYear}
-              setYear={setMinYear}
+              value={minYear}
+              setValue={setMinYear}
               title={`최소나이`}></YearSelect>
             <YearSelect
-              year={maxYear}
-              setYear={setMaxYear}
+              value={maxYear}
+              setValue={setMaxYear}
               title={`최대나이`}></YearSelect>
-            <PersonnelSelect
-              personnel={personnel}
-              setPersonnel={setPersonnel}></PersonnelSelect>
+            <PersonnelSelect value={personnel} setValue={setPersonnel}></PersonnelSelect>
           </ul>
         </Form>
       </main>

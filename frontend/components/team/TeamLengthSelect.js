@@ -12,17 +12,17 @@ function createNumberList() {
 }
 
 // 함수 호출하여 숫자 리스트 생성
-const personnelList = createNumberList();
+const teamList = createNumberList();
 
-export default function PersonnelSelect({ value, setValue }) {
+export default function TeamLengthSelect({ value, setValue, title }) {
   return (
     <>
       <EditItemSelect
-        placeholder={`정원 선택`}
-        title={`정원`}
+        placeholder={`팀 수 선택`}
+        title={title}
         value={value}
         setValue={setValue}
-        list={personnelList}></EditItemSelect>
+        list={teamList}></EditItemSelect>
     </>
   );
 }

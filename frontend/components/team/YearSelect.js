@@ -19,14 +19,14 @@ function createYearList() {
 // 함수 호출하여 연도 리스트 생성
 const yearList = createYearList();
 
-export default function YearSelect({ year, setYear, title }) {
+export default function YearSelect({ value, setValue, title }) {
   return (
     <>
       <EditItemSelect
         placeholder={`나이 선택`}
         title={title}
-        value={year}
-        setValue={setYear}
+        value={value}
+        setValue={setValue}
         list={yearList}></EditItemSelect>
     </>
   );

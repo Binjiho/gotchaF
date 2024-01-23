@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import addressJson from "@/constants/addressCity.json";
 import { Typeahead } from "react-bootstrap-typeahead";
 
-export default function AreaSelect({ address, setAddress, title }) {
+export default function AreaSelect({ value, setValue, title }) {
   const [showModal, setShowModal] = useState(false);
   const [addressList, setAddressList] = useState([]);
 
@@ -29,16 +29,16 @@ export default function AreaSelect({ address, setAddress, title }) {
   }, [showModal]);
 
   useEffect(() => {
-    if (!address[0]?.code) return;
+    if (!value[0]?.code) return;
     setShowModal(false);
-  }, [address]);
+  }, [value]);
 
   return (
     <>
       <EditItem
         placeholder={`지역 선택`}
         title={title}
-        value={address[0]?.name}
+        value={value[0]?.name}
         onButtonClick={handleButtonClick}></EditItem>
       <PrevFullModal show={showModal} setShow={setShowModal}>
         <p type={`middle`}>지역 설정</p>
@@ -48,10 +48,10 @@ export default function AreaSelect({ address, setAddress, title }) {
               <Typeahead
                 id={`cityType`}
                 labelKey="name"
-                onChange={setAddress}
+                onChange={setValue}
                 options={addressList}
                 placeholder="지역을 선택하세요"
-                selected={address}
+                selected={value}
                 emptyLabel={`지역이 없습니다.`}
                 inputProps={{ required: true, className: "form-select form-select-40" }}
                 autoFocus

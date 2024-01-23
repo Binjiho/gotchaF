@@ -112,24 +112,17 @@ export default function Create() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <AreaSelect
-              address={address}
-              setAddress={setAddress}
-              title={"지역"}></AreaSelect>
-            <GenderSelect
-              genderType={genderType}
-              setGenderType={setGenderType}></GenderSelect>
+            <AreaSelect value={address} setValue={setAddress} title={"지역"}></AreaSelect>
+            <GenderSelect value={genderType} setValue={setGenderType}></GenderSelect>
             <YearSelect
-              year={minYear}
-              setYear={setMinYear}
+              value={minYear}
+              setValue={setMinYear}
               title={`최소나이`}></YearSelect>
             <YearSelect
-              year={maxYear}
-              setYear={setMaxYear}
+              value={maxYear}
+              setValue={setMaxYear}
               title={`최대나이`}></YearSelect>
-            <PersonnelSelect
-              personnel={personnel}
-              setPersonnel={setPersonnel}></PersonnelSelect>
+            <PersonnelSelect value={personnel} setValue={setPersonnel}></PersonnelSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
             팀 이름과 사진은 개설 후에도 변경할 수 있어요

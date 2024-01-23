@@ -8,12 +8,15 @@ import { calculateAge } from "@/helper/value";
 import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import UploadCover from "@/components/image/UploadCover";
+import TeamLengthSelect from "@/components/team/TeamLengthSelect";
 
 export default function Create() {
   const [teamName, setTeamName] = useState("");
   const [title, setTitle] = useState("");
   const [file, setFile] = useState(null);
   const [address, setAddress] = useState([]);
+  const [teamLength, setTeamLength] = useState([]);
+
   const [genderType, setGenderType] = useState("");
   const [minYear, setMinYear] = useState("");
   const [maxYear, setMaxYear] = useState("");
@@ -98,9 +101,13 @@ export default function Create() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
+            <TeamLengthSelect
+              value={teamLength}
+              setValue={setTeamLength}
+              title={"참가팀 수"}></TeamLengthSelect>
             <AreaSelect
-              address={address}
-              setAddress={setAddress}
+              value={address}
+              setValue={setAddress}
               title={"경기 희망 지역"}></AreaSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
