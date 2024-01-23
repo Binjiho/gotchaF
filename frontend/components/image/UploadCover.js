@@ -17,7 +17,7 @@ export default function UploadCover({ file, setFile }) {
         <div className={`w-[100%] h-[154px] relative`}>
           <Form.Group
             controlId="formImage"
-            className={`w-[100vw] h-[100%] bg-gray5 rounded-[3px] absolute left-[-20px]`}>
+            className={`w-[100vw] h-[100%] max-w-layout bg-gray5 rounded-[3px] absolute left-[-20px]`}>
             <Form.Label
               className={`w-full h-full flex flex-column align-items-center justify-center text-gray8 mb-0`}>
               <Image width={`26px`} className={`text-gray7`}></Image>
@@ -35,7 +35,7 @@ export default function UploadCover({ file, setFile }) {
       {file && (
         <div className={`w-[100%] h-[154px] relative`}>
           <div
-            className={`w-[100vw] h-[100%] bg-gray5 rounded-[3px] absolute left-[-20px]`}>
+            className={`w-[100vw] h-[100%] max-w-layout bg-gray5 rounded-[3px] absolute left-[-20px]`}>
             <img src={image} className={`w-[100%] h-[100%] object-cover`} />
           </div>
           <Form.Group

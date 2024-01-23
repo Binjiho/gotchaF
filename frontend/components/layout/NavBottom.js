@@ -46,7 +46,7 @@ export default function NavBottom() {
   return (
     <Navbar
       fixed="bottom"
-      className={`bg-white py-0 max-w-[500px] left-[50%] translate-x-[-50%] w-full`}>
+      className={`bg-white py-0 max-w-layout left-[50%] translate-x-[-50%] w-full`}>
       <Nav className={`flex justify-around w-full`}>
         {nav.map((item, index) => (
           <Nav.Link
