@@ -1,6 +1,4 @@
-import EditItem from "@/components/team/EditItem";
-import { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
+import EditItemSelect from "@/components/team/EditItemSelect";
 
 function createYearList() {
   const currentYear = new Date().getFullYear();
@@ -9,7 +7,10 @@ function createYearList() {
 
   const yearList = [];
   for (let year = endYear; year >= startYear; year--) {
-    yearList.push(year);
+    yearList.push({
+      value: year,
+      name: year + "년도",
+    });
   }
 
   return yearList;
@@ -19,47 +20,14 @@ function createYearList() {
 const yearList = createYearList();
 
 export default function YearSelect({ year, setYear, title }) {
-  const [showModal, setShowModal] = useState(false);
-
-  const handleButtonClick = () => {
-    setShowModal(true);
-  };
-
-  const handleClose = () => setShowModal(false);
-
-  useEffect(() => {
-    if (!year) return;
-    handleClose();
-  }, [year]);
-
   return (
     <>
-      <EditItem
+      <EditItemSelect
         placeholder={`나이 선택`}
         title={title}
-        value={year ? year + "년생" : null}
-        onButtonClick={handleButtonClick}></EditItem>
-      <Modal
-        show={showModal}
-        animation={false}
-        dialogClassName={`modal-bottom w-[100%] bottom-0`}
-        onHide={handleClose}>
-        <div className={`flex flex-column max-h-[50vh] overflow-y-auto mt-4 pb-4`}>
-          {yearList.map((item, index) => (
-            <Button
-              className={`border-bottom !border-gray-100 hover:bg-gray-200 ${
-                year == item && "bg-gray-200"
-              }`}
-              value={item}
-              key={`year-${index}`}
-              variant={`text`}
-              size={40}
-              onClick={e => setYear(e.currentTarget.value)}>
-              {item}
-            </Button>
-          ))}
-        </div>
-      </Modal>
+        value={year}
+        setValue={setYear}
+        list={yearList}></EditItemSelect>
     </>
   );
 }

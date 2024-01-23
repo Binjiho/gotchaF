@@ -98,7 +98,10 @@ export default function Create() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <AreaSelect address={address} setAddress={setAddress}></AreaSelect>
+            <AreaSelect
+              address={address}
+              setAddress={setAddress}
+              title={"경기 희망 지역"}></AreaSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
             팀 이름과 사진은 개설 후에도 변경할 수 있어요

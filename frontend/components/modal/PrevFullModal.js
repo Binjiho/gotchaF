@@ -9,7 +9,12 @@ export default function PrevFullModal({ children, show, setShow }) {
   };
 
   return (
-    <Modal show={show} fullscreen animation={false}>
+    <Modal
+      show={show}
+      fullscreen
+      animation={false}
+      centered={true}
+      dialogClassName={"max-w-layout m-auto"}>
       <header className={styles.header}>
         <button className={styles.prevBtn} onClick={() => setShow(false)}>
           <PrevIcon />

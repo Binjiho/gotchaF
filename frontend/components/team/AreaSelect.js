@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import addressJson from "@/constants/addressCity.json";
 import { Typeahead } from "react-bootstrap-typeahead";
 
-export default function AreaSelect({ address, setAddress }) {
+export default function AreaSelect({ address, setAddress, title }) {
   const [showModal, setShowModal] = useState(false);
   const [addressList, setAddressList] = useState([]);
 
@@ -37,7 +37,7 @@ export default function AreaSelect({ address, setAddress }) {
     <>
       <EditItem
         placeholder={`지역 선택`}
-        title={`지역`}
+        title={title}
         value={address[0]?.name}
         onButtonClick={handleButtonClick}></EditItem>
       <PrevFullModal show={showModal} setShow={setShowModal}>

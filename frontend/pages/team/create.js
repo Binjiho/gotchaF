@@ -112,7 +112,10 @@ export default function Create() {
           </Form.Group>
           <hr className={`hr-line`} />
           <ul>
-            <AreaSelect address={address} setAddress={setAddress}></AreaSelect>
+            <AreaSelect
+              address={address}
+              setAddress={setAddress}
+              title={"지역"}></AreaSelect>
             <GenderSelect
               genderType={genderType}
               setGenderType={setGenderType}></GenderSelect>
