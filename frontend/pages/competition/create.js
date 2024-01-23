@@ -9,7 +9,13 @@ import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import UploadCover from "@/components/image/UploadCover";
 import EditItemSelect from "@/components/team/EditItemSelect";
-import { competitionKindList, teamLengthList } from "@/constants/UiConstants";
+import {
+  competitionKindList,
+  frequencyGameList,
+  numberPlayersList,
+  teamLengthList,
+} from "@/constants/UiConstants";
+import EditItemDateSelect from "@/components/team/EditItemDateSelect";
 
 export default function Create() {
   const [teamName, setTeamName] = useState("");
@@ -18,6 +24,9 @@ export default function Create() {
   const [address, setAddress] = useState([]);
   const [teamLength, setTeamLength] = useState("");
   const [competitionKind, setCompetitionKind] = useState("");
+  const [numberPlayers, setNumberPlayers] = useState("");
+  const [frequencyGame, setFrequencyGame] = useState("");
+  const [startDate, setStartDate] = useState("");
 
   const [genderType, setGenderType] = useState("");
   const [minYear, setMinYear] = useState("");
@@ -119,6 +128,23 @@ export default function Create() {
               value={competitionKind}
               setValue={setCompetitionKind}
               list={competitionKindList}></EditItemSelect>
+            <EditItemSelect
+              placeholder={`인원 선택`}
+              title={`경기 인원`}
+              value={numberPlayers}
+              setValue={setNumberPlayers}
+              list={numberPlayersList()}></EditItemSelect>
+            <EditItemDateSelect
+              placeholder={`날짜 선택`}
+              title={`경기 시작 희망일`}
+              value={startDate}
+              setValue={setStartDate}></EditItemDateSelect>
+            <EditItemSelect
+              placeholder={`빈도 선택`}
+              title={`경기 빈도`}
+              value={frequencyGame}
+              setValue={setFrequencyGame}
+              list={frequencyGameList()}></EditItemSelect>
           </ul>
           <p className={`text-gray7 text-[13px] text-center mt-10`}>
             팀 이름과 사진은 개설 후에도 변경할 수 있어요

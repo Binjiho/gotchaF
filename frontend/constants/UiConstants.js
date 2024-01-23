@@ -63,3 +63,38 @@ export const personnelList = () => {
   }
   return numberList;
 };
+
+export const frequencyGameList = () => {
+  const list = [
+    "주1회",
+    "주2회",
+    "주3회",
+    "주4회",
+    "주5회",
+    "주6회",
+    "주7회",
+    "월1회",
+    "월2회",
+    "월3회",
+  ];
+
+  const frequencyList = [];
+  for (let i = 0; i <= list.length; i++) {
+    frequencyList.push({
+      value: list[i],
+      name: list[i],
+    });
+  }
+  return frequencyList;
+};
+
+export const numberPlayersList = () => {
+  const numberList = [];
+  for (let i = 4; i <= 12; i++) {
+    numberList.push({
+      value: `${i}:${i}`,
+      name: `${i}:${i}`,
+    });
+  }
+  return numberList;
+};
