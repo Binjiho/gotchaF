@@ -4,7 +4,6 @@ import { Button, Form } from "react-bootstrap";
 import AreaSelect from "@/components/team/AreaSelect";
 import { toast } from "react-toastify";
 import { sendPost } from "@/helper/api";
-import { calculateAge } from "@/helper/value";
 import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import UploadCover from "@/components/image/UploadCover";
@@ -16,62 +15,45 @@ import {
   teamLengthList,
 } from "@/constants/UiConstants";
 import EditItemDateSelect from "@/components/team/EditItemDateSelect";
+import EditItemWeekSelect from "@/components/team/EditItemWeekSelect";
 
 export default function Create() {
-  const [teamName, setTeamName] = useState("");
-  const [title, setTitle] = useState("");
   const [file, setFile] = useState(null);
+  const [title, setTitle] = useState("");
   const [address, setAddress] = useState([]);
   const [teamLength, setTeamLength] = useState("");
   const [competitionKind, setCompetitionKind] = useState("");
   const [numberPlayers, setNumberPlayers] = useState("");
   const [frequencyGame, setFrequencyGame] = useState("");
   const [startDate, setStartDate] = useState("");
-
-  const [genderType, setGenderType] = useState("");
-  const [minYear, setMinYear] = useState("");
-  const [maxYear, setMaxYear] = useState("");
-  const [personnel, setPersonnel] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [weekDate, setWeekDate] = useState([]);
   const [formClear, setFormClear] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    if (!minYear || !maxYear) return;
+    if (!startDate || !endDate) return;
 
-    if (minYear < maxYear) {
-      toast("최대나이는 최소나이보다 커야 합니다.");
-      setMaxYear("");
+    if (endDate < startDate) {
+      toast("마감일은 희망일보다 늦어야 합니다.");
+      setEndDate("");
     }
-  }, [minYear, maxYear]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
-    if (
-      !teamName ||
-      !title ||
-      !file ||
-      !address ||
-      !genderType ||
-      !minYear ||
-      !maxYear ||
-      !personnel
-    ) {
+    if (!title || !file || !address) {
       setFormClear(false);
       return;
     }
 
     setFormClear(true);
-  }, [teamName, title, file, address, genderType, minYear, maxYear, personnel]);
+  }, [title, file, address]);
 
   const createTeam = () => {
     const formData = new FormData();
     formData.append("files[]", file);
-    formData.append("title", teamName);
     formData.append("contents", title);
     formData.append("region", address[0].name);
-    formData.append("limit_person", personnel);
-    formData.append("sex", genderType);
-    formData.append("min_age", calculateAge(minYear));
-    formData.append("max_age", calculateAge(maxYear));
 
     sendPost(
       "/api/teams",
@@ -98,7 +80,7 @@ export default function Create() {
           </Button>
         </div>
       </PrevHeader>
-      <main className={`pb-[20px]`}>
+      <main className={`pb-[60px]`}>
         <Form>
           <UploadCover file={file} setFile={setFile}></UploadCover>
           <Form.Group>
@@ -139,16 +121,32 @@ export default function Create() {
               title={`경기 시작 희망일`}
               value={startDate}
               setValue={setStartDate}></EditItemDateSelect>
+            <EditItemDateSelect
+              placeholder={`날짜 선택`}
+              title={`리그 모집 마감일`}
+              value={endDate}
+              setValue={setEndDate}></EditItemDateSelect>
             <EditItemSelect
               placeholder={`빈도 선택`}
               title={`경기 빈도`}
               value={frequencyGame}
               setValue={setFrequencyGame}
               list={frequencyGameList()}></EditItemSelect>
+            <EditItemWeekSelect
+              title={`희망 요일`}
+              value={weekDate}
+              setValue={setWeekDate}
+              style={`!border-none`}></EditItemWeekSelect>
           </ul>
-          <p className={`text-gray7 text-[13px] text-center mt-10`}>
-            팀 이름과 사진은 개설 후에도 변경할 수 있어요
-          </p>
+          <div className={`mt-[60px] text-gray7 text-[13px]`}>
+            <h4 className={`font-bold`}>리그 형식</h4>
+            <ul className={`mt-[5px] flex flex-column `}>
+              <li className={`left-dot`}>단일 대결</li>
+              <li className={`left-dot`}>
+                승리당 점수 +3 / 무승부당 점수 +1 / 패배당 점수 +0
+              </li>
+            </ul>
+          </div>
         </Form>
       </main>
     </>

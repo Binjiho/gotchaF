@@ -1,5 +1,4 @@
 import RightIcon from "@/public/icons/system/arrow-right-s-line.svg";
-import { Button } from "react-bootstrap";
 
 export default function EditItemSelect({
   placeholder,
