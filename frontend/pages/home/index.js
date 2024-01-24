@@ -1,12 +1,15 @@
 import NavBottom from "@/components/layout/NavBottom";
-import SearchHeader from "@/components/layout/SearchHeader";
+import LogoIcon from "@/public/icons/logos/black_logo.svg";
+import MainHeader from "@/components/layout/MainHeader";
 
 export default function Index() {
   return (
     <>
-      <SearchHeader>
-        <p type={"left"}>홈</p>
-      </SearchHeader>
+      <MainHeader>
+        <a type={"left"}>
+          <LogoIcon width={42}></LogoIcon>
+        </a>
+      </MainHeader>
       <main></main>
       <NavBottom></NavBottom>
     </>

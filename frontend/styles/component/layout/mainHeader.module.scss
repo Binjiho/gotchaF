@@ -1,0 +1,20 @@
+.header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  max-width: $max-layout;
+  transition: background 0.3s;
+  position: fixed;
+  left: 50%;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  transform: translateX(-50%);
+  z-index: 100;
+  justify-content: space-between;
+
+  & + main {
+    padding-top: 60px;
+  }
+}
