@@ -79,7 +79,7 @@ export default function Index() {
     formData.append("min_age", calculateAge(minYear));
     formData.append("max_age", calculateAge(maxYear));
 
-    sendPatch(
+    sendPost(
       `/api/teams/${teamId}`,
       formData,
       res => {

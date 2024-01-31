@@ -28,7 +28,7 @@ export default function EditItemWeekSelect({ title, value, setValue, style = "" 
       name: "토",
     },
     {
-      value: 7,
+      value: 0,
       name: "일",
     },
   ];

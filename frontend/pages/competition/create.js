@@ -16,6 +16,7 @@ import {
 } from "@/constants/UiConstants";
 import EditItemDateSelect from "@/components/team/EditItemDateSelect";
 import EditItemWeekSelect from "@/components/team/EditItemWeekSelect";
+import { useSelector } from "react-redux";
 
 export default function Create() {
   const [file, setFile] = useState(null);
@@ -30,6 +31,7 @@ export default function Create() {
   const [weekDate, setWeekDate] = useState([]);
   const [formClear, setFormClear] = useState(false);
   const router = useRouter();
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
     if (!startDate || !endDate) return;
@@ -49,17 +51,28 @@ export default function Create() {
     setFormClear(true);
   }, [title, file, address]);
 
-  const createTeam = () => {
+  const createCompetition = () => {
     const formData = new FormData();
-    formData.append("files[]", file);
-    formData.append("contents", title);
+    formData.append("tid", user.tid);
+    formData.append("kind", competitionKind);
+    formData.append("type", "0");
+    formData.append("title", title);
+    formData.append("contents", "");
     formData.append("region", address[0].name);
+    formData.append("limit_team", teamLength);
+    formData.append("person_vs", numberPlayers);
+    formData.append("regist_sdate", new Date());
+    formData.append("event_sdate", startDate);
+    formData.append("event_edate", endDate);
+    formData.append("frequency", frequencyGame);
+    formData.append("yoil", weekDate.join(","));
+    formData.append("files[]", file);
 
     sendPost(
-      "/api/teams",
+      "/api/competitions",
       formData,
       res => {
-        toast("팀이 생성되었습니다");
+        toast("경기가 생성되었습니다");
         router.back();
       },
       () => {},
@@ -75,7 +88,7 @@ export default function Create() {
             variant={"text"}
             className={`text-[15px] text-green_primary bg-white [&:disabled]:!text-gray7`}
             disabled={!formClear}
-            onClick={createTeam}>
+            onClick={createCompetition}>
             완료
           </Button>
         </div>
