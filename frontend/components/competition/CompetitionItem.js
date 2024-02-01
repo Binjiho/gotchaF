@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import TimeBadge from "@/components/competition/TimeBadge";
 import TimeIcon from "@/public/icons/system/time-line.svg";
 import { COMPETITION_KIND } from "@/constants/serviceConstants";
+import { useRouter } from "next/router";
 
 export default function CompetitionItem({ item }) {
   const [isProgress, setIsProgress] = useState(false);
   const [isEnd, setIsEnd] = useState(false);
+  const router = useRouter();
 
   const parseDaysString = function (daysString) {
     // 주어진 문자열을 쉼표로 분리하여 배열로 만듭니다.
@@ -48,8 +50,12 @@ export default function CompetitionItem({ item }) {
     );
   }
 
+  const goDetailPage = () => {
+    router.push(`/competition/${item.uid}`);
+  };
+
   return (
-    <div className={`border-b !border-b-gray4 py-[22px]`}>
+    <div className={`border-b !border-b-gray4 py-[22px]`} onClick={goDetailPage}>
       <div className={`flex gap-[5px]`}>
         <Badge pill bg="secondary" size={12}>
           {item.region}
@@ -70,7 +76,7 @@ export default function CompetitionItem({ item }) {
       </div>
       <div className={`mt-[12px] flex gap-[20px]`}>
         <div className={`w-full`}>
-          <h3 className={`text-[15px]`}>{item.title}</h3>
+          <h3 className={`text-[15px] font-medium`}>{item.title}</h3>
           <p
             className={`text-[14px] text-gray9 mt-[8px] flex align-items-center gap-[3px] `}>
             <span>{printDateTimeFormat(item.event_sdate, "M.d(E)")} 시작</span>

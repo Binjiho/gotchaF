@@ -20,7 +20,7 @@ export default function TeamItem({ item }) {
       </div>
       <div className={`w-[calc(100%-78px)]`}>
         <p className={`text-[16px] mb-[3px] flex align-items-center gap-2`}>
-          <span>{item.title}</span>
+          <span className={`font-medium`}>{item.title}</span>
           {item.user_count < item.limit_person && (
             <Badge pill bg="primary">
               모집중

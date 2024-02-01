@@ -2,7 +2,7 @@ import { Badge, Button, Tab, Nav, Spinner } from "react-bootstrap";
 import MoreVerticalIcon from "@/public/icons/system/more-vertical.svg";
 import PrevHeader from "@/components/layout/PrevHeader";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import TimeIcon from "@/public/icons/system/time-line.svg";
 import EarthLineIcon from "@/public/icons/other/earth-line.svg";
@@ -11,30 +11,29 @@ import UserLineIcon from "@/public/icons/social/map-pin-user-line.svg";
 import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
+import { sendAnonymousGet } from "@/helper/api";
+import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
 
 export default function Id() {
   const router = useRouter();
   const competitionId = router.query.id;
-  const [competitionInfo, setCompetitionInfo] = useState({
-    sid: 1,
-    kind: 0,
-    type: 0,
-    title: "축구 같이 함",
-    contents: "같이 할 사람~~~",
-    region: "이게 뭘까",
-    limit_person: 4,
-    sex: 1,
-    file_name: null,
-    file_path: null,
-    del_yn: new Date(),
-    created_at: new Date(),
-    updated_at: new Date(),
-  });
+  const [competitionInfo, setCompetitionInfo] = useState(null);
   const user = useSelector(state => state.user);
+
+  const getCompetition = function () {
+    sendAnonymousGet(`/api/competitions/${competitionId}`, null, res => {
+      // setCompetitionInfo();
+    });
+  };
 
   const goTeamSetting = () => {
     router.push(`/team/${competitionId}/setting`);
   };
+
+  useEffect(() => {
+    if (!competitionId) return;
+    getCompetition();
+  }, [competitionId]);
 
   return (
     <>
