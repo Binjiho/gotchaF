@@ -26,6 +26,7 @@ class Competition extends Model
         'uid',
         'kind',
         'type',
+        'state',
         'title',
         'contents',
         'region',

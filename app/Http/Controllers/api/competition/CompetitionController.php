@@ -176,7 +176,7 @@ class CompetitionController extends Controller
      * @OA\Post (
      *     path="/api/competitions/start/{cid}",
      *     tags={"대회"},
-     *     description="대회 경기 시작",
+     *     description="대회 경기 시작, 대회 state값 변경 및 매치 생성",
      *      @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -192,7 +192,8 @@ class CompetitionController extends Controller
      */
     public function startCompetition(String $cid)
     {
-        return $this->compService->startCompetition($cid);
+        $state = $this->compService->startCompetition($cid);
+        return $this->matchService->startCompetition($cid);
     }
 
 }

@@ -45,6 +45,7 @@ class CompetitionService extends Services
             $comp->uid = $user->sid;
             $comp->kind = $request->kind;
             $comp->type = $request->type;
+            $comp->state = 'W';
             $comp->title = $request->title;
             $comp->contents = $request->contents;
             $comp->region = $request->region;
@@ -434,32 +435,50 @@ class CompetitionService extends Services
             ], 500);
         }
 
+        $comp = Competition::where( ['del_yn' => 'N', 'sid' => $cid ])->first();
+        if(!$comp){
+            return response()->json([
+                'message' => 'There is No Competition!',
+                'state' => "E",
+            ], 500);
+        }
+        
         try {
             $this->transaction();
 
-            $now = date('Y-m-d H:i:s');
+            $comp->state = 'S';
+            $comp->save();
 
-            $comp_team = new Competition_Team();
+//            $now = date('Y-m-d H:i:s');
 
-            $comp_team->cid = $cid;
-            $comp_team->tid = $user_level->tid;
-            $comp_team->level = 'C';
-            $comp_team->created_at = $now;
-            $comp_team->save();
+//            $comp = Competition::where( ['del_yn' => 'N', 'sid' => $cid ])->first();
+//            if(!$comp){
+//                return response()->json([
+//                    'message' => 'There is No Competition!',
+//                    'state' => "E",
+//                ], 500);
+//            }
+//
+//            $comp_team = new Competition_Team();
+//            $comp_team->cid = $cid;
+//            $comp_team->tid = $user_level->tid;
+//            $comp_team->level = 'C';
+//            $comp_team->created_at = $now;
+//            $comp_team->save();
 
             $data = [
-                "result" => $comp_team,
+                "result" => $comp,
             ];
 
             $this->dbCommit('경기 참여');
 
             return response()->json([
-                'message' => 'Successfully apply Competition!',
+                'message' => 'Successfully start Competition!',
                 'state' => "S",
                 "data" => $data,
             ], 200);
         } catch (\Exception $e) {
-            return $this->dbRollback('Error apply Competition!',$e);
+            return $this->dbRollback('Error start Competition!',$e);
         }
     }
 
