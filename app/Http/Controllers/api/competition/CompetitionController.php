@@ -25,8 +25,8 @@ class CompetitionController extends Controller
      *             mediaType="application/json",
      *             @OA\Schema (
      *                 @OA\Property (property="tid", type="string", description="호스트 팀아이디", example="1"),
-     *                 @OA\Property (property="kind", type="string", description="대회 종목(0:축구, 1:풋살)", example="1"),
-     *                 @OA\Property (property="type", type="string", description="대회 타입(0:리그, 1:컵)", example="0"),
+     *                  @OA\Property (property="kind", type="string", description="대회 종목(1:풋살, 2:축구)", example="1"),
+     *                  @OA\Property (property="type", type="string", description="대회 타입(1:리그, 2:컵)", example="1"),
      *                 @OA\Property (property="title", type="string", description="제목", example="제목"),
      *                 @OA\Property (property="contents", type="string", description="내용", example="내용"),
      *                 @OA\Property (property="region", type="string", description="지역", example="서울시 노원구"),
@@ -124,8 +124,8 @@ class CompetitionController extends Controller
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema (
-     *                 @OA\Property (property="kind", type="string", description="대회 종목(0:축구, 1:풋살)", example="1"),
-     *                 @OA\Property (property="type", type="string", description="대회 타입(0:리그, 1:컵)", example="0"),
+     *                 @OA\Property (property="kind", type="string", description="대회 종목(1:풋살, 2:축구)", example="1"),
+     *                 @OA\Property (property="type", type="string", description="대회 타입(1:리그, 2:컵)", example="1"),
      *                 @OA\Property (property="title", type="string", description="제목", example="제목"),
      *                 @OA\Property (property="contents", type="string", description="내용", example="내용"),
      *                 @OA\Property (property="region", type="string", description="지역", example="서울시 노원구"),
@@ -192,8 +192,8 @@ class CompetitionController extends Controller
      */
     public function startCompetition(String $cid)
     {
-        $state = $this->compService->startCompetition($cid);
-        return $this->matchService->startCompetition($cid);
+        return $this->compService->startCompetition($cid);
+//        return $this->matchService->startCompetition($cid);
     }
 
 }

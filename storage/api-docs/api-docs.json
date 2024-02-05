@@ -242,14 +242,14 @@
                                         "example": "1"
                                     },
                                     "kind": {
-                                        "description": "대회 종목(0:축구, 1:풋살)",
+                                        "description": "대회 종목(1:풋살, 2:축구)",
                                         "type": "string",
                                         "example": "1"
                                     },
                                     "type": {
-                                        "description": "대회 타입(0:리그, 1:컵)",
+                                        "description": "대회 타입(1:리그, 2:컵)",
                                         "type": "string",
-                                        "example": "0"
+                                        "example": "1"
                                     },
                                     "title": {
                                         "description": "제목",
@@ -419,14 +419,14 @@
                             "schema": {
                                 "properties": {
                                     "kind": {
-                                        "description": "대회 종목(0:축구, 1:풋살)",
+                                        "description": "대회 종목(1:풋살, 2:축구)",
                                         "type": "string",
                                         "example": "1"
                                     },
                                     "type": {
-                                        "description": "대회 타입(0:리그, 1:컵)",
+                                        "description": "대회 타입(1:리그, 2:컵)",
                                         "type": "string",
-                                        "example": "0"
+                                        "example": "1"
                                     },
                                     "title": {
                                         "description": "제목",
@@ -538,7 +538,7 @@
                 "tags": [
                     "대회"
                 ],
-                "description": "대회 경기 시작",
+                "description": "대회 경기 시작, 대회 state값 변경 및 매치 생성",
                 "operationId": "cf7fea8e5fa7d61d9d765222af8bde42",
                 "requestBody": {
                     "required": true,

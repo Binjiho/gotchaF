@@ -23,10 +23,14 @@ class Matches extends Model
     //fillable 허용목록
     protected $fillable = [
         'cid',
+        'type',
         'tid1',
         'tid2',
-        'type',
-        'status',
+        't1_result',
+        't2_result',
+        'total_step',
+        'order',
+        'state',
         'del_yn',
     ];
 }

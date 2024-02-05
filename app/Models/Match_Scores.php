@@ -24,7 +24,6 @@ class Match_Scores extends Model
     protected $fillable = [
         'mid',
         'tid',
-        'round',
         'step',
         'score',
         'del_yn',

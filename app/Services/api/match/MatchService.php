@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services\api\competition;
+namespace App\Services\api\match;
 
-use App\Models\Competition;
+use App\Models\Matches;
 
-use App\Models\Competition_Team;
-use App\Models\Team_User;
-use App\Models\User;
+use App\Models\Match_Scores;
+
 use App\Services\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
  * Class AuthServices
  * @package App\Services
  */
-class CompetitionService extends Services
+class MatchService extends Services
 {
     public $data = array();
     public function storeCompetition(Request $request)
@@ -109,9 +108,9 @@ class CompetitionService extends Services
 
     public function indexCompetition(Request $request)
     {
-        //type=>1:리그,2:컵
+        //type=>0:리그,1:컵
         if(!$request->type){
-            $type = 1;
+            $type = 0;
         }else{
             $type = $request->type;
         }
@@ -447,59 +446,30 @@ class CompetitionService extends Services
             $this->transaction();
 
             $comp->state = 'S';
-//            $comp->save();
+            $comp->save();
 
-            /**
-             * match 대진표 생성
-             */
-            //시작하는 팀
-            $join_teams = Competition_Team::where( ['del_yn' => 'N', 'cid' => $comp->sid ])->get();
+//            $now = date('Y-m-d H:i:s');
 
-            //시작하는 팀 카운트
-            $team_count = count($join_teams);
-            //총 경기 수
-            $total_step = ($team_count-1);
-            //현재 진행한 경기 step
-            $step = 0;
-
-            if($comp->type == '1'/*리그*/){
-
-
-            }else if($comp->type == '2'/*컵*/){
-                //경기 생성
-                $join_team_arr = array();
-                //처음 만들어하야 하는 배열 갯수
-                $match_team_arr = array();
-
-                foreach ($join_teams as $join_team) {
-                    $join_team_arr[] = $join_team['sid'];
-                }
-
-                foreach ($join_teams as $join_team_key => $join_team_value) {
-                    $select_tid = array_rand($join_team_arr);
-                    $join_team_arr = array_diff($join_team_arr, array($join_team_arr[$select_tid]));
-//                    if (($key = array_search($select_tid, $join_team_arr)) !== false) {
-//                        unset($join_team_arr[$key]);
-//                    }
-
-                    $match_key = 0;
-                    if($join_team_key %2 == 1) $match_key++;
-                    $match_team_arr[$match_key][] = $select_tid;
-                }
+//            $comp = Competition::where( ['del_yn' => 'N', 'sid' => $cid ])->first();
+//            if(!$comp){
 //                return response()->json([
-//                    'message' => 'Successfully start Competition!',
-//                    'state' => "S",
-//                    "data" => $match_team_arr,
-//                ], 200);
-
-
-            }
+//                    'message' => 'There is No Competition!',
+//                    'state' => "E",
+//                ], 500);
+//            }
+//
+//            $comp_team = new Competition_Team();
+//            $comp_team->cid = $cid;
+//            $comp_team->tid = $user_level->tid;
+//            $comp_team->level = 'C';
+//            $comp_team->created_at = $now;
+//            $comp_team->save();
 
             $data = [
-                "result" => $match_team_arr,
+                "result" => $comp,
             ];
 
-//            $this->dbCommit('경기 참여');
+            $this->dbCommit('경기 참여');
 
             return response()->json([
                 'message' => 'Successfully start Competition!',
