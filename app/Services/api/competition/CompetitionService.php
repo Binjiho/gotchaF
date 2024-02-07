@@ -455,6 +455,7 @@ class CompetitionService extends Services
              */
             //시작하는 팀
             $join_teams = Competition_Team::where( ['del_yn' => 'N', 'cid' => $comp->sid ])->get();
+            $join_team_arr = array();
             foreach ($join_teams as $join_team) {
                 $join_team_arr[] = $join_team['sid'];
             }
@@ -462,26 +463,76 @@ class CompetitionService extends Services
             $team_count = count($join_teams);
             //총 경기 수
             $total_step = ($team_count-1);
-            //현재 진행한 경기 step
-            $step = 0;
-            //경기 생성
-            $join_team_arr = array();
             //처음 만들어하야 하는 배열 갯수
             $match_team_arr = array();
 
             $now = date('Y-m-d H:i:s');
 
             if($comp->type == '1'/*리그*/){
+//                for ($i=0; $i<$total_step; $i++) {
+//                    $stick_arr = $join_team_arr;
+//                    $flag = false;
+//                    do {
+//                        $select_tkey1 = array_rand($stick_arr);
+//                        $stick_arr = array_diff($stick_arr, array($stick_arr[$select_tkey1]));
+//                        $select_tkey2 = array_rand($stick_arr);
+//                        $stick_arr = array_diff($stick_arr, array($stick_arr[$select_tkey2]));
+//
+//                        $selected_arr = array($join_team_arr[$select_tkey1],$join_team_arr[$select_tkey2]);
+//
+//                        if(array_search($match_team_arr,$selected_arr) == false){
+//                            $match_team_arr[] = $selected_arr;
+//                            $flag = true;
+//                        }
+//
+//                    } while($flag == true);
+//
+//                }
+                do {
+                    $stick_arr = $join_team_arr;
+                    $select_tkey1 = array_rand($stick_arr);
+                    $stick_arr = array_diff($stick_arr, array($stick_arr[$select_tkey1]));
+                    $select_tkey2 = array_rand($stick_arr);
 
-                foreach ($join_teams as $join_team_key => $join_team_value) {
-                    $select_tkey = array_rand($join_team_arr);
+                    $selected_arr = array($join_team_arr[$select_tkey1],$join_team_arr[$select_tkey2]);
 
-                    $match_key = 0;
-                    if($join_team_key %2 == 1) $match_key++;
-                    $match_team_arr[$match_key][] = $join_team_arr[$select_tkey];
 
-                    $join_team_arr = array_diff($join_team_arr, array($join_team_arr[$select_tkey]));
-                }
+                    if(empty($match_team_arr)){
+                        $match_team_arr[] = $selected_arr;
+                    }else{
+                        $search_count = 0;
+                        foreach($match_team_arr as $match_team){
+//                            return response()->json([
+//                                'message' => 'Successfully start Competition!',
+//                                'state' => "S",
+//                                "data" => $match_team,
+//                                "selected" => $selected_arr,
+//                            ], 200);
+                            if(in_array($selected_arr,$match_team) == false){
+                                $search_count++;
+                            }
+                        }
+                        if($search_count < 1){
+                            $match_team_arr[] = $selected_arr;
+                        }
+                        return response()->json([
+                            'message' => 'Successfully start Competition!',
+                            'state' => "S",
+                            "data" => $match_team_arr,
+                            "match_count" => count($match_team_arr),
+                            "count" => ($team_count*($team_count-1)/2),
+                        ], 200);
+                    }
+
+                }while(count($match_team_arr) < ($team_count*($team_count-1)/2));
+
+                return response()->json([
+                    'message' => 'Successfully start Competition!',
+                    'state' => "S",
+                    "data" => $match_team_arr,
+                    "match_count" => count($match_team_arr),
+                    "count" => ($team_count*($team_count-1)/2),
+                ], 200);
 
                 foreach ($match_team_arr as $match_idx => $match){
                     $matches = new Matches();
