@@ -443,6 +443,12 @@ class CompetitionService extends Services
                 'state' => "E",
             ], 500);
         }
+        if($comp->state == 'S'){
+            return response()->json([
+                'message' => '이미 경기가 생성 되었습니다!',
+                'state' => "E",
+            ], 500);
+        }
 
         try {
             $this->transaction();
@@ -463,19 +469,15 @@ class CompetitionService extends Services
             $team_count = count($join_teams);
             //총 경기 수
             $total_step = ($team_count-1);
-            //처음 만들어하야 하는 배열 갯수
+            //처음 만들어하야 하는 배열
             $match_team_arr = array();
 
             $now = date('Y-m-d H:i:s');
 
-            /**
-             * test
-             */
-//            $join_team_arr = array('A','B','C','D','E','F');
-//            $team_count = count($join_team_arr);
-//            $total_step = ($team_count-1);
-
             if($comp->type == '1'/*리그*/){
+                //한팀당 진행해야하는 라운드
+                $round = ($team_count*($team_count-1)/2);
+
                 //랜덤 배열 생성
                 $tmp_team_arr = array();
                 do {
@@ -497,7 +499,7 @@ class CompetitionService extends Services
                         $tmp_team_arr[] = $selected_arr;
                     }
 
-                }while(count($tmp_team_arr) < ($team_count*($team_count-1)/2));
+                }while(count($tmp_team_arr) < $round);
 
 
                 //라운드 갯수에 맞게 재정렬
@@ -514,7 +516,7 @@ class CompetitionService extends Services
                             $match_team_arr[$round_count][] = $tmp_team;
                             //매치 팀 배열에서 계속 값 제거
                             unset($tmp_match_team_arr[$tmp_key]);
-                            
+
                             //조인 팀 배열에서 계속 값 제거
                             $tmp_join_team_arr = array_diff($tmp_join_team_arr, $tmp_team);
                             break;
@@ -527,44 +529,63 @@ class CompetitionService extends Services
                     }
                 }while($round_count < $total_step);
 
-                return response()->json([
-                    'message' => 'Successfully start Competition!',
-                    'state' => "S",
-                    "data" => $match_team_arr,
-                ], 200);
-
-
-                return response()->json([
-                    'message' => 'Successfully start Competition!',
-                    'state' => "S",
-                    "data" => $match_team_arr,
-                    "match_count" => count($match_team_arr),
-                    "count" => ($team_count*($team_count-1)/2),
-                ], 200);
-
-                foreach ($match_team_arr as $match_idx => $match){
-                    $matches = new Matches();
-                    $matches->cid = $cid;
-                    $matches->type = $comp->type;
-                    $matches->tid1 = $match[0];
-                    $matches->tid2 = $match[1];
-                    $matches->total_step = $total_step;
-                    $matches->order = $match_idx;
-                    $matches->created_at = $now;
-                    $matches->save();
+                foreach ($match_team_arr as $match_idx => $match_val){
+                    foreach($match_val as $idx => $val){
+                        $matches = new Matches();
+                        $matches->cid = $cid;
+                        $matches->type = $comp->type;
+                        $matches->tid1 = $val[0];
+                        $matches->tid2 = $val[1];
+                        $matches->total_step = $round;
+                        $matches->round = $match_idx+1;
+                        $matches->order = $idx+1;
+                        $matches->created_at = $now;
+                        $matches->save();
+                    }
                 }
 
             }else if($comp->type == '2'/*컵*/){
 
-                foreach ($join_teams as $join_team_key => $join_team_value) {
-                    $select_tkey = array_rand($join_team_arr);
+                $join_teams = array(1,2,3,4,5,6);
+                $join_team_arr = array(1,2,3,4,5,6);
+                //시작하는 팀 카운트
+                $team_count = count($join_teams);
+                //총 경기 수
+                $total_step = ($team_count-1);
 
-                    $match_key = 0;
-                    if($join_team_key %2 == 1) $match_key++;
-                    $match_team_arr[$match_key][] = $join_team_arr[$select_tkey];
+                //한팀당 진행해야하는 라운드
+                $round = ($team_count/2);
+                //조인 팀
+                $tmp_join_team_arr = $join_team_arr;
 
-                    $join_team_arr = array_diff($join_team_arr, array($join_team_arr[$select_tkey]));
+                for($cup=0; $cup<$round; $cup++){
+                    $select_tkey1 = array_rand($tmp_join_team_arr);
+                    $tmp_join_team_arr = array_diff($tmp_join_team_arr, array($tmp_join_team_arr[$select_tkey1]));
+                    $select_tkey2 = array_rand($tmp_join_team_arr);
+                    $tmp_join_team_arr = array_diff($tmp_join_team_arr, array($tmp_join_team_arr[$select_tkey2]));
+                    $selected_arr = array($join_team_arr[$select_tkey1],$join_team_arr[$select_tkey2]);
+
+                    $match_team_arr[] = $selected_arr;
                 }
+
+                //컵 경기의 경우, 총 시합 갯수만큼 빈배열 생성
+                if($total_step>count($match_team_arr)){
+                    $pp = 0;
+                    for($i=0; $i<$total_step-count($match_team_arr); $i++){
+                        array_push($match_team_arr,array(0,0));
+                        $pp++;
+                    }
+                }
+
+                return response()->json([
+                    'message' => 'Successfully start Competition!',
+                    'state' => "S",
+                    "data" => $match_team_arr,
+                    "total_step" => $total_step,
+                    "count(match_team_arr)" => count($match_team_arr),
+                    "pp" => $pp,
+
+                ], 200);
 
                 foreach ($match_team_arr as $match_idx => $match){
                     $matches = new Matches();
@@ -573,7 +594,8 @@ class CompetitionService extends Services
                     $matches->tid1 = $match[0];
                     $matches->tid2 = $match[1];
                     $matches->total_step = $total_step;
-                    $matches->order = $match_idx;
+                    $matches->round = $match_idx+1;
+                    $matches->order = $match_idx+1;
                     $matches->created_at = $now;
                     $matches->save();
                 }

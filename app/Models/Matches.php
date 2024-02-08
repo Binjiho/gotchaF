@@ -29,6 +29,7 @@ class Matches extends Model
         't1_result',
         't2_result',
         'total_step',
+        'round',
         'order',
         'state',
         'del_yn',
