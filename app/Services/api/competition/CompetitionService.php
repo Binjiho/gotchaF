@@ -471,13 +471,10 @@ class CompetitionService extends Services
             /**
              * test
              */
-            $join_team_arr = array('A','B','C','D','E','F');
-            $join_team_arr = array('A','B','C','D');
-            $team_count = count($join_team_arr);
-            $total_step = ($team_count-1);
-            /**
-             * test
-             */
+//            $join_team_arr = array('A','B','C','D','E','F');
+//            $team_count = count($join_team_arr);
+//            $total_step = ($team_count-1);
+
             if($comp->type == '1'/*리그*/){
                 //랜덤 배열 생성
                 $tmp_team_arr = array();
@@ -511,12 +508,13 @@ class CompetitionService extends Services
                 $tmp_join_team_arr = $join_team_arr;
 
                 do{
-                    foreach($tmp_team_arr as $tmp_team){
+                    foreach($tmp_match_team_arr as $tmp_key => $tmp_team){
                         $same_array=array_intersect($tmp_join_team_arr,$tmp_team);
                         if(count($same_array) >= 2){
                             $match_team_arr[$round_count][] = $tmp_team;
                             //매치 팀 배열에서 계속 값 제거
-                            $tmp_match_team_arr = array_diff($tmp_match_team_arr, $tmp_team);
+                            unset($tmp_match_team_arr[$tmp_key]);
+                            
                             //조인 팀 배열에서 계속 값 제거
                             $tmp_join_team_arr = array_diff($tmp_join_team_arr, $tmp_team);
                             break;
