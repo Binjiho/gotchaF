@@ -468,26 +468,18 @@ class CompetitionService extends Services
 
             $now = date('Y-m-d H:i:s');
 
+            /**
+             * test
+             */
+            $join_team_arr = array('A','B','C','D','E','F');
+            $join_team_arr = array('A','B','C','D');
+            $team_count = count($join_team_arr);
+            $total_step = ($team_count-1);
+            /**
+             * test
+             */
             if($comp->type == '1'/*리그*/){
-//                for ($i=0; $i<$total_step; $i++) {
-//                    $stick_arr = $join_team_arr;
-//                    $flag = false;
-//                    do {
-//                        $select_tkey1 = array_rand($stick_arr);
-//                        $stick_arr = array_diff($stick_arr, array($stick_arr[$select_tkey1]));
-//                        $select_tkey2 = array_rand($stick_arr);
-//                        $stick_arr = array_diff($stick_arr, array($stick_arr[$select_tkey2]));
-//
-//                        $selected_arr = array($join_team_arr[$select_tkey1],$join_team_arr[$select_tkey2]);
-//
-//                        if(array_search($match_team_arr,$selected_arr) == false){
-//                            $match_team_arr[] = $selected_arr;
-//                            $flag = true;
-//                        }
-//
-//                    } while($flag == true);
-//
-//                }
+                //랜덤 배열 생성
                 do {
                     $stick_arr = $join_team_arr;
                     $select_tkey1 = array_rand($stick_arr);
@@ -496,35 +488,45 @@ class CompetitionService extends Services
 
                     $selected_arr = array($join_team_arr[$select_tkey1],$join_team_arr[$select_tkey2]);
 
-
-                    if(empty($match_team_arr)){
+                    $search_count = 0;
+                    foreach($match_team_arr as $match_team){
+                        $same_array=array_intersect($selected_arr,$match_team);
+                        if(count($same_array) >= 2){
+                            $search_count++;
+                        }
+                    }
+                    if($search_count < 1){
                         $match_team_arr[] = $selected_arr;
-                    }else{
-                        $search_count = 0;
-                        foreach($match_team_arr as $match_team){
-//                            return response()->json([
-//                                'message' => 'Successfully start Competition!',
-//                                'state' => "S",
-//                                "data" => $match_team,
-//                                "selected" => $selected_arr,
-//                            ], 200);
-                            if(in_array($selected_arr,$match_team) == false){
-                                $search_count++;
-                            }
-                        }
-                        if($search_count < 1){
-                            $match_team_arr[] = $selected_arr;
-                        }
-                        return response()->json([
-                            'message' => 'Successfully start Competition!',
-                            'state' => "S",
-                            "data" => $match_team_arr,
-                            "match_count" => count($match_team_arr),
-                            "count" => ($team_count*($team_count-1)/2),
-                        ], 200);
                     }
 
                 }while(count($match_team_arr) < ($team_count*($team_count-1)/2));
+
+                //라운드 갯수에 맞게 재정렬
+                $round_count = 0;
+                $tmp_team_arr = array();
+                $stick_arr = $join_team_arr;
+//                do{
+//                    foreach($match_team_arr as $match_team){
+//                        $same_array=array_intersect($stick_arr,$match_team);
+//                        if(count($same_array) >= 2){
+//                            $tmp_team_arr[$round_count][] = $match_team;
+//                            $stick_arr = array_diff($stick_arr, $match_team);
+//                        }
+//                        if(count($stick_arr)==0){
+//                            $stick_arr = $join_team_arr;
+//                        }
+//                    }
+//                }while($round_count < $total_step);
+
+//                foreach ($match_team_arr as $match_team_key => $match_team_value) {
+//                    $select_tkey = array_rand($join_team_arr);
+//
+//                    $match_key = 0;
+//                    if($join_team_key %2 == 1) $match_key++;
+//                    $match_team_arr[$match_key][] = $join_team_arr[$select_tkey];
+//
+//                    $join_team_arr = array_diff($join_team_arr, array($join_team_arr[$select_tkey]));
+//                }
 
                 return response()->json([
                     'message' => 'Successfully start Competition!',
