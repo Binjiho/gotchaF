@@ -373,13 +373,13 @@
                 }
             }
         },
-        "/api/competitions/{$cid}": {
+        "/api/competitions/detail/{$cid}": {
             "get": {
                 "tags": [
                     "대회"
                 ],
                 "description": "대회 상세 불러오기",
-                "operationId": "4b9c06caa0b0b1b5f8fe9a35b643fbef",
+                "operationId": "f74733241bf31da67c0e93cc7316d961",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -388,7 +388,9 @@
                         "description": "Fail"
                     }
                 }
-            },
+            }
+        },
+        "/api/competitions/{$cid}": {
             "patch": {
                 "tags": [
                     "대회"
@@ -550,6 +552,72 @@
                                         "description": "참여 경기의 sid",
                                         "type": "string",
                                         "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/matches/{$cid}": {
+            "get": {
+                "tags": [
+                    "경기"
+                ],
+                "description": "경기 대진표 불러오기",
+                "operationId": "9daa4dcaba27f466780d1f8be93d3615",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/matches/score/{$mid}": {
+            "post": {
+                "tags": [
+                    "경기"
+                ],
+                "description": "경기 스코어 및 경기날짜 저장",
+                "operationId": "84c3c319c8350cbde81805fc52f514cc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "t1_score": {
+                                        "description": "1팀의 스코어",
+                                        "type": "integer",
+                                        "example": "3"
+                                    },
+                                    "t2_score": {
+                                        "description": "2팀의 스코어",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "matched_at": {
+                                        "description": "경기 진행 날짜",
+                                        "type": "timestamp",
+                                        "example": "2024-02-13 15:00:00"
+                                    },
+                                    "state": {
+                                        "description": "매치완료 토글버튼",
+                                        "type": "string",
+                                        "example": "Y"
                                     }
                                 },
                                 "type": "object"
