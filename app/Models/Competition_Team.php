@@ -25,6 +25,10 @@ class Competition_Team extends Model
         'cid',
         'tid',
         'level',
-        'tot_score'
+        'tot_score',
+        'step',
+        'w_cnt',
+        'd_cnt',
+        'l_cnt'
     ];
 }

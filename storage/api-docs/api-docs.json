@@ -612,7 +612,7 @@
                                     "matched_at": {
                                         "description": "경기 진행 날짜",
                                         "type": "timestamp",
-                                        "example": "2024-02-13 15:00:00"
+                                        "example": "2024-02-13"
                                     },
                                     "state": {
                                         "description": "매치완료 토글버튼",
@@ -625,6 +625,23 @@
                         }
                     }
                 },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/matches/ranking/{$cid}": {
+            "get": {
+                "tags": [
+                    "경기"
+                ],
+                "description": "경기 랭킹표 불러오기",
+                "operationId": "15b0654fa3d3b543608da263e369f363",
                 "responses": {
                     "200": {
                         "description": "Success"

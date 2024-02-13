@@ -470,8 +470,10 @@ class CompetitionService extends Services
             $join_teams = Competition_Team::where( ['del_yn' => 'N', 'cid' => $comp->sid ])->get();
             $join_team_arr = array();
             foreach ($join_teams as $join_team) {
-                $join_team_arr[] = $join_team['sid'];
+                $join_team_arr[] = $join_team['tid'];
             }
+//            $join_teams = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+//            $join_team_arr = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
             //시작하는 팀 카운트
             $team_count = count($join_teams);
             //총 경기 수
@@ -574,13 +576,14 @@ class CompetitionService extends Services
                     $matches->type = $comp->type;
                     $matches->tid1 = $match[0];
                     $matches->tid2 = $match[1];
-                    $matches->total_step = $total_step;
+                    $matches->total_step = (int)log($team_count,2);
                     $matches->round = 1;
                     $matches->order = $match_idx+1;
                     $matches->created_at = $now;
                     $matches->save();
                 }
 
+                /*
                 //컵 경기의 경우, 총 시합 갯수만큼 빈배열 생성
                 $add_team_count = $total_step-count($match_team_arr);
 
@@ -598,7 +601,7 @@ class CompetitionService extends Services
                         $matches->save();
                     }
                 }
-
+                */
 
             }
 
