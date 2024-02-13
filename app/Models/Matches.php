@@ -26,12 +26,13 @@ class Matches extends Model
         'type',
         'tid1',
         'tid2',
-        't1_result',
-        't2_result',
+        't1_score',
+        't2_score',
         'total_step',
         'round',
         'order',
         'state',
+        'matched_at',
         'del_yn',
     ];
 }

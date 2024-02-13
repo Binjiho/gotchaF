@@ -92,7 +92,7 @@ Route::prefix('/teams')->group(function () {
 Route::prefix('/competitions')->group(function () {
     Route::get('{type?}{sorting?}', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']); //전체
     Route::post('/search', [App\Http\Controllers\api\competition\CompetitionController::class, 'searchCompetition']); //대회 검색
-    Route::get('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
+    Route::get('/detail/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [App\Http\Controllers\api\competition\CompetitionController::class, 'storeCompetition']);
         Route::post('/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'updateCompetition']);
@@ -108,7 +108,11 @@ Route::prefix('/competitions')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/matches')->group(function () {
-
+    Route::get('/{cid}', [App\Http\Controllers\api\match\MatchController::class, 'showMatch']);
+    Route::get('/ranking/{cid}', [App\Http\Controllers\api\match\MatchController::class, 'showRanking']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/score/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'storeMatch']);
+    });
 });
 
 /*

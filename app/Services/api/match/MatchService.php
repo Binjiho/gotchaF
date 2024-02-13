@@ -3,7 +3,6 @@
 namespace App\Services\api\match;
 
 use App\Models\Matches;
-
 use App\Models\Match_Scores;
 
 use App\Services\Services;
@@ -18,18 +17,66 @@ use Illuminate\Support\Facades\Storage;
 class MatchService extends Services
 {
     public $data = array();
-    public function storeCompetition(Request $request)
+
+    public function showMatch(String $cid)
+    {
+        try {
+            $matches = DB::table('matches')
+                ->join('teams as t1', function ($join) {
+                    $join->on('t1.sid', '=', 'matches.tid1');
+                })
+                ->join('teams as t2', function ($join) {
+                    $join->on('t2.sid', '=', 'matches.tid2');
+                })
+                ->select('matches.round','matches.order','t1.title as title1','t2.title as title2 ')
+                ->where('matches.cid', '=', $cid)
+                ->where('matches.del_yn', '=', 'N')
+                ->orderBy('matches.round')
+                ->orderBy('matches. order')
+                ->get();
+            if(!$matches){
+                return response()->json([
+                    'message' => '경기 대진표 정보가 없습니다.',
+                    'state' => "E",
+                ], 500);
+            }
+
+            $data = [
+                "result" => $matches,
+            ];
+
+            return response()->json([
+                'message' => 'Successfully loaded Matches!',
+                'state' => "S",
+                "data" => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded Matches!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+    public function storeMatch(String $mid, Request $request)
     {
         $user = auth()->user();
         $user_level = Team_User::where( [
             'del_yn' => 'N',
             'uid' => $user->sid,
-            'tid' => $request->tid,
         ])->first();
 
         if($user_level->level != 'L'){
             return response()->json([
-                'message' => '팀의 리더만 경기를 만들 수 있습니다.',
+                'message' => '팀의 리더만 경기를 수정할 수 있습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        $match = Matches::where( ['del_yn' => 'N', 'sid' => $mid ])->first();
+        if(!$match){
+            return response()->json([
+                'message' => '경기 대진표 정보가 없습니다.',
                 'state' => "E",
             ], 500);
         }
@@ -39,218 +86,31 @@ class MatchService extends Services
 
             $now = date('Y-m-d H:i:s');
 
-            $comp = new Competition();
-            $comp->tid = $request->tid;
-            $comp->uid = $user->sid;
-            $comp->kind = $request->kind;
-            $comp->type = $request->type;
-            $comp->state = 'W';
-            $comp->title = $request->title;
-            $comp->contents = $request->contents;
-            $comp->region = $request->region;
-            $comp->limit_team = $request->limit_team;
-            $comp->person_vs = $request->person_vs;
-            $comp->regist_edate = $request->regist_edate;
-            $comp->event_sdate = $request->event_sdate;
-            $comp->event_edate = $request->event_edate;
-            $comp->frequency = $request->frequency;
-            $comp->yoil = $request->yoil;
-            $comp->created_at = $now;
-            $comp->save();
-            $save_id = $comp->sid;
+            if($request->t1_score) $match->t1_score = $request->t1_score;
+            if($request->t2_score) $match->t2_score = $request->t2_score;
+            if($request->matched_at) $match->matched_at = $request->matched_at;
+            if($request->state) $match->state = $request->state;
 
-            if($request->hasFile('files')){
-                $s3_path = "gotcha/competitions/".$save_id;
-                foreach($request->file('files') as $file){
-                    $extension = $file->getClientOriginalExtension();
-                    $uuid = uniqid();
-                    $filename = $uuid. '_' . time() . '.' . $extension;
-                    $filepath = $s3_path . '/' . $filename;
+            if($match->type == '1'/*리그*/) {
 
-                    // S3에 파일 저장
-                    Storage::disk('s3')->put($filepath, $file);
-
-                    $comp = Competition::find($save_id);
-                    $comp->file_name = $file->getClientOriginalName();
-                    $comp->file_path = Storage::disk('s3')->url($filepath);
-                    $comp->save();
-                }
+            }else if ($match->type == '2'/*컵*/) {
+                $match->state = 'S';
+                $match->save();
             }
 
-            /**
-             * 경기 생성 시, competition_teams 테이블에도 db저장
-             * 경기 주최자 무조건 L(리더)
-             */
-            $comp_team = new Competition_Team();
-
-            $comp_team->cid = $save_id;
-            $comp_team->tid = $request->tid;
-            $comp_team->level = 'L';
-            $comp_team->created_at = $now;
-            $comp_team->save();
-
             $data = [
-                "result" => $comp,
+                "result" => $match,
             ];
 
-            $this->dbCommit('경기 생성');
+            $this->dbCommit('매치 대진표 수정');
 
             return response()->json([
-                'message' => 'Successfully created Competition!',
+                'message' => 'Successfully store Match!',
                 'state' => "S",
                 "data" => $data,
             ], 200);
         } catch (\Exception $e) {
-            return $this->dbRollback('Error create Competition!',$e);
-        }
-    }
-
-
-    public function indexCompetition(Request $request)
-    {
-        //type=>0:리그,1:컵
-        if(!$request->type){
-            $type = 0;
-        }else{
-            $type = $request->type;
-        }
-        try {
-            $query = DB::table('competitions')
-                ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day, ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn
-                , ( CASE
-                    WHEN regist_edate >= NOW() THEN '모집중'
-                    WHEN event_edate < NOW() THEN '대회종료'
-                    WHEN event_sdate < NOW() AND event_edate >= NOW() THEN '진행중'
-                    ELSE '대회준비중' END ) AS state"))
-                ->where('type', '=',$type)
-                ->where('del_yn', '=','N');
-            /**
-             * 모집중:pre/진행중:ing/종료된:end
-             */
-            switch($request->sorting) {
-                case 'pre':
-                    $query->where('regist_edate', '>', now());
-                    break;
-                case 'ing':
-                    $query->where('event_sdate', '<', now());
-                    $query->where('event_edate', '>=', now());
-                    break;
-                case 'end':
-                    $query->where('event_edate', '<', now());
-                    break;
-                default:
-                    break;
-            }
-
-            /**
-             * 최근등록순->종료 하위 순
-             */
-            $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
-
-            $comps = $query->paginate(10);
-
-            foreach($comps as $comp_idx => $comp) {
-                $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();
-                $comps[$comp_idx]->team_count = $team_count;
-            }
-
-
-            $data = [
-                "result" => $comps,
-            ];
-
-            return response()->json([
-                'message' => 'Successfully loaded Competitions!',
-                'state' => "S",
-                "data" => $data,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error loaded Competitions!',
-                'state' => "E",
-                'error' => $e,
-            ], 500);
-        }
-    }
-
-    public function searchCompetition(Request $request)
-    {
-        try {
-            $query = DB::table('competitions')
-                ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day, ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn
-                , ( CASE
-                    WHEN regist_edate >= NOW() THEN '모집중'
-                    WHEN event_edate < NOW() THEN '대회종료'
-                    WHEN event_sdate < NOW() AND event_edate >= NOW() THEN '진행중'
-                    ELSE '대회준비중' END ) AS state"))
-                ->where('title', 'like','%'.$request->search.'%')
-                ->where('del_yn', '=','N');
-
-            /**
-             * 최근등록순->종료 하위 순
-             */
-            $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
-
-            $comps = $query->paginate(10);
-
-            foreach($comps as $comp_idx => $comp) {
-                $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();
-                $comps[$comp_idx]->team_count = $team_count;
-            }
-
-            $data = [
-                "result" => $comps,
-            ];
-
-            return response()->json([
-                'message' => 'Successfully searched Competitions!',
-                'state' => "S",
-                "data" => $data,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error searched Competitions!',
-                'state' => "E",
-                'error' => $e,
-            ], 500);
-        }
-    }
-    public function showCompetition(String $cid)
-    {
-        try {
-            $comp = Competition::where( ['del_yn' => 'N', 'sid' => $cid ])->first();
-            if(!$comp){
-                return response()->json([
-                    'message' => 'There is No Competition!',
-                    'state' => "E",
-                ], 500);
-            }
-
-            $comp_dday = DB::table('competitions')
-                ->select(DB::raw('( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day'))
-                ->where('del_yn', '=','N')
-                ->first();
-            $comp['d_day'] = $comp_dday->d_day;
-
-            $join_teams = Competition_Team::where( ['del_yn' => 'N', 'cid' => $comp->sid ])->get();
-            $comp['team_count'] = count($join_teams);
-            $comp['join_teams'] = $join_teams;
-
-            $data = [
-                "result" => $comp,
-            ];
-
-            return response()->json([
-                'message' => 'Successfully loaded Competition!',
-                'state' => "S",
-                "data" => $data,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error loaded Competition!',
-                'state' => "E",
-                'error' => $e,
-            ], 500);
+            return $this->dbRollback('Error store Match!',$e);
         }
     }
 

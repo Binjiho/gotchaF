@@ -59,7 +59,7 @@ class CompetitionController extends Controller
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function indexCompetition(Request $request)
+    public function  indexCompetition(Request $request)
     {
         return $this->compService->indexCompetition($request);
     }
@@ -88,7 +88,7 @@ class CompetitionController extends Controller
 
     /**
      * @OA\Get (
-     *     path="/api/competitions/{$cid}",
+     *     path="/api/competitions/detail/{$cid}",
      *     tags={"대회"},
      *     description="대회 상세 불러오기",
      *     @OA\Response(response="200", description="Success"),

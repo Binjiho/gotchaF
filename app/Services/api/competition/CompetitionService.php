@@ -73,7 +73,8 @@ class CompetitionService extends Services
                     Storage::disk('s3')->put($filepath, $file);
 
                     $comp = Competition::find($save_id);
-                    $comp->file_name = $file->getClientOriginalName();
+                    $comp->file_originalname = $file->getClientOriginalName();
+                    $comp->file_realname = $filename;
                     $comp->file_path = Storage::disk('s3')->url($filepath);
                     $comp->save();
                 }
@@ -234,7 +235,13 @@ class CompetitionService extends Services
                 ->first();
             $comp['d_day'] = $comp_dday->d_day;
 
-            $join_teams = Competition_Team::where( ['del_yn' => 'N', 'cid' => $comp->sid ])->get();
+            $join_teams = DB::table('competition_teams')
+                ->join('teams', 'competition_teams.tid', '=', 'teams.sid')
+                ->select('competition_teams.tid', 'competition_teams.level', 'teams.title', 'teams.region')
+                ->where('competition_teams.cid', '=', $cid)
+                ->where('competition_teams.del_yn', '=', 'N')
+                ->get();
+
             $comp['team_count'] = count($join_teams);
             $comp['join_teams'] = $join_teams;
 
@@ -546,13 +553,6 @@ class CompetitionService extends Services
 
             }else if($comp->type == '2'/*컵*/){
 
-                $join_teams = array(1,2,3,4,5,6);
-                $join_team_arr = array(1,2,3,4,5,6);
-                //시작하는 팀 카운트
-                $team_count = count($join_teams);
-                //총 경기 수
-                $total_step = ($team_count-1);
-
                 //한팀당 진행해야하는 라운드
                 $round = ($team_count/2);
                 //조인 팀
@@ -568,25 +568,6 @@ class CompetitionService extends Services
                     $match_team_arr[] = $selected_arr;
                 }
 
-                //컵 경기의 경우, 총 시합 갯수만큼 빈배열 생성
-                if($total_step>count($match_team_arr)){
-                    $pp = 0;
-                    for($i=0; $i<$total_step-count($match_team_arr); $i++){
-                        array_push($match_team_arr,array(0,0));
-                        $pp++;
-                    }
-                }
-
-                return response()->json([
-                    'message' => 'Successfully start Competition!',
-                    'state' => "S",
-                    "data" => $match_team_arr,
-                    "total_step" => $total_step,
-                    "count(match_team_arr)" => count($match_team_arr),
-                    "pp" => $pp,
-
-                ], 200);
-
                 foreach ($match_team_arr as $match_idx => $match){
                     $matches = new Matches();
                     $matches->cid = $cid;
@@ -594,11 +575,31 @@ class CompetitionService extends Services
                     $matches->tid1 = $match[0];
                     $matches->tid2 = $match[1];
                     $matches->total_step = $total_step;
-                    $matches->round = $match_idx+1;
+                    $matches->round = 1;
                     $matches->order = $match_idx+1;
                     $matches->created_at = $now;
                     $matches->save();
                 }
+
+                //컵 경기의 경우, 총 시합 갯수만큼 빈배열 생성
+                $add_team_count = $total_step-count($match_team_arr);
+
+                if($add_team_count > 0){
+                    for($i=1; $i<=$add_team_count; $i++){
+                        $matches = new Matches();
+                        $matches->cid = $cid;
+                        $matches->type = $comp->type;
+                        $matches->tid1 = 0;
+                        $matches->tid2 = 0;
+                        $matches->total_step = $total_step;
+                        $matches->round = $i+1;
+                        $matches->order = $i+count($match_team_arr);
+                        $matches->created_at = $now;
+                        $matches->save();
+                    }
+                }
+
+
             }
 
             $data = [
