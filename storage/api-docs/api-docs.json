@@ -612,7 +612,7 @@
                                     "matched_at": {
                                         "description": "경기 진행 날짜",
                                         "type": "timestamp",
-                                        "example": "2024-02-13"
+                                        "example": "2024-02-13 18:30"
                                     },
                                     "state": {
                                         "description": "매치완료 토글버튼",
@@ -642,6 +642,23 @@
                 ],
                 "description": "경기 랭킹표 불러오기",
                 "operationId": "15b0654fa3d3b543608da263e369f363",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/matches/match-in/{$mid}": {
+            "get": {
+                "tags": [
+                    "경기"
+                ],
+                "description": "경기 참여하기",
+                "operationId": "ae9c1dba7880b28edd5e1a18133358f5",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -1393,6 +1410,23 @@
                 ],
                 "description": "팀 상세 불러오기",
                 "operationId": "0d59eebd57389b50eb958210308cf803",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/teams/detail-match/{$tid}": {
+            "get": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 경기 상세 불러오기",
+                "operationId": "ee00833541e10ec8137d522367ff238a",
                 "responses": {
                     "200": {
                         "description": "Success"

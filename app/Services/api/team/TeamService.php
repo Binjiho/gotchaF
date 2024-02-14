@@ -222,22 +222,47 @@ class TeamService extends Services
         }
     }
 
-    public function showTeam(String $sid)
+    public function showTeam(String $tid)
     {
         $team_info = Team::where( [
             'del_yn' => 'N',
-            'sid' => $sid,
+            'sid' => $tid,
         ])->get();
         if(!$team_info){
             return response()->json([
                 'message' => '해당하는 팀정보가 없습니다!',
                 'state' => "E",
-                'error' => $sid,
+                'error' => $tid,
             ], 500);
         }
 
         try {
 
+            //팀 게시판
+
+            //팀 경기일정
+            $team_matches = DB::table('matches')
+                ->join('teams as t1', function ($join) {
+                    $join->on('t1.sid', '=', 'matches.tid1');
+                })
+                ->join('teams as t2', function ($join) {
+                    $join->on('t2.sid', '=', 'matches.tid2');
+                })
+                ->leftJoin('competitions as c','c.sid','=','matches.cid')
+                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order, (SELECT count(match_users.sid) FROM match_users WHERE match_users.mid=matches.sid AND match_users.del_yn="N" AND match_users.tid='.$tid.') as match_user_cnt'))
+                ->where('matches.del_yn', '=', 'N')
+                ->where('matches.state', '=', 'N')
+                ->where('matches.matched_at', '<>', null)
+                ->where(function ($query) use ($tid) {
+                    $query->where('matches.tid1', '=', $tid)
+                        ->orWhere('matches.tid2', '=', $tid);
+                })
+                ->orderBy('matches.round')
+                ->orderBy('matches.order')
+                ->limit(4)
+                ->get();
+
+            //팀 유저
             $team_users = DB::table('users')
                 ->join('team_users', function ($join) {
                     $join->on('users.sid', '=', 'team_users.uid')
@@ -245,7 +270,7 @@ class TeamService extends Services
                 })
                 ->Join('teams','teams.sid','=','team_users.tid')
                 ->select('users.*','team_users.level')
-                ->where('teams.sid','=',$sid)
+                ->where('teams.sid','=',$tid)
                 ->get();
 
             return response()->json([
@@ -253,7 +278,60 @@ class TeamService extends Services
                 'state' => "S",
                 "data" => [
                     "team_info" => $team_info,
+                    "team_matches" => $team_matches,
                     "team_users" => $team_users,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded team!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function showTeamMatch(String $tid)
+    {
+        $team_info = Team::where( [
+            'del_yn' => 'N',
+            'sid' => $tid,
+        ])->get();
+        if(!$team_info){
+            return response()->json([
+                'message' => '해당하는 팀정보가 없습니다!',
+                'state' => "E",
+                'error' => $tid,
+            ], 500);
+        }
+
+        try {
+            //팀 경기일정
+            $team_matches = DB::table('matches')
+                ->join('teams as t1', function ($join) {
+                    $join->on('t1.sid', '=', 'matches.tid1');
+                })
+                ->join('teams as t2', function ($join) {
+                    $join->on('t2.sid', '=', 'matches.tid2');
+                })
+                ->leftJoin('competitions as c','c.sid','=','matches.cid')
+                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
+                ->where('matches.del_yn', '=', 'N')
+                ->where('matches.state', '=', 'N')
+                ->where('matches.matched_at', '<>', null)
+                ->where(function ($query) use ($tid) {
+                    $query->where('matches.tid1', '=', $tid)
+                        ->orWhere('matches.tid2', '=', $tid);
+                })
+                ->orderBy('matches.round')
+                ->orderBy('matches.order')
+                ->get();
+
+            return response()->json([
+                'message' => 'Successfully loaded team!',
+                'state' => "S",
+                "data" => [
+                    "result" => $team_matches,
                 ],
             ], 200);
         } catch (\Exception $e) {

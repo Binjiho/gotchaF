@@ -5,7 +5,7 @@ namespace App\Services\api\match;
 use App\Models\Competition;
 use App\Models\Competition_Team;
 use App\Models\Matches;
-use App\Models\Match_Scores;
+use App\Models\Match_Users;
 
 use App\Models\Team_User;
 use App\Services\Services;
@@ -345,5 +345,150 @@ class MatchService extends Services
 
     }
 
+    public function signinMatch(String $mid)
+    {
+        $match = Matches::where( [
+            'del_yn' => 'N',
+            'sid' => $mid,
+        ])->first();
+        if(!$match){
+            return response()->json([
+                'message' => '해당 경기를 찾을 수 없습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        $user = auth()->user();
+        $team_user_info = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+        ])->first();
+        if(!$team_user_info){
+            return response()->json([
+                'message' => '팀 가입정보를 찾을 수 없습니다.',
+                'state' => "E",
+            ], 500);
+        }
+        if($team_user_info->tid != $match->tid1 && $team_user_info->tid != $match->tid2){
+            return response()->json([
+                'message' => '가입된 팀정보와 경기에 참여하는 팀정보가 일치하지 않습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        $match_user = Match_Users::where( [
+            'del_yn' => 'N',
+            'mid' => $mid,
+            'tid' => $team_user_info->tid,
+            'uid' => $user->sid,
+        ])->first();
+        if($match_user){
+            return response()->json([
+                'message' => '이미 참여한 경기입니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $this->transaction();
+
+            $match_user = new Match_Users();
+            $match_user->mid = $mid;
+            $match_user->tid = $team_user_info->tid;
+            $match_user->uid = $user->sid;
+
+            $match_user->created_at = $now;
+            $match_user->save();
+
+            $this->dbCommit('팀회원의 경기 참여');
+
+            $data = [
+                "result" => $match_user,
+            ];
+
+            return response()->json([
+                'message' => 'Successfully join matchIn!',
+                'state' => "S",
+                "data" => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error join matchIn!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+
+    }
+
+    public function signoutMatch(String $mid)
+    {
+        $match = Matches::where( [
+            'del_yn' => 'N',
+            'sid' => $mid,
+        ])->first();
+        if(!$match){
+            return response()->json([
+                'message' => '해당 경기를 찾을 수 없습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        $user = auth()->user();
+        $team_user_info = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+        ])->first();
+        if(!$team_user_info){
+            return response()->json([
+                'message' => '팀 가입정보를 찾을 수 없습니다.',
+                'state' => "E",
+            ], 500);
+        }
+        if($team_user_info->tid != $match->tid1 && $team_user_info->tid != $match->tid2){
+            return response()->json([
+                'message' => '가입된 팀정보와 경기에 참여하는 팀정보가 일치하지 않습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $this->transaction();
+
+            $match_user = Match_Users::where( [
+                'del_yn' => 'N',
+                'mid' => $mid,
+                'tid' => $team_user_info->tid,
+                'uid' => $user->sid,
+            ])->first();
+
+            $match_user->del_yn = 'Y';
+            $match_user->updated_at = $now;
+            $match_user->save();
+
+            $this->dbCommit('팀회원의 경기 참여 취소');
+
+            $data = [
+                "result" => $match_user,
+            ];
+
+            return response()->json([
+                'message' => 'Successfully cancle matchIn!',
+                'state' => "S",
+                "data" => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error cancle matchIn!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+
+    }
 
 }

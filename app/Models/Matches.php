@@ -24,6 +24,8 @@ class Matches extends Model
     protected $fillable = [
         'cid',
         'type',
+        'region',
+        'memo',
         'tid1',
         'tid2',
         't1_score',

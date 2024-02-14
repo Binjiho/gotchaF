@@ -67,8 +67,9 @@ Route::prefix('/mypage')->group(function () {
 */
 Route::prefix('/teams')->group(function () {
     Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
-    Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
+    Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
+    Route::get('/detail-match/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeamMatch']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
         Route::post('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
@@ -112,6 +113,8 @@ Route::prefix('/matches')->group(function () {
     Route::get('/ranking/{cid}', [App\Http\Controllers\api\match\MatchController::class, 'showRanking']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/score/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'storeMatch']);
+        Route::get('/match-in/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'signinMatch']);
+        Route::get('/match-out/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'signinMatch']);
     });
 });
 

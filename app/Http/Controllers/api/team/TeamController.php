@@ -133,6 +133,20 @@ class TeamController extends BaseController
     }
 
     /**
+     * @OA\Get (
+     *     path="/api/teams/detail-match/{$tid}",
+     *     tags={"팀"},
+     *     description="팀 경기 상세 불러오기",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function showTeamMatch(String $sid)
+    {
+        return $this->teamService->showTeamMatch($sid);
+    }
+
+    /**
      * @OA\Post (
      *     path="/api/teams/delete-team/{tid}",
      *     tags={"팀"},

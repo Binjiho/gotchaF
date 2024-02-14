@@ -26,4 +26,9 @@ class Team_User extends Model
         'uid',
         'level',
     ];
+
+//    public function user()
+//    {
+//        return $this->belongsTo(User::class,'uid','sid');
+//    }
 }

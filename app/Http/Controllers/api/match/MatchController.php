@@ -39,7 +39,7 @@ class MatchController extends Controller
      *              @OA\Schema (
      *                  @OA\Property (property="t1_score", type="int", description="1팀의 스코어", example="3"),
      *                  @OA\Property (property="t2_score", type="int", description="2팀의 스코어", example="1"),
-     *                  @OA\Property (property="matched_at", type="timestamp", description="경기 진행 날짜", example="2024-02-13"),
+     *                  @OA\Property (property="matched_at", type="timestamp", description="경기 진행 날짜", example="2024-02-13 18:30"),
      *                  @OA\Property (property="state", type="string", description="매치완료 토글버튼", example="Y"),
      *              )
      *          )
@@ -53,7 +53,6 @@ class MatchController extends Controller
         return $this->matchService->storeMatch($mid, $request);
     }
 
-
     /**
      * @OA\Get (
      *     path="/api/matches/ranking/{$cid}",
@@ -66,5 +65,33 @@ class MatchController extends Controller
     public function showRanking(String $cid)
     {
         return $this->matchService->showRanking($cid);
+    }
+
+    /**
+     * @OA\Get (
+     *     path="/api/matches/match-in/{$mid}",
+     *     tags={"경기"},
+     *     description="경기 참여하기",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function signinMatch(String $mid)
+    {
+        return $this->matchService->signinMatch($mid);
+    }
+
+    /**
+     * @OA\Get (
+     *     path="/api/matches/match-out/{$mid}",
+     *     tags={"경기"},
+     *     description="경기 참여취소하기",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function signoutMatch(String $mid)
+    {
+        return $this->matchService->signoutMatch($mid);
     }
 }
