@@ -101,6 +101,62 @@ class MypageService extends Services
         }
     }
 
+    public function showMymatch()
+    {
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+
+        $myteam = DB::table('teams')
+            ->join('team_users', function ($join) use ($user) {
+                $join->on('teams.sid', '=', 'team_users.tid')
+                    ->where('team_users.uid', '=', $user->sid);
+            })
+            ->select('teams.*')
+            ->where('team_users.uid','=',$user->sid)
+            ->first();
+
+        try {
+            //내 경기 일정
+            $mymatch = DB::table('matches')
+                ->join('teams as t1', function ($join) {
+                    $join->on('t1.sid', '=', 'matches.tid1');
+                })
+                ->join('teams as t2', function ($join) {
+                    $join->on('t2.sid', '=', 'matches.tid2');
+                })
+                ->join('match_users', function ($join) use ($user) {
+                    $join->on('match_users.mid', '=', 'matches.sid')
+                        ->where('match_users.uid', '=', $user->sid);
+                })
+                ->leftJoin('competitions as c','c.sid','=','matches.cid')
+                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
+                ->where('matches.del_yn', '=', 'N')
+                ->where('matches.state', '=', 'N')
+                ->where('matches.matched_at', '<>', null)
+                ->orderBy('matches.created_at')
+                ->get();
+
+            return response()->json([
+                'message' => 'Successfully loaded myMatch!',
+                'state' => "S",
+                "data" => [
+                    "result" => $mymatch,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error loaded myMatch!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
     public function updateUser(Request $request)
     {
         $user = auth()->user();

@@ -669,6 +669,23 @@
                 }
             }
         },
+        "/api/matches/match-out/{$mid}": {
+            "get": {
+                "tags": [
+                    "경기"
+                ],
+                "description": "경기 참여취소하기",
+                "operationId": "974cf37b9fc5dc74306926a5c70ddd1e",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
         "/api/auth/signup": {
             "post": {
                 "tags": [
@@ -938,6 +955,23 @@
                 ],
                 "description": "토큰으로 사용자 디테일 정보 얻기",
                 "operationId": "f775197c9c7230add000c41ca4a28aeb",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/mypage/detail/match": {
+            "get": {
+                "tags": [
+                    "마이페이지"
+                ],
+                "description": "detail my Match 정보 얻기",
+                "operationId": "99c6a561ce614832dfaa7eb218e0a258",
                 "responses": {
                     "200": {
                         "description": "Success"

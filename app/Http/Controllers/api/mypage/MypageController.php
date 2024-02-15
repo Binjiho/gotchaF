@@ -43,6 +43,20 @@ class MypageController extends BaseController
     }
 
     /**
+     * @OA\Get (
+     *     path="/api/mypage/detail/match",
+     *     tags={"마이페이지"},
+     *     description="detail my Match 정보 얻기",
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function showMymatch()
+    {
+        return $this->mypageService->showMymatch();
+    }
+
+    /**
      * @OA\Post  (
      *     path="/api/mypage",
      *     tags={"마이페이지"},

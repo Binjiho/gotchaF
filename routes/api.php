@@ -55,6 +55,7 @@ Route::prefix('/mypage')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('', [App\Http\Controllers\api\mypage\MypageController::class, 'indexMypage']);
         Route::get('/detail', [App\Http\Controllers\api\mypage\MypageController::class, 'showMypage']);
+        Route::get('/detail/match', [App\Http\Controllers\api\mypage\MypageController::class, 'showMymatch']);
         Route::post('', [App\Http\Controllers\api\mypage\MypageController::class, 'updateUser']);
         Route::post('/thum', [App\Http\Controllers\api\mypage\MypageController::class, 'storeThum']);
     });
