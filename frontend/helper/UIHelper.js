@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import { weekList } from "@/constants/UiConstants";
 
 export const replaceSpacesWithDot = inputString => {
   // 정규식을 사용하여 문자열에서 중간 공백을 '·'로 바꿉니다.
@@ -64,4 +65,28 @@ export const shareNowUrl = () => {
   } else {
     toast("페이지 공유를 지원하지 않습니다.");
   }
+};
+
+export const convertWeek = yoil => {
+  const weekObject = weekList.reduce((acc, curr) => {
+    acc[curr.value] = curr.name;
+    return acc;
+  }, {});
+
+  let week = "";
+
+  yoil.split(",").map(item => {
+    week = week + `${week !== "" ? "," : ""}${weekObject[item]}`;
+  });
+
+  return week;
+};
+
+export const calculateDday = targetDate => {
+  const currentDate = new Date();
+  const dDay = new Date(targetDate);
+  const timeDiff = dDay.getTime() - currentDate.getTime();
+  const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  return dayDiff;
 };

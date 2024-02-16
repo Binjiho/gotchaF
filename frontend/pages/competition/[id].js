@@ -12,7 +12,10 @@ import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
 import { sendAnonymousGet } from "@/helper/api";
-import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
+import { COMPETITION_KIND, TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
+import { printDateTimeFormat } from "@/helper/value";
+import { convertWeek, calculateDday } from "@/helper/UIHelper";
+import TimeBadge from "@/components/competition/TimeBadge";
 
 export default function Id() {
   const router = useRouter();
@@ -22,7 +25,7 @@ export default function Id() {
 
   const getCompetition = function () {
     sendAnonymousGet(`/api/competitions/${competitionId}`, null, res => {
-      // setCompetitionInfo();
+      setCompetitionInfo(res.data.result.data[0]);
     });
   };
 
@@ -67,12 +70,29 @@ export default function Id() {
                   {competitionInfo.title}
                 </p>
                 <div className={`mt-[8px] flex align-items-center gap-[5px] text-[14px]`}>
-                  <div className={`text-red_primary flex align-items-center gap-[5px]`}>
-                    <TimeIcon width={16} />
-                    <b>D-10</b>
-                  </div>
-                  <span className={`gap-line`}></span>
-                  <p className={`text-gray10`}>12월 18일(수) 모집 마감</p>
+                  {calculateDday(competitionInfo.regist_edate) > 0 ? (
+                    <>
+                      <div
+                        className={`text-red_primary flex align-items-center gap-[5px]`}>
+                        <TimeIcon width={16} />
+                        <b>D-{calculateDday(competitionInfo.regist_edate)}</b>
+                      </div>
+                      <span className={`gap-line`}></span>
+                      <p className={`text-gray10`}>
+                        {printDateTimeFormat(
+                          competitionInfo.regist_edate,
+                          "MM월 dd일(E) "
+                        )}
+                        모집 마감
+                      </p>
+                    </>
+                  ) : (
+                    <TimeBadge
+                      eventStart={competitionInfo.event_sdate}
+                      eventEnd={competitionInfo.event_edate}
+                      limit={competitionInfo.limit_team}
+                      teamCount={competitionInfo.team_count}></TimeBadge>
+                  )}
                 </div>
               </div>
               <div className={`mb-[20px]`}>
@@ -84,27 +104,37 @@ export default function Id() {
                 `}>
                   <li>
                     <EarthLineIcon width={16} />
-                    <p>풋살 5:5</p>
+                    <p>
+                      {COMPETITION_KIND[competitionInfo.kind]} {competitionInfo.person_vs}
+                    </p>
                   </li>
                   <li>
                     <MapIcon width={16} />
-                    <p>논현동</p>
+                    <p>{competitionInfo.region}</p>
                   </li>
                   <li>
                     <UserLineIcon width={16} />
-                    <p>2/4</p>
+                    <p>
+                      {competitionInfo.team_count}/{competitionInfo.limit_team}
+                    </p>
                   </li>
                   <li>
                     <CalendarIcon width={16} />
-                    <p>주 3회 월,목</p>
+                    <p>
+                      {competitionInfo.frequency} {convertWeek(competitionInfo.yoil)}
+                    </p>
                   </li>
                   <li>
                     <TimeLineIcon width={16} />
-                    <p>12월 18일 마감</p>
+                    <p>
+                      {printDateTimeFormat(competitionInfo.event_edate, "MM월 dd일")} 마감
+                    </p>
                   </li>
                   <li>
                     <RightCircleIcon width={16} />
-                    <p>12월 26일 시작</p>
+                    <p>
+                      {printDateTimeFormat(competitionInfo.event_sdate, "MM월 dd일")} 시작
+                    </p>
                   </li>
                 </ul>
               </div>
