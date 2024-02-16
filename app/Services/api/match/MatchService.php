@@ -189,6 +189,7 @@ class MatchService extends Services
                         $comp_team1->tot_score += 3;
                         $comp_team1->step += 1;
                         $comp_team1->w_cnt += 1;
+                        $comp_team1->state = 'W';
                         $comp_team1->save();
 
                         $comp_team2 = Competition_Team::where( [
@@ -198,6 +199,7 @@ class MatchService extends Services
                         ])->first();
                         $comp_team2->step += 1;
                         $comp_team2->l_cnt += 1;
+                        $comp_team2->state = 'L';
                         $comp_team2->save();
 
                         $next_tid = $match->tid1;
@@ -209,6 +211,7 @@ class MatchService extends Services
                         ])->first();
                         $comp_team1->step += 1;
                         $comp_team1->l_cnt += 1;
+                        $comp_team1->state = 'L';
                         $comp_team1->save();
 
                         $comp_team2 = Competition_Team::where( [
@@ -219,6 +222,7 @@ class MatchService extends Services
                         $comp_team2->tot_score += 3;
                         $comp_team2->step += 1;
                         $comp_team2->w_cnt += 1;
+                        $comp_team2->state = 'W';
                         $comp_team2->save();
 
                         $next_tid = $match->tid2;

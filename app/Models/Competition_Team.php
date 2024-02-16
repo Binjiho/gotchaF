@@ -29,6 +29,7 @@ class Competition_Team extends Model
         'step',
         'w_cnt',
         'd_cnt',
-        'l_cnt'
+        'l_cnt',
+        'state'
     ];
 }

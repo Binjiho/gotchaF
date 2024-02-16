@@ -82,6 +82,29 @@ class MypageService extends Services
                 ->first();
 
             //내 팀 total rank, match rank
+            /*내팀이 참여중인 경기*/
+            /*
+            SELECT c.sid, c.title, c.type, ct.sid, ct.tot_score, ct.w_cnt, ct.d_cnt, ct.l_cnt
+            FROM competitions c
+            INNER JOIN competition_teams ct
+                ON (c.sid = ct.cid AND ct.tid = 1 AND ct.del_yn = 'N')
+            WHERE c.del_yn = 'N'
+            */
+
+            /*내팀 경기의 기록*/
+            /*
+             * type == 1 리그
+            SELECT tid, w_cnt, d_cnt, l_cnt, tot_score, ROW_NUMBER() OVER (ORDER BY tot_score DESC) AS `rank`
+            FROM competition_teams
+            WHERE del_yn = 'N' AND cid = 1
+            */
+
+            /*
+             * type == 2 컵 2승1패 4강 진출/탈락
+            SELECT tid, w_cnt, d_cnt, l_cnt, tot_score, ROW_NUMBER() OVER (ORDER BY tot_score DESC) AS `rank`
+            FROM competition_teams
+            WHERE del_yn = 'N' AND cid = 1
+            */
 
             return response()->json([
                 'message' => 'Successfully loaded myInfo!',
