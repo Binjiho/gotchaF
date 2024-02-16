@@ -2,7 +2,7 @@ import PrevHeader from "@/components/layout/PrevHeader";
 import { sendGet } from "@/helper/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import MemberProfile from "@/components/team/MemberProfile";
+import MemberImage from "@/components/team/MemberImage";
 import { printDateTimeFormat } from "@/helper/value";
 import { Button } from "react-bootstrap";
 import StateLine from "@/public/icons/system/shate-line.svg";
@@ -37,10 +37,10 @@ export default function NoticeId() {
           <>
             <div
               className={`flex gap-[9px] align-items-center border-b-[1px] border-gray2 py-[15px]`}>
-              <MemberProfile
+              <MemberImage
                 img={notice.user_thum}
                 role={notice.level}
-                size={38}></MemberProfile>
+                size={38}></MemberImage>
               <div className={`flex flex-column `}>
                 <p className={`text-gray10 text-[13px]`}>{notice.writer}</p>
                 <span className={`text-[12px] text-gray7`}>

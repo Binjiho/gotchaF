@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import TodoLineIcon from "@/public/icons/other/todo-line.svg";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import TeamMemberItem from "@/components/team/TeamMemberItem";
+import TeamMemberProfile from "@/components/team/TeamMemberProfile";
 
 export default function Join() {
   const router = useRouter();
@@ -72,7 +72,7 @@ export default function Join() {
               <div
                 key={item.sid}
                 className={`flex justify-between align-items-center py-[10px]`}>
-                <TeamMemberItem item={item}></TeamMemberItem>
+                <TeamMemberProfile item={item}></TeamMemberProfile>
                 {item.access ? (
                   <Button
                     variant="gray2"

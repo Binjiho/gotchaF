@@ -11,7 +11,7 @@ import { calculateAge } from "@/helper/value";
 import LinkHeader from "@/components/btn/LinkHeader";
 import RecommendBtn from "@/components/btn/RecommendBtn";
 import NoContentText from "@/components/noContent/noContentText";
-import TeamMemberItem from "@/components/team/TeamMemberItem";
+import TeamMemberProfile from "@/components/team/TeamMemberProfile";
 import NoticeCardItem from "@/components/team/NoticeCardItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -247,9 +247,9 @@ export default function Index() {
                       {nowTeamUser && (
                         <div className={`flex flex-column gap-[20px] mb-[40px]`}>
                           {nowTeamUser?.map((item, index) => (
-                            <TeamMemberItem
+                            <TeamMemberProfile
                               item={item}
-                              key={`member-${index}`}></TeamMemberItem>
+                              key={`member-${index}`}></TeamMemberProfile>
                           ))}
                         </div>
                       )}

@@ -1,4 +1,4 @@
-import MemberProfile from "@/components/team/MemberProfile";
+import MemberImage from "@/components/team/MemberImage";
 import { printDateTimeFormat } from "@/helper/value";
 import { useRouter } from "next/router";
 
@@ -16,7 +16,7 @@ export default function NoticeItem({ item }) {
       onClick={() => goNoticePage(item.sid)}>
       <div className={`flex justify-between align-items-center`}>
         <div className={`flex gap-[9px] align-items-center`}>
-          <MemberProfile img={item.user_thum} size={20} role={item.level}></MemberProfile>
+          <MemberImage img={item.user_thum} size={20} role={item.level}></MemberImage>
           <p className={`text-gray10 text-[13px]`}>{item.writer}</p>
         </div>
         <p className={`text-[13px] text-gray7`}>

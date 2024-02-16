@@ -16,6 +16,7 @@ import { COMPETITION_KIND, TEAM_MEMBER_LEVEL } from "@/constants/serviceConstant
 import { printDateTimeFormat } from "@/helper/value";
 import { convertWeek, calculateDday } from "@/helper/UIHelper";
 import TimeBadge from "@/components/competition/TimeBadge";
+import TeamProfile from "@/components/team/TeamProfile";
 
 export default function Id() {
   const router = useRouter();
@@ -24,9 +25,11 @@ export default function Id() {
   const user = useSelector(state => state.user);
 
   const getCompetition = function () {
-    sendAnonymousGet(`/api/competitions/${competitionId}`, null, res => {
-      setCompetitionInfo(res.data.result.data[0]);
+    sendAnonymousGet(`/api/competitions/detail/${competitionId}`, null, res => {
+      setCompetitionInfo(res.data.result);
     });
+
+    sendAnonymousGet(`/api/matches/${competitionId}`, null, res => {});
   };
 
   const goTeamSetting = () => {
@@ -115,7 +118,10 @@ export default function Id() {
                   <li>
                     <UserLineIcon width={16} />
                     <p>
-                      {competitionInfo.team_count}/{competitionInfo.limit_team}
+                      <span className={`text-green_primary`}>
+                        {competitionInfo.team_count}
+                      </span>
+                      /{competitionInfo.limit_team}
                     </p>
                   </li>
                   <li>
@@ -156,7 +162,30 @@ export default function Id() {
                 </Nav>
                 <hr className={`hr-line`} />
                 <Tab.Content>
-                  <Tab.Pane eventKey="home"></Tab.Pane>
+                  <Tab.Pane
+                    eventKey="home"
+                    className={"pt-[30px] pb-[60px] [&_h3]:text-[18px] [&_h3]:font-bold"}>
+                    <div>
+                      <h3>참가팀</h3>
+                      <div className={`mt-[18px] pb-[12px] border-b-[1px] !border-gray3`}>
+                        <TeamProfile
+                          size={"big"}
+                          item={competitionInfo.join_teams[0]}></TeamProfile>
+                      </div>
+                      <div className={`pt-[12px] flex flex-column gap-[12px]`}>
+                        <span className={`text-[#A2A6A9] text-[13px]`}>
+                          {competitionInfo.join_teams.length}팀 참가중
+                        </span>
+                        {competitionInfo.join_teams.map(item => {
+                          return (
+                            <TeamProfile
+                              item={item}
+                              key={`team-${item.tid}`}></TeamProfile>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}

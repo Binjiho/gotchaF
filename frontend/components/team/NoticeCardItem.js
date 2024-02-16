@@ -1,4 +1,4 @@
-import MemberProfile from "@/components/team/MemberProfile";
+import MemberImage from "@/components/team/MemberImage";
 import { useRouter } from "next/router";
 
 export default function NoticeCardItem({ item }) {
@@ -15,7 +15,7 @@ export default function NoticeCardItem({ item }) {
       onClick={() => goNoticePage(item.sid)}>
       <div>
         <div className={`flex gap-[9px] align-items-center`}>
-          <MemberProfile img={item.user_thum} role={item.level} size={24}></MemberProfile>
+          <MemberImage img={item.user_thum} role={item.level} size={24}></MemberImage>
           <p className={`text-gray10 text-[13px]`}>{item.writer}</p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import KingIcon from "@/public/icons/label/label_king.svg";
 import StarIcon from "@/public/icons/label/label_star.svg";
 import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
 
-export default function MemberProfile({ img, role = "", size = 24 }) {
+export default function MemberImage({ img, role = "", size = 24 }) {
   const iconSize = size === 42 ? 20 : size === 24 ? 12 : size / 2;
 
   return (
