@@ -18,11 +18,11 @@ use Illuminate\Support\Facades\DB;
  */
 class TeamAuthService extends Services
 {
-    public function signupTeam(Request $request)
+    public function signupTeam(String $tid)
     {
         $this->transaction();
 
-        $user = $request->user();
+        $user = auth()->user();
         if(!$user){
             return response()->json([
                 'message' => 'Error load User!',
@@ -38,12 +38,10 @@ class TeamAuthService extends Services
             ], 555);
         }
 
-
-        $team = Team::where( ['del_yn' => 'N', 'sid' => $request->sid ])->first();
-
+        $team = Team::where( ['del_yn' => 'N', 'sid' => $tid ])->first();
         if(!$team){
             return response()->json([
-                'message' => 'Error load Team!',
+                'message' => '팀을 찾을 수 없습니다!',
                 'state' => "E",
             ], 555);
         }
@@ -71,7 +69,7 @@ class TeamAuthService extends Services
             }
         }
 
-        $team_count = Team_User::where( ['del_yn' => 'N', 'sid' => $request->sid ])->count();
+        $team_count = Team_User::where( ['del_yn' => 'N', 'sid' => $tid ])->count();
         if($team_count >= $team->limit_person) {
             return response()->json([
                 'message' => '팀 인원이 가득찼습니다.',

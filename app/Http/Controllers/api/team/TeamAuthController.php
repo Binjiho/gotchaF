@@ -19,7 +19,7 @@ class TeamAuthController extends BaseController
 
     /**
      * @OA\Post (
-     *     path="/api/teams/signup/{sid}",
+     *     path="/api/teams/signup/{tid}",
      *     tags={"팀"},
      *     description="팀 가입",
      *      @OA\RequestBody(
@@ -27,8 +27,7 @@ class TeamAuthController extends BaseController
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema (
-     *                 @OA\Property (property="tid", type="string", description="팀sid", example="1"),
-     *                 @OA\Property (property="uid", type="string", description="가입하려는 회원아이디 token보내면 됨", example="token"),
+     *
      *             )
      *         )
      *     ),
@@ -36,9 +35,9 @@ class TeamAuthController extends BaseController
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function signupTeam(Request $request)
+    public function signupTeam(String $tid)
     {
-        return $this->teamAuthService->signupTeam($request);
+        return $this->teamAuthService->signupTeam($tid);
     }
 
     /**

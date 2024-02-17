@@ -1016,32 +1016,18 @@
                 }
             }
         },
-        "/api/teams/signup/{sid}": {
+        "/api/teams/signup/{tid}": {
             "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 가입",
-                "operationId": "4998efb6faed5e855e5777e1d5450ad7",
+                "operationId": "62131d810ef690cea49b519f3f9d9fb3",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "tid": {
-                                        "description": "팀sid",
-                                        "type": "string",
-                                        "example": "1"
-                                    },
-                                    "uid": {
-                                        "description": "가입하려는 회원아이디 token보내면 됨",
-                                        "type": "string",
-                                        "example": "token"
-                                    }
-                                },
-                                "type": "object"
-                            }
+                            "schema": {}
                         }
                     }
                 },
