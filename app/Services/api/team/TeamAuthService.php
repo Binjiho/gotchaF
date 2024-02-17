@@ -50,14 +50,14 @@ class TeamAuthService extends Services
 
         if($user->age/*1995*/ < $team->max_age/*1993*/ ) {
             return response()->json([
-                'message' => 'max age!',
+                'message' => '팀 최대나이 제한과 회원님의 나이가 다릅니다.',
                 'state' => "E",
             ], 555);
         }
 
         if($user->age/*1995*/ > $team->min_age/*2000*/) {
             return response()->json([
-                'message' => 'min age!',
+                'message' => '팀 최소나이 제한과 회원님의 나이가 다릅니다.',
                 'state' => "E",
             ], 555);
         }
@@ -65,7 +65,7 @@ class TeamAuthService extends Services
         if($team->sex > 0){
             if($user->sex != $team->sex) {
                 return response()->json([
-                    'message' => 'wrong sex!',
+                    'message' => '팀 성별 제한과 회원님의 성별이 다릅니다.',
                     'state' => "E",
                 ], 555);
             }
@@ -74,7 +74,7 @@ class TeamAuthService extends Services
         $team_count = Team_User::where( ['del_yn' => 'N', 'sid' => $request->sid ])->count();
         if($team_count >= $team->limit_person) {
             return response()->json([
-                'message' => 'limit_person!',
+                'message' => '팀 인원이 가득찼습니다.',
                 'state' => "E",
             ], 555);
         }

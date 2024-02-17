@@ -193,7 +193,6 @@ class CompetitionController extends Controller
     public function startCompetition(String $cid)
     {
         return $this->compService->startCompetition($cid);
-//        return $this->matchService->startCompetition($cid);
     }
 
 }

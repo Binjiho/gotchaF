@@ -2,6 +2,7 @@
 
 namespace App\Services\api\mypage;
 
+use App\Models\Competition;
 use App\Services\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,13 +84,16 @@ class MypageService extends Services
 
             //내 팀 total rank, match rank
             /*내팀이 참여중인 경기*/
-            /*
-            SELECT c.sid, c.title, c.type, ct.sid, ct.tot_score, ct.w_cnt, ct.d_cnt, ct.l_cnt
-            FROM competitions c
-            INNER JOIN competition_teams ct
-                ON (c.sid = ct.cid AND ct.tid = 1 AND ct.del_yn = 'N')
-            WHERE c.del_yn = 'N'
-            */
+            $myteams = DB::table('competitions')
+                ->join('competition_teams as ct', function ($join) use ($myteam) {
+                    $join->on('competitions.sid', '=', 'ct.cid')
+                        ->where('ct.tid', '=', $myteam->sid)
+                        ->where('ct.del_yn', '=', 'N');
+                })
+                ->select(DB::raw('competitions.sid, competitions.type, competitions.title'))
+                ->where('competitions.del_yn', '=', 'N')
+                ->where('competitions.state', '=', 'S')
+                ->get();
 
             /*내팀 경기의 기록*/
             /*
@@ -101,10 +105,35 @@ class MypageService extends Services
 
             /*
              * type == 2 컵 2승1패 4강 진출/탈락
-            SELECT tid, w_cnt, d_cnt, l_cnt, tot_score, ROW_NUMBER() OVER (ORDER BY tot_score DESC) AS `rank`
+            SELECT tid, w_cnt, d_cnt, l_cnt, tot_score, step
             FROM competition_teams
             WHERE del_yn = 'N' AND cid = 1
             */
+            $myteam_ranks = array();
+            foreach($myteams as $mt){
+                $comp = DB::table('competition_teams as ct')
+                    ->select(DB::raw('ct.tid, ct.state,  ct.w_cnt, ct.d_cnt, ct.l_cnt, ct.tot_score, ct.step, ROW_NUMBER() OVER (ORDER BY ct.tot_score DESC) AS `rank`'))
+                    ->where('ct.cid', '=', $mt->sid)
+                    ->get();
+                foreach($comp as $cp){
+                    if($myteam->sid == $cp->tid){
+                        $myteam_ranks[$mt->sid] = [
+                            'sid' => $mt->sid,
+                            'title' => $mt->title,
+                            'type' => $mt->type,
+//                            'score' => $cp,
+                            'state' => $cp->state,
+                            'w_cnt' => $cp->w_cnt,
+                            'd_cnt' => $cp->d_cnt,
+                            'l_cnt' => $cp->l_cnt,
+                            'tot_score' => $cp->tot_score,
+                            'step' => $cp->step,
+                            'rank' => $cp->rank,
+                        ];
+                    }
+                }
+
+            }
 
             return response()->json([
                 'message' => 'Successfully loaded myInfo!',
@@ -113,6 +142,8 @@ class MypageService extends Services
                     "myinfo" => $user,
                     "mymatch" => $mymatch,
                     "myteam" => $myteam,
+                    "myteams" => $myteams,
+                    "myteam_ranks" => $myteam_ranks,
                 ],
             ], 200);
         } catch (\Exception $e) {
