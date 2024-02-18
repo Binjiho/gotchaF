@@ -17,19 +17,52 @@ import { printDateTimeFormat } from "@/helper/value";
 import { convertWeek, calculateDday } from "@/helper/UIHelper";
 import TimeBadge from "@/components/competition/TimeBadge";
 import TeamProfile from "@/components/team/TeamProfile";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import RoundItem from "@/components/competition/RoundItem";
 
 export default function Id() {
   const router = useRouter();
   const competitionId = router.query.id;
   const [competitionInfo, setCompetitionInfo] = useState(null);
+  const [matchInfo, setMatchInfo] = useState(null);
   const user = useSelector(state => state.user);
 
   const getCompetition = function () {
     sendAnonymousGet(`/api/competitions/detail/${competitionId}`, null, res => {
       setCompetitionInfo(res.data.result);
     });
+  };
 
-    sendAnonymousGet(`/api/matches/${competitionId}`, null, res => {});
+  const getMatches = () => {
+    sendAnonymousGet(`/api/matches/${competitionId}`, null, res => {
+      const match = res.data.result;
+      let round = 1;
+      let matchList = [];
+
+      match.map(item => {
+        if (
+          matchList.length &&
+          matchList[matchList.length - 1].round === Number(item.round)
+        ) {
+          matchList[matchList.length - 1].list.push(item);
+        } else if (round === Number(item.round)) {
+          matchList.push({
+            round: Number(item.round),
+            list: [item],
+          });
+        } else {
+          round += 1;
+
+          matchList.push({
+            round: Number(item.round),
+            list: [item],
+          });
+        }
+      });
+
+      setMatchInfo(matchList);
+    });
   };
 
   const goTeamSetting = () => {
@@ -39,6 +72,7 @@ export default function Id() {
   useEffect(() => {
     if (!competitionId) return;
     getCompetition();
+    getMatches();
   }, [competitionId]);
 
   return (
@@ -186,6 +220,17 @@ export default function Id() {
                       </div>
                     </div>
                   </Tab.Pane>
+                  <Tab.Pane eventKey="competition">
+                    <Swiper modules={[Navigation]} navigation>
+                      {matchInfo?.map((item, index) => (
+                        <SwiperSlide key={`match-${index}`}>
+                          <RoundItem item={item}></RoundItem>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="rank"></Tab.Pane>
+                  <Tab.Pane eventKey="consult"></Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}
