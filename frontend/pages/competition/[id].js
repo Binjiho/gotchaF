@@ -221,7 +221,10 @@ export default function Id() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="competition">
-                    <Swiper modules={[Navigation]} navigation>
+                    <Swiper
+                      modules={[Navigation]}
+                      navigation
+                      className={`swiper-custom-btn size-24 [&_.swiper-button-next]:top-[49px] [&_.swiper-button-prev]:top-[49px]`}>
                       {matchInfo?.map((item, index) => (
                         <SwiperSlide key={`match-${index}`}>
                           <RoundItem item={item}></RoundItem>

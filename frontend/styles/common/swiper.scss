@@ -1,0 +1,20 @@
+.swiper-custom-btn {
+  &.size-24 {
+    .swiper-button-next,
+    .swiper-button-prev {
+      color: $gray10;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .swiper-button-prev {
+      @include maskIcon("/icons/system/arrow-left-s-line.svg", 24px);
+    }
+
+    .swiper-button-next {
+      @include maskIcon("/icons/system/arrow-right-s-line.svg", 24px);
+    }
+  }
+}
