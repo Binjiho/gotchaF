@@ -3,6 +3,7 @@
 namespace App\Services\api\board;
 
 use App\Models\Board;
+use App\Models\Competition_Team;
 use App\Models\Team_User;
 use App\Services\Services;
 use Illuminate\Http\Request;
@@ -344,6 +345,325 @@ class BoardService extends Services
 
             return $this->dbRollback('Error load teamImage!',$e);
 
+        }
+    }
+
+//============================================================
+// 경기 공지/문의
+//============================================================
+
+    public function indexInquire(String $cid)
+    {
+        try {
+            $boards = DB::table('boards')
+                ->join('teams', 'boards.tid', '=', 'teams.sid')
+                ->join('competition_teams as c', function ($join) use ($cid) {
+                    $join->on('teams.sid', '=', 'c.tid')
+                        ->where('c.cid', '=', $cid);
+                })
+                ->select('boards.*', 'teams.title as name','teams.file_path as thum', 'c.level')
+                ->where('boards.ccode', '=', '3')
+                ->where('boards.cid', '=', $cid)
+                ->where('boards.display_yn', '=', 'Y')
+                ->where('boards.del_yn', '=', 'N')
+                ->orderBy('sid','desc')
+                ->get();
+
+            $result = array();
+            foreach($boards as $board){
+                $reply = DB::table('boards')
+                    ->select('boards.*', 'teams.title as name','teams.file_path as thum', 'c.level')
+                    ->where('boards.ccode', '=', '3')
+                    ->where('boards.cid', '=', $cid)
+                    ->where('boards.display_yn', '=', 'Y')
+                    ->where('boards.del_yn', '=', 'N')
+                    ->where('boards.step', '=', '2')
+                    ->count();
+
+                $result[] = array(
+                  'sid' => $board->sid,
+                  'team_name' => $board->name,
+                  'level' => $board->level,
+                  'title' => $board->title,
+                  'contents' => $board->contents,
+                  'file' => $board->file_path,
+                  'created_at' => $board->created_at,
+                  'reply_cnt' => $reply,
+                  'hit_cnt' => $board->hit,
+                );
+
+            }
+
+            return response()->json([
+                'message' => '경기 공지/문의 불러오기 성공!',
+                'state' => "S",
+                "data" => ["result" => $result],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => '경기 공지/문의 불러오기 실패!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+
+    public function showInquire(String $cid,  String $sid)
+    {
+        try {
+            $board = DB::table('boards')
+                ->join('teams', 'boards.tid', '=', 'teams.sid')
+                ->join('competition_teams as c', function ($join) use ($cid) {
+                    $join->on('teams.sid', '=', 'c.tid')
+                        ->where('c.cid', '=', $cid);
+                })
+                ->select('boards.*', 'teams.title as name','teams.file_path as thum', 'c.level')
+                ->where('boards.ccode', '=', '3')
+                ->where('boards.cid', '=', $cid)
+                ->where('boards.display_yn', '=', 'Y')
+                ->where('boards.del_yn', '=', 'N')
+                ->where('boards.sid', '=', $sid)
+                ->first();
+
+            $replys = DB::table('boards')
+                ->select('boards.*')
+                ->where('boards.ccode', '=', '3')
+                ->where('boards.cid', '=', $cid)
+                ->where('boards.display_yn', '=', 'Y')
+                ->where('boards.del_yn', '=', 'N')
+                ->where('boards.step', '=', '2')
+                ->orderBy('boards.sid','desc')
+                ->get();
+
+            $result = array(
+                'sid' => $board->sid,
+                'team_name' => $board->name,
+                'level' => $board->level,
+                'title' => $board->title,
+                'contents' => $board->contents,
+                'file' => $board->file_path,
+                'created_at' => $board->created_at,
+                'reply' => $replys,
+                'hit_cnt' => $board->hit,
+            );
+
+            return response()->json([
+                'message' => '경기 공지/문의 상세 불러오기 성공!',
+                'state' => "S",
+                "data" => ["result" => $result],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => '경기 공지/문의 상세 불러오기 실패!',
+                'state' => "E",
+                'error' => $e,
+            ], 500);
+        }
+    }
+    public function storeInquire(Request $request, String $cid)
+    {
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+
+        //팀의 리더인지 확인
+        $leader_user = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+            'level' => 'L'
+        ])->first();
+        if(!$leader_user){
+            return response()->json([
+                'message' => '팀의 리더가 아닙니다!',
+                'state' => "E",
+            ], 555);
+        }
+
+        //경기에 참여한 팀인지 확인
+        $competition_join = Competition_Team::where( [
+            'del_yn' => 'N',
+            'cid' => $cid,
+            'tid' => $leader_user->tid,
+        ])->first();
+        if(!$competition_join){
+            return response()->json([
+                'message' => '경기에 참여한 팀이 아닙니다!',
+                'state' => "E",
+            ], 555);
+        }
+
+        try {
+            $this->transaction();
+
+            $now = date('Y-m-d H:i:s');
+
+            $board = new Board;
+            $board->ccode = 3;
+            $board->cid = $cid;
+            $board->tid = $leader_user->tid;
+            $board->uid = $user->sid;
+            $board->title = $request->title;
+            $board->contents = $request->contents;
+            $board->writer = $user->name;
+            $board->created_at = $now;
+            $board->save();
+            $save_id = $board->sid;
+
+            if($request->hasFile('files')){
+                $s3_path = "gotcha/inquire/".$cid;
+                foreach($request->file('files') as $file){
+                    $extension = $file->getClientOriginalExtension();
+                    $uuid = uniqid();
+                    $filename = $uuid. '_' . time() . '.' . $extension;
+                    $filepath = $s3_path . '/' . $filename;
+
+                    // S3에 파일 저장
+                    Storage::disk('s3')->put($filepath, $file);
+
+                    $board = Board::find($save_id);
+                    $board->file_originalname = $file->getClientOriginalName();
+                    $board->file_realname = $filename;;
+                    $board->file_path = Storage::disk('s3')->url($filepath);
+                    $board->save();
+                }
+            }
+
+            $this->dbCommit('경기 공지/문의 생성');
+
+            return response()->json([
+                'message' => 'Successfully created board Inquire!',
+                'state' => "S",
+                "data" => [ "board" => $board ],
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error board Inquire!',$e);
+        }
+    }
+
+    public function updateInquire(Request $request, String $cid, String $sid)
+    {
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+
+        $board = Board::where( [
+            'sid' => $sid,
+            'uid' => $user->sid,
+        ])->first();
+        if(!$board){
+            return response()->json([
+                'message' => '게시글 작성자가 아닙니다!',
+                'state' => "E",
+            ], 555);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $this->transaction();
+
+            if($request->title) $board->title = $request->title;
+            if($request->contents) $board->contents = $request->contents;
+            if($request->del_yn) $board->del_yn = $request->del_yn;
+
+            $board->updated_at = $now;
+
+            if($request->hasFile('files')){
+                $s3_path = "gotcha/inquire/".$cid;
+
+                //기존 이미지 삭제
+                if($board->file_path){
+                    $file_uploaded_name = $board->file_realname;
+                    $file_uploaded_path = $s3_path."/".$file_uploaded_name;
+                    // Delete a file
+                    Storage::disk('s3')->delete($file_uploaded_path);
+                }
+
+                //새로운 이미지 저장
+                foreach($request->file('files') as $file){
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid. '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
+
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
+                        $board->file_originalname = $file->getClientOriginalName();
+                        $board->file_realname = $filename;
+                        $board->file_path = Storage::disk('s3')->url($filepath);
+                    }
+                }
+            }
+
+            $board->save();
+
+            $this->dbCommit('경기 공지/문의 수정 및 삭제');
+
+            return response()->json([
+                'message' => 'Successfully update delete Inquire!',
+                'state' => "S",
+                "data" => ["board" => $board],
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error update delete Inquire!',$e);
+        }
+    }
+
+    public function replyInquire(Request $request, String $sid)
+    {
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
+
+        $motherBoard = Board::where( [
+            'sid' => $sid,
+            'del_yn' => 'N',
+        ])->first();
+        if(!$motherBoard){
+            return response()->json([
+                'message' => '게시글이 존재하지 않습니다!',
+                'state' => "E",
+            ], 500);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $this->transaction();
+
+            $board = new Board;
+            $board->ccode = 3;
+            $board->step = 2;
+            $board->cid = $motherBoard->cid;
+            $board->uid = $user->sid;
+            $board->title = $request->title;
+            $board->contents = $request->contents;
+            $board->writer = $user->name;
+            $board->created_at = $now;
+            $board->save();
+
+            $this->dbCommit('경기 공지/문의 댓글달기');
+
+            return response()->json([
+                'message' => '경기 공지/문의 댓글달기 성공!',
+                'state' => "S",
+                "data" => ["board" => $board],
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('경기 공지/문의 댓글달기 실패!',$e);
         }
     }
 

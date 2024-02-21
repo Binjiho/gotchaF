@@ -23,8 +23,11 @@ class Board extends Model
     //fillable 허용목록
     protected $fillable = [
         'ccode',
+        'cid',
         'tid',
         'uid',
+        'step',
+        'hit',
         'title',
         'contents',
         'writer',

@@ -79,8 +79,8 @@ Route::prefix('/teams')->group(function () {
         Route::post('/confirm', [App\Http\Controllers\api\team\TeamAuthController::class, 'confirm']);
         Route::post('/mendate', [App\Http\Controllers\api\team\TeamAuthController::class, 'mendate']);
         Route::post('/delete-team/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'deleteTeam']);
-//        Route::post('/delete-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'delete']);
         Route::post('/manager-member', [App\Http\Controllers\api\team\TeamAuthController::class, 'manager']);
+        //팀게시판
         Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
         Route::post('/board-gallery', [App\Http\Controllers\api\team\TeamController::class, 'gallery']);
     });
@@ -101,6 +101,9 @@ Route::prefix('/competitions')->group(function () {
 
         Route::post('/apply/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'applyCompetition']);
         Route::post('/start/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'startCompetition']);
+
+        //경기 공지사항/문의
+        Route::post('/board-notice', [App\Http\Controllers\api\team\TeamController::class, 'notice']);
     });
 });
 
@@ -125,19 +128,21 @@ Route::prefix('/matches')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/boards')->group(function () {
-//    Route::post('', [App\Http\Controllers\api\board\BoardController::class, 'storeBoard']);
-//    Route::get('', [App\Http\Controllers\api\board\BoardController::class, 'indexBoards']);
-//    Route::get('/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'showBoard']);
-//    Route::patch('/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'updateBoard']);
-
     Route::get('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexGallery']);
 
     Route::get('/board-notice/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexNotice']);
     Route::get('/board-notice/{tid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showNotice']);
 
+    Route::get('/board-inquire/{cid}', [App\Http\Controllers\api\board\BoardController::class, 'indexInquire']);
+    Route::get('/board-inquire/{cid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showInquire']);
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/board-notice/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'storeNotice']);
         Route::post('/board-notice/{tid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateNotice']);
+
+        Route::post('/board-inquire/{cid}', [App\Http\Controllers\api\board\BoardController::class, 'storeInquire']);
+        Route::post('/board-inquire/{cid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateInquire']);
+        Route::post('/board-reply/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'replyInquire']);
 
         Route::post('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'storeGallery']);
     });
