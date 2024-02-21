@@ -164,7 +164,7 @@
                 "tags": [
                     "게시판"
                 ],
-                "description": "게시판 상세 불러오기",
+                "description": "팀 공지사항 상세 불러오기",
                 "operationId": "5310f80bceb9bbd5a7e9d6f03fca9cc7",
                 "responses": {
                     "200": {
@@ -201,6 +201,175 @@
                                         "description": "삭제유무",
                                         "type": "string",
                                         "example": "Y"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-inquire/{cid}": {
+            "get": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "경기 공지/문의 리스트",
+                "operationId": "a737c97d28a3082b7fe86ea3ae69fcf8",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "경기 공지/문의 생성",
+                "operationId": "4d9b65992724ac9ac6d4319d100e4ac2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-inquire/{cid}/{sid}": {
+            "get": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "경기 공지/문의  상세 불러오기",
+                "operationId": "bdc84b81e9ef4d24f2e95bc183b8a6b9",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-inquire/{tid}/{sid}": {
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "경기 공지/문의 수정 및 삭제",
+                "operationId": "44a7b3f9ac58e85bcc28edec20bed95c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
+                                    },
+                                    "del_yn": {
+                                        "description": "삭제유무",
+                                        "type": "string",
+                                        "example": "Y"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-reply/{sid}": {
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "경기 공지/문의 댓글달기",
+                "operationId": "b8929128d3cb92288945b8a34b111cd0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
                                     },
                                     "files[]": {
                                         "description": "이미지 input name=files[]",
