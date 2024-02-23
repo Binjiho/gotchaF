@@ -11,7 +11,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN set -eux
 
 # Install PHP dependencies
-RUN composer install --ignore-platform-reqs -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
