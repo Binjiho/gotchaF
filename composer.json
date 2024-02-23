@@ -17,14 +17,15 @@
         "socialiteproviders/facebook": "^4.1",
         "socialiteproviders/google": "^4.1",
         "socialiteproviders/kakao": "^4.2",
-        "socialiteproviders/naver": "^4.1"
+        "socialiteproviders/naver": "^4.1",
+        "nunomaduro/collision": "^7.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
-        "laravel/sail": "^1.18",
+        "laravel/sail": "^1.28",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
+
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
     },
@@ -73,7 +74,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        }
+        },
+        "discard-changes": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true
