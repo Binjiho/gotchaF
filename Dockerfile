@@ -1,5 +1,5 @@
 FROM php:8.2-fpm
-
+USER root
 RUN apt-get update &&apt-get install -y composer
 
 COPY . /var/www/html
