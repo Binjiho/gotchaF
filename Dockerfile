@@ -7,7 +7,7 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
+RUN composer install --ignore-platform-reqs -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
