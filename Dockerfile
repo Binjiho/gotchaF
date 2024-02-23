@@ -11,8 +11,10 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN set -eux
 
 # Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
+RUN composer install
 
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN chmod -R 755 /var/www/html/storage
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
