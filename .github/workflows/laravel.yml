@@ -1,4 +1,4 @@
-name: Laravel-CD
+name: Laravel-CD without Test
 
 on:
   push:
