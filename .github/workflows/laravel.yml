@@ -6,7 +6,7 @@ on:
 
 env:
   # 이미지 이름을 환경변수로 등록합니다.
-  IMAGE_NAME: jiyu1948/example-app
+  IMAGE_NAME: jiyu1948/brave_webtoon
 
 jobs:
   build:
