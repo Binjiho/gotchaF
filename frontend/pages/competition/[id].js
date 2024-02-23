@@ -12,17 +12,13 @@ import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
 import { sendAnonymousGet } from "@/helper/api";
-import {
-  COMPETITION_KIND,
-  COMPETITION_TYPE,
-  TEAM_MEMBER_LEVEL,
-} from "@/constants/serviceConstants";
+import { COMPETITION_KIND, COMPETITION_TYPE } from "@/constants/serviceConstants";
 import { printDateTimeFormat } from "@/helper/value";
 import { convertWeek, calculateDday } from "@/helper/UIHelper";
 import TimeBadge from "@/components/competition/TimeBadge";
 import TeamProfile from "@/components/team/TeamProfile";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import RoundItem from "@/components/competition/RoundItem";
 
 export default function Id() {
@@ -30,7 +26,9 @@ export default function Id() {
   const competitionId = router.query.id;
   const [competitionInfo, setCompetitionInfo] = useState(null);
   const [matchInfo, setMatchInfo] = useState(null);
+  const [rankInfo, setRankInfo] = useState(null);
   const user = useSelector(state => state.user);
+  const [key, setKey] = useState("home");
 
   const getCompetition = function () {
     sendAnonymousGet(`/api/competitions/detail/${competitionId}`, null, res => {
@@ -69,6 +67,12 @@ export default function Id() {
     });
   };
 
+  const getRank = () => {
+    sendAnonymousGet(`/api/matches/ranking/${competitionId}`, null, res => {
+      setRankInfo(res.data.result);
+    });
+  };
+
   const goTeamSetting = () => {
     router.push(`/team/${competitionId}/setting`);
   };
@@ -76,8 +80,15 @@ export default function Id() {
   useEffect(() => {
     if (!competitionId) return;
     getCompetition();
-    getMatches();
   }, [competitionId]);
+
+  useEffect(() => {
+    if (key === "competition") {
+      getMatches();
+    } else if (key === "rank") {
+      getRank();
+    }
+  }, [key]);
 
   return (
     <>
@@ -188,7 +199,10 @@ export default function Id() {
                   </ul>
                 </div>
               </div>
-              <Tab.Container id="left-tabs-example" defaultActiveKey="home">
+              <Tab.Container
+                id="left-tabs-example"
+                activeKey={key}
+                onSelect={k => setKey(k)}>
                 <Nav variant="underline">
                   <Nav.Item>
                     <Nav.Link eventKey="home">홈</Nav.Link>
@@ -247,11 +261,40 @@ export default function Id() {
                       <div className={`inner`}>
                         <h3>
                           {Number(competitionInfo.type) === COMPETITION_TYPE.LEAGUE
-                            ? "리그"
-                            : "컵"}{" "}
+                            ? "리그 "
+                            : "컵 "}
                           랭킹
                         </h3>
                       </div>
+                      <table className={`text-[13px]`}>
+                        <thead>
+                          <tr>
+                            <th>팀</th>
+                            <th>경기</th>
+                            <th>승점</th>
+                            <th>승</th>
+                            <th>무</th>
+                            <th>패</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rankInfo?.map((rank, index) => {
+                            return (
+                              <tr key={`rank-${index}`}>
+                                <td>
+                                  <b className={`text-green_primary`}>{index + 1}</b>
+                                  {rank.title}
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="consult"></Tab.Pane>
