@@ -42,7 +42,7 @@ export default function AreaSelect({ value, setValue, title }) {
         onButtonClick={handleButtonClick}></EditItem>
       <PrevFullModal show={showModal} setShow={setShowModal}>
         <p type={`middle`}>지역 설정</p>
-        <main type={`content`}>
+        <main type={`content`} className={`inner`}>
           <Form className={`mt-3 flex flex-column gap-[16px]`}>
             <Form.Group controlId="control1">
               <Typeahead

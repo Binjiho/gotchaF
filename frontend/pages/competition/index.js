@@ -90,7 +90,7 @@ export default function Index() {
           </p>
         </div>
       </SearchHeader>
-      <main>
+      <main className={`inner`}>
         <Nav
           variant="pills"
           className={`mt-[20px]`}

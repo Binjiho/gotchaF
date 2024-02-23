@@ -88,29 +88,31 @@ export default function Create() {
       </PrevHeader>
       <main className={`pb-[20px]`}>
         <Form>
-          <Form.Group className={`my-[30px]`}>
-            <Form.Control
-              placeholder={`팀명 입력(최대 7자)`}
-              maxLength={7}
-              value={teamName}
-              onChange={e => setTeamName(e.target.value)}
-              className={`border-none text-center text-[20px] font-bold placeholder:text-gray7 py-0`}></Form.Control>
-          </Form.Group>
-          <div className={`m-auto w-fit`}>
-            <UploadImage file={file} setFile={setFile}></UploadImage>
+          <div className={`inner`}>
+            <Form.Group className={`my-[30px]`}>
+              <Form.Control
+                placeholder={`팀명 입력(최대 7자)`}
+                maxLength={7}
+                value={teamName}
+                onChange={e => setTeamName(e.target.value)}
+                className={`border-none text-center text-[20px] font-bold placeholder:text-gray7 py-0`}></Form.Control>
+            </Form.Group>
+            <div className={`m-auto w-fit`}>
+              <UploadImage file={file} setFile={setFile}></UploadImage>
+            </div>
+            <hr className={`border-gray3 mt-[30px] mb-[20px]`} />
+            <Form.Group>
+              <Form.Control
+                as={`textarea`}
+                placeholder={`팀 소개글이나 대표 사이트를 입력해주세요. (최대 100자)`}
+                value={teamContents}
+                rows={4}
+                onChange={e => setTeamContents(e.target.value)}
+                className={`p-0 border-0 rounded-0 text-[14px] mb-[20px]`}></Form.Control>
+            </Form.Group>
           </div>
-          <hr className={`border-gray3 mt-[30px] mb-[20px]`} />
-          <Form.Group>
-            <Form.Control
-              as={`textarea`}
-              placeholder={`팀 소개글이나 대표 사이트를 입력해주세요. (최대 100자)`}
-              value={teamContents}
-              rows={4}
-              onChange={e => setTeamContents(e.target.value)}
-              className={`p-0 border-0 rounded-0 text-[14px] mb-[20px]`}></Form.Control>
-          </Form.Group>
           <hr className={`hr-line`} />
-          <ul>
+          <ul className={`inner`}>
             <AreaSelect value={address} setValue={setAddress} title={"지역"}></AreaSelect>
             <EditItemSelect
               placeholder={`성별 선택`}

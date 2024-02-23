@@ -54,10 +54,12 @@ export default function ScoreSelect({ show, setShow, item }) {
                 <NumberSelect score={teamScore2} setScore={setTeamScore2}></NumberSelect>
               </li>
             </ul>
-            <div
-              className={`shadow-[0_-2px_6px_0_rgba(0,0,0,0.04)] px-[20px] py-[12px]`}
-              onClick={createScore}>
-              <Button className={`w-full`} variant="green-primary" size="50">
+            <div className={`shadow-[0_-2px_6px_0_rgba(0,0,0,0.04)] px-[20px] py-[12px]`}>
+              <Button
+                className={`w-full`}
+                variant="green-primary"
+                size="50"
+                onClick={createScore}>
                 점수 입력
               </Button>
             </div>

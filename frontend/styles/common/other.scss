@@ -55,7 +55,7 @@
     width: 100vw;
     height: 100%;
     position: absolute;
-    left: -20px;
+    left: 0;
     max-width: $max-layout;
   }
 }
@@ -68,13 +68,15 @@
   overflow: visible;
   z-index: 1;
 
+  @extend .inner;
+
   &::after {
     content: "";
     background: $gray2;
     width: 100vw;
     height: 100%;
     position: absolute;
-    left: -20px;
+    left: 0;
     top: 0;
     max-width: $max-layout;
     z-index: -1;
@@ -104,4 +106,9 @@
     width: auto;
     opacity: 0;
   }
+}
+
+.inner {
+  padding-left: 20px;
+  padding-right: 20px;
 }

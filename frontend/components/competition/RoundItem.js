@@ -1,10 +1,13 @@
 import RoundProfile from "@/components/image/RoundProfile";
 import ScoreSelect from "@/components/competition/ScoreSelect";
-import { useEffect, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 
 export default function RoundItem({ item }) {
   const [showModal, setShowModal] = useState(false);
   const [nowItem, setNowItem] = useState(null);
+  const inputRef = useRef();
+  const id = useId();
+  const [roundDate, setRoundDate] = useState("");
 
   useEffect(() => {
     if (!showModal) {
@@ -17,11 +20,19 @@ export default function RoundItem({ item }) {
     setNowItem(item);
   };
 
+  const changeValue = e => {
+    setRoundDate(e.target.value);
+  };
+
+  const onRefClick = e => {
+    inputRef.current.showPicker();
+  };
+
   return (
     <>
       <div>
         <span
-          className={`text-[15px] text-gray9 w-[86px] h-[30px] flex align-items-center justify-center rounded-full bg-gray1 mx-auto my-[22px]`}>
+          className={`text-[15px] text-gray9 w-[86px] h-[30px] flex align-items-center justify-center rounded-full bg-gray1 mx-auto mb-[22px]`}>
           {item.round}라운드
         </span>
         <ul className={`flex flex-column gap-[20px]`}>
@@ -36,7 +47,23 @@ export default function RoundItem({ item }) {
                 </div>
                 <div
                   className={`w-full flex flex-column gap-[8px] justify-content-center`}>
-                  <p className={`text-[13px] text-center`}>정해진 날짜 없음</p>
+                  <div className={`date-input-hide`}>
+                    <input
+                      type="date"
+                      ref={inputRef}
+                      value={roundDate}
+                      onChange={changeValue}
+                      id={id}
+                    />
+                    <label
+                      className={`text-[13px] text-center  ${
+                        roundDate ? "text-black" : "text-gray7 "
+                      }`}
+                      onClick={onRefClick}
+                      htmlFor={id}>
+                      {roundDate ? roundDate : "정해진 날짜 없음"}
+                    </label>
+                  </div>
                   <div
                     className={`flex align-items-center text-[24px] w-[90px] mx-auto border-[1px] !border-gray3 rounded-[3px] h-[42px] text-gray6`}
                     onClick={() => selectScore(match)}>

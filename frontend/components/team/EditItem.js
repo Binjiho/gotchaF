@@ -10,9 +10,10 @@ export default function EditItem({
 }) {
   return (
     <div
-      className={`flex justify-between align-items-center py-[16px] border-b-[1px] border-gray3 text-gray10 ${style}`}>
+      className={`flex justify-between align-items-center py-[16px] border-b-[1px] border-gray3 text-gray10 ${style}`}
+      onClick={onButtonClick}>
       <p className={`text-[15px] gap-[4px]`}>{title}</p>
-      <Button variant={"text"} className={`flex`} onClick={onButtonClick}>
+      <Button variant={"text"} className={`flex`}>
         <div className={`text-[15px]`}>
           {value ? <p>{value}</p> : <p className={`text-gray7`}>{placeholder}</p>}
         </div>

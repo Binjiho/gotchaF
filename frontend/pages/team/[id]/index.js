@@ -118,9 +118,9 @@ export default function Index() {
         <div className={`mt-[106px] position-relative z-2`}>
           {teamInfo ? (
             <>
-              <div>
+              <div className={`inner`}>
                 <div
-                  className={`flex justify-between align-items-end mb-[14px] position-absolute right-0 top-[16px]`}>
+                  className={`flex justify-between align-items-end mb-[14px] position-absolute right-[20px] top-[16px]`}>
                   <div className={`flex gap-[12px]`}>
                     {[
                       {
@@ -193,7 +193,8 @@ export default function Index() {
                       {teamNotice.length ? (
                         <Swiper
                           spaceBetween={10}
-                          slidesPerView={teamNotice.length === 1 ? 1 : 1.2}>
+                          slidesPerView={teamNotice.length === 1 ? 1 : 1.2}
+                          className={`pl-[20px]`}>
                           {teamNotice.map(item => (
                             <SwiperSlide key={item.sid}>
                               <NoticeCardItem item={item}></NoticeCardItem>
@@ -223,22 +224,24 @@ export default function Index() {
                         title={"경기 일정"}
                         active={() => {}}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
-                      {isLeader ? (
-                        <RecommendBtn
-                          title={`경기를 시작해보세요.`}
-                          content={
-                            <>
-                              대회를 만들거나 참여해 경기를 시작해보세요.
-                              <br />
-                              대회가 아닌 내부팀 연습 경기로도 일정을 만들 수 있어요!
-                            </>
-                          }
-                          btnMessage={`경기 시작하기`}
-                          active={() => {}}></RecommendBtn>
-                      ) : (
-                        <NoContentText
-                          title={`아직 경기 일정이 없습니다.`}></NoContentText>
-                      )}
+                      <div className={`inner`}>
+                        {isLeader ? (
+                          <RecommendBtn
+                            title={`경기를 시작해보세요.`}
+                            content={
+                              <>
+                                대회를 만들거나 참여해 경기를 시작해보세요.
+                                <br />
+                                대회가 아닌 내부팀 연습 경기로도 일정을 만들 수 있어요!
+                              </>
+                            }
+                            btnMessage={`경기 시작하기`}
+                            active={() => {}}></RecommendBtn>
+                        ) : (
+                          <NoContentText
+                            title={`아직 경기 일정이 없습니다.`}></NoContentText>
+                        )}
+                      </div>
                     </div>
                     <div>
                       <LinkHeader

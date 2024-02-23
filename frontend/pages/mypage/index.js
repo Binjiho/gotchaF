@@ -48,7 +48,7 @@ export default function Index() {
       <SearchHeader>
         <p type={"left"}>마이페이지</p>
       </SearchHeader>
-      <main className={`pb-[80px]`}>
+      <main className={`pb-[80px] inner`}>
         {!user?.sid ? (
           <>
             <div className={`flex align-items-center my-[30px]`}>

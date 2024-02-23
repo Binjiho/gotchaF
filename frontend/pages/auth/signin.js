@@ -7,7 +7,7 @@ export default function SignIn() {
   const [toggleSnsJoin, setToggleSnsJoin] = useState(false);
 
   return (
-    <main className={`pt-[10vh] min-h-[100vh] pb-10`}>
+    <main className={`pt-[10vh] min-h-[100vh] pb-10 inner`}>
       <div className={styles.logo}></div>
       <div className={`flex align-items-center flex-column w-full gap-[10px] mb-[10px]`}>
         <SnsLoginBtn type="kakao">카카오로 시작하기</SnsLoginBtn>

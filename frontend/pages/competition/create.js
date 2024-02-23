@@ -96,17 +96,19 @@ export default function Create() {
       <main className={`pb-[60px]`}>
         <Form>
           <UploadCover file={file} setFile={setFile}></UploadCover>
-          <Form.Group>
-            <Form.Control
-              as={`textarea`}
-              placeholder={`리그 이름을 입력해주세요. (최대 30자)`}
-              value={title}
-              rows={1}
-              onChange={e => setTitle(e.target.value)}
-              className={`p-0 border-0 rounded-0 text-[14px] my-[20px] !min-h-fit`}></Form.Control>
-          </Form.Group>
+          <div className={`inner`}>
+            <Form.Group>
+              <Form.Control
+                as={`textarea`}
+                placeholder={`리그 이름을 입력해주세요. (최대 30자)`}
+                value={title}
+                rows={1}
+                onChange={e => setTitle(e.target.value)}
+                className={`p-0 border-0 rounded-0 text-[14px] my-[20px] !min-h-fit`}></Form.Control>
+            </Form.Group>
+          </div>
           <hr className={`hr-line`} />
-          <ul>
+          <ul className={`inner`}>
             <EditItemSelect
               placeholder={`팀 수 선택`}
               title={`참가팀 수`}
@@ -151,7 +153,7 @@ export default function Create() {
               setValue={setWeekDate}
               style={`!border-none`}></EditItemWeekSelect>
           </ul>
-          <div className={`mt-[60px] text-gray7 text-[13px]`}>
+          <div className={`mt-[60px] text-gray7 text-[13px] inner`}>
             <h4 className={`font-bold`}>리그 형식</h4>
             <ul className={`mt-[5px] flex flex-column `}>
               <li className={`left-dot`}>단일 대결</li>

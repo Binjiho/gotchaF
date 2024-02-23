@@ -24,7 +24,7 @@ export default function Search() {
   return (
     <>
       <PrevHeader></PrevHeader>
-      <main className={`pb-20`}>
+      <main className={`pb-20 inner`}>
         <Form className={`pt-2`}>
           <InputGroup>
             <InputGroup.Text id="basic-addon1" className={`pr-0 pl-[15px] !bg-gray2`}>

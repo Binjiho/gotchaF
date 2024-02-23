@@ -11,7 +11,9 @@ export default function TeamItem({ item }) {
   };
 
   return (
-    <div className={`flex gap-[16px] py-[10px] cursor-pointer`} onClick={detailTeam}>
+    <div
+      className={`flex gap-[16px] py-[10px] cursor-pointer inner`}
+      onClick={detailTeam}>
       <div
         className={`w-[62px] h-[62px] rounded-full overflow-hidden bg-gray2 flex-none`}>
         {item.file_path && (

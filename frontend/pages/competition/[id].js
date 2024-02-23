@@ -12,7 +12,11 @@ import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
 import { sendAnonymousGet } from "@/helper/api";
-import { COMPETITION_KIND, TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
+import {
+  COMPETITION_KIND,
+  COMPETITION_TYPE,
+  TEAM_MEMBER_LEVEL,
+} from "@/constants/serviceConstants";
 import { printDateTimeFormat } from "@/helper/value";
 import { convertWeek, calculateDday } from "@/helper/UIHelper";
 import TimeBadge from "@/components/competition/TimeBadge";
@@ -102,83 +106,88 @@ export default function Id() {
         <div className={`mt-[106px] position-relative z-2`}>
           {competitionInfo ? (
             <>
-              <div className={`pt-[24px] pb-[20px] border-b-[1px] !border-gray3`}>
-                <p className={`text-[20px] font-bold mb-[6px]`}>
-                  {competitionInfo.title}
-                </p>
-                <div className={`mt-[8px] flex align-items-center gap-[5px] text-[14px]`}>
-                  {calculateDday(competitionInfo.regist_edate) > 0 ? (
-                    <>
-                      <div
-                        className={`text-red_primary flex align-items-center gap-[5px]`}>
-                        <TimeIcon width={16} />
-                        <b>D-{calculateDday(competitionInfo.regist_edate)}</b>
-                      </div>
-                      <span className={`gap-line`}></span>
-                      <p className={`text-gray10`}>
-                        {printDateTimeFormat(
-                          competitionInfo.regist_edate,
-                          "MM월 dd일(E) "
-                        )}
-                        모집 마감
+              <div className={`inner`}>
+                <div className={`pt-[24px] pb-[20px] border-b-[1px] !border-gray3`}>
+                  <p className={`text-[20px] font-bold mb-[6px]`}>
+                    {competitionInfo.title}
+                  </p>
+                  <div
+                    className={`mt-[8px] flex align-items-center gap-[5px] text-[14px]`}>
+                    {calculateDday(competitionInfo.regist_edate) > 0 ? (
+                      <>
+                        <div
+                          className={`text-red_primary flex align-items-center gap-[5px]`}>
+                          <TimeIcon width={16} />
+                          <b>D-{calculateDday(competitionInfo.regist_edate)}</b>
+                        </div>
+                        <span className={`gap-line`}></span>
+                        <p className={`text-gray10`}>
+                          {printDateTimeFormat(
+                            competitionInfo.regist_edate,
+                            "MM월 dd일(E) "
+                          )}
+                          모집 마감
+                        </p>
+                      </>
+                    ) : (
+                      <TimeBadge
+                        eventStart={competitionInfo.event_sdate}
+                        eventEnd={competitionInfo.event_edate}
+                        limit={competitionInfo.limit_team}
+                        teamCount={competitionInfo.team_count}></TimeBadge>
+                    )}
+                  </div>
+                </div>
+                <div className={`mb-[20px]`}>
+                  <p className={`mb-[13px] text-gray8 text-[13px] mt-[18px]`}>
+                    자세한 정보
+                  </p>
+                  <ul
+                    className={`[&>li]:flex [&>li]:align-items-center [&>li]:gap-[8px] [&>li]:w-[152px] max-w-[327px] flex justify-between flex-wrap text-[15px] text-gray10 gap-[10px] font-medium
+                `}>
+                    <li>
+                      <EarthLineIcon width={16} />
+                      <p>
+                        {COMPETITION_KIND[competitionInfo.kind]}{" "}
+                        {competitionInfo.person_vs}
                       </p>
-                    </>
-                  ) : (
-                    <TimeBadge
-                      eventStart={competitionInfo.event_sdate}
-                      eventEnd={competitionInfo.event_edate}
-                      limit={competitionInfo.limit_team}
-                      teamCount={competitionInfo.team_count}></TimeBadge>
-                  )}
+                    </li>
+                    <li>
+                      <MapIcon width={16} />
+                      <p>{competitionInfo.region}</p>
+                    </li>
+                    <li>
+                      <UserLineIcon width={16} />
+                      <p>
+                        <span className={`text-green_primary`}>
+                          {competitionInfo.team_count}
+                        </span>
+                        /{competitionInfo.limit_team}
+                      </p>
+                    </li>
+                    <li>
+                      <CalendarIcon width={16} />
+                      <p>
+                        {competitionInfo.frequency} {convertWeek(competitionInfo.yoil)}
+                      </p>
+                    </li>
+                    <li>
+                      <TimeLineIcon width={16} />
+                      <p>
+                        {printDateTimeFormat(competitionInfo.event_edate, "MM월 dd일")}{" "}
+                        마감
+                      </p>
+                    </li>
+                    <li>
+                      <RightCircleIcon width={16} />
+                      <p>
+                        {printDateTimeFormat(competitionInfo.event_sdate, "MM월 dd일")}{" "}
+                        시작
+                      </p>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <div className={`mb-[20px]`}>
-                <p className={`mb-[13px] text-gray8 text-[13px] mt-[18px]`}>
-                  자세한 정보
-                </p>
-                <ul
-                  className={`[&>li]:flex [&>li]:align-items-center [&>li]:gap-[8px] [&>li]:w-[152px] max-w-[327px] flex justify-between flex-wrap text-[15px] text-gray10 gap-[10px] font-medium
-                `}>
-                  <li>
-                    <EarthLineIcon width={16} />
-                    <p>
-                      {COMPETITION_KIND[competitionInfo.kind]} {competitionInfo.person_vs}
-                    </p>
-                  </li>
-                  <li>
-                    <MapIcon width={16} />
-                    <p>{competitionInfo.region}</p>
-                  </li>
-                  <li>
-                    <UserLineIcon width={16} />
-                    <p>
-                      <span className={`text-green_primary`}>
-                        {competitionInfo.team_count}
-                      </span>
-                      /{competitionInfo.limit_team}
-                    </p>
-                  </li>
-                  <li>
-                    <CalendarIcon width={16} />
-                    <p>
-                      {competitionInfo.frequency} {convertWeek(competitionInfo.yoil)}
-                    </p>
-                  </li>
-                  <li>
-                    <TimeLineIcon width={16} />
-                    <p>
-                      {printDateTimeFormat(competitionInfo.event_edate, "MM월 dd일")} 마감
-                    </p>
-                  </li>
-                  <li>
-                    <RightCircleIcon width={16} />
-                    <p>
-                      {printDateTimeFormat(competitionInfo.event_sdate, "MM월 dd일")} 시작
-                    </p>
-                  </li>
-                </ul>
-              </div>
-
               <Tab.Container id="left-tabs-example" defaultActiveKey="home">
                 <Nav variant="underline">
                   <Nav.Item>
@@ -195,11 +204,12 @@ export default function Id() {
                   </Nav.Item>
                 </Nav>
                 <hr className={`hr-line`} />
-                <Tab.Content>
-                  <Tab.Pane
-                    eventKey="home"
-                    className={"pt-[30px] pb-[60px] [&_h3]:text-[18px] [&_h3]:font-bold"}>
-                    <div>
+                <Tab.Content
+                  className={
+                    "[&>div]:pt-[30px] [&>div]:pb-[60px] [&_h3]:text-[18px] [&_h3]:font-bold"
+                  }>
+                  <Tab.Pane eventKey="home">
+                    <div className={`inner`}>
                       <h3>참가팀</h3>
                       <div className={`mt-[18px] pb-[12px] border-b-[1px] !border-gray3`}>
                         <TeamProfile
@@ -220,11 +230,11 @@ export default function Id() {
                       </div>
                     </div>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="competition">
+                  <Tab.Pane eventKey="competition" className={"inner"}>
                     <Swiper
                       modules={[Navigation]}
                       navigation
-                      className={`swiper-custom-btn size-24 [&_.swiper-button-next]:top-[49px] [&_.swiper-button-prev]:top-[49px]`}>
+                      className={`swiper-custom-btn size-24 [&_.swiper-button-next]:top-[27px] [&_.swiper-button-prev]:top-[27px]`}>
                       {matchInfo?.map((item, index) => (
                         <SwiperSlide key={`match-${index}`}>
                           <RoundItem item={item}></RoundItem>
@@ -232,7 +242,18 @@ export default function Id() {
                       ))}
                     </Swiper>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="rank"></Tab.Pane>
+                  <Tab.Pane eventKey="rank">
+                    <div>
+                      <div className={`inner`}>
+                        <h3>
+                          {Number(competitionInfo.type) === COMPETITION_TYPE.LEAGUE
+                            ? "리그"
+                            : "컵"}{" "}
+                          랭킹
+                        </h3>
+                      </div>
+                    </div>
+                  </Tab.Pane>
                   <Tab.Pane eventKey="consult"></Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
