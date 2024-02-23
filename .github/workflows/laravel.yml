@@ -46,9 +46,9 @@ jobs:
           echo "::set-output name=version::$VERSION"
       # Container Registry에 로그인합니다.
     - name: DockerHub Login
-      uses: docker/login-action@v2.2.0
+      uses: docker/login-action@v3
       with:
-          username: jiyu1948
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       # 애플리케이션을 이미지로 build 하고 push합니다.
     - name: Push to GitHub Packages
