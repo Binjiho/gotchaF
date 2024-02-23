@@ -37,6 +37,7 @@ jobs:
 
     - name: Check out code
       uses: actions/checkout@v2
+
       # Revision를 이미지의 태그로 만들기 위해 값을 생성합니다.
     - name: Get verion
       id: image
@@ -44,12 +45,14 @@ jobs:
           VERSION=$(echo ${{ github.sha }} | cut -c1-8)
           echo VERSION=$VERSION
           echo "::set-output name=version::$VERSION"
+
       # Container Registry에 로그인합니다.
     - name: DockerHub Login
       uses: docker/login-action@v3
       with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       # 애플리케이션을 이미지로 build 하고 push합니다.
     - name: Push to GitHub Packages
       uses: docker/build-push-action@v2
