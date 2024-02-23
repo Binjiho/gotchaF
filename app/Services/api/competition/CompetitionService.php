@@ -237,7 +237,7 @@ class CompetitionService extends Services
 
             $join_teams = DB::table('competition_teams')
                 ->join('teams', 'competition_teams.tid', '=', 'teams.sid')
-                ->select('competition_teams.tid', 'competition_teams.level', 'teams.title', 'teams.region')
+                ->select('competition_teams.tid', 'competition_teams.level', 'teams.title', 'teams.file_path as thum', 'teams.region')
                 ->where('competition_teams.cid', '=', $cid)
                 ->where('competition_teams.del_yn', '=', 'N')
                 ->get();

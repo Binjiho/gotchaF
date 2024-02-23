@@ -31,7 +31,7 @@ class MatchService extends Services
                 ->join('teams as t2', function ($join) {
                     $join->on('t2.sid', '=', 'matches.tid2');
                 })
-                ->select('matches.sid','matches.round','matches.order','t1.title as title1','t2.title as title2 ')
+                ->select('matches.sid','matches.round','matches.order','t1.title as title1', 't1.file_path as thum1', 't2.title as title2', 't2.file_path as thum2')
                 ->where('matches.cid', '=', $cid)
                 ->where('matches.del_yn', '=', 'N')
                 ->orderBy('matches.round')
@@ -307,7 +307,7 @@ class MatchService extends Services
                     ->join('teams', function ($join) {
                         $join->on('teams.sid', '=', 'cp.tid');
                     })
-                    ->select('teams.title','cp.tid','cp.step','cp.tot_score','cp.w_cnt','cp.d_cnt','cp.l_cnt')
+                    ->select('teams.title', 'teams.file_path as thum','cp.tid','cp.step','cp.tot_score','cp.w_cnt','cp.d_cnt','cp.l_cnt')
                     ->where('cp.cid', '=', $cid)
                     ->where('cp.del_yn', '=', 'N')
                     ->orderBy('cp.tot_score','desc')
@@ -322,7 +322,7 @@ class MatchService extends Services
                     ->join('teams as t2', function ($join) {
                         $join->on('t2.sid', '=', 'matches.tid2');
                     })
-                    ->select('t1.title as title1','t2.title as title2','matches.sid','matches.round','matches.order','matches.state')
+                    ->select('t1.title as title1', 't1.file_path as thum1', 't2.title as title2', 't2.file_path as thum2','matches.sid','matches.round','matches.order','matches.state')
                     ->where('matches.cid', '=', $cid)
                     ->where('matches.del_yn', '=', 'N')
                     ->orderBy('matches.round')
