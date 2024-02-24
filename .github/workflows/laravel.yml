@@ -100,7 +100,7 @@ jobs:
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
 
-        #deploy.sh 실행 image check 실행
+        #deploy.sh 실행 image check,image 네임 변경
         - name: Deploy sh
           uses: appleboy/ssh-action@v1.0.3
           with:
