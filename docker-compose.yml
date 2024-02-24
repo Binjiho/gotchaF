@@ -11,20 +11,20 @@ services:
         environment:
             - HOST=0.0.0.0
 
-#    frontend:
-#        #    build: ./frontend
-#        image: blue:frontend
-#        container_name: frontend_blue
-#        ports:
-#            - 9001:9001
-#            - 24678:24678
-#        #    volumes:
-#        #      - ./frontend:/frontend
-#        environment:
-#            - HOST=0.0.0.0
-#            #     - API_URL=http://172.17.0.1:9002/ #linux
-#            - API_URL=http://host.docker.internal:9002/
-#        stdin_open: true
-#        tty: true
-#        depends_on:
-#            - backend
+    frontend:
+        #    build: ./frontend
+        image: blue:larafront
+        container_name: frontend_blue
+        ports:
+            - 9001:3001
+            - 24678:24678
+        #    volumes:
+        #      - ./frontend:/frontend
+        environment:
+            - HOST=0.0.0.0
+            #     - API_URL=http://172.17.0.1:9002/ #linux
+            - API_URL=http://host.docker.internal:9002/
+        stdin_open: true
+        tty: true
+        depends_on:
+            - backend
