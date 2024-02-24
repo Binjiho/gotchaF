@@ -55,13 +55,21 @@ jobs:
         tags: |
             ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }}
 
-    - name: docker FE image build
-      run: |
+    - name: Push FE image to DockerRepository
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: |
           cd ./frontend
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }} .
-    - name: docker Hub push
-      run: |
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }}
+          ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }}
+
+#    - name: docker FE image build
+#      run: |
+#          cd ./frontend
+#          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }} .
+#    - name: docker Hub push
+#      run: |
+#        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }}
 
   deploy:
     needs: build
