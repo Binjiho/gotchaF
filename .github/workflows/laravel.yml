@@ -38,7 +38,7 @@ jobs:
 #      run: vendor/bin/phpunit
 
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
       # Container Registry에 로그인합니다.
     - name: DockerHub Login
@@ -48,7 +48,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # 애플리케이션을 이미지로 build 하고 push합니다.
-    - name: Push to GitHub Packages
+    - name: Push BE image to DockerRepository
       uses: docker/build-push-action@v5
       with:
         push: true
@@ -58,9 +58,9 @@ jobs:
     - name: Push FE image to DockerRepository
       uses: docker/build-push-action@v5
       with:
+        context: "/frontend"
         push: true
         tags: |
-          cd ./frontend
           ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }}
 
 #    - name: docker FE image build
