@@ -28,12 +28,12 @@ RUN chown -R www-data:www-data /var/www/html/storage
 RUN chmod -R 755 /var/www/html/storage
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-EXPOSE 8000
-
 #/var/www/html/artisan serve --host=0.0.0.0 --port=80
 #ENTRYPOINT : 이미지가 컨테이너화 되며 실행될 명령어 지정
 #docker run -d --name spring_server -p 8000:8000 b68963563f42
 #ENV HOST=localhost
 #ENTRYPOINT ["php", "artisan", "serve","--host","localhost","--port","8000"]
-ENV HOST=0.0.0.0
-ENTRYPOINT ["php", "artisan", "serve","--host","0.0.0.0","--port","8000"]
+#ENV HOST=0.0.0.0
+#EXPOSE 8000
+#ENTRYPOINT ["php", "artisan", "serve","--host","0.0.0.0","--port","8000"]
+ENTRYPOINT ["php", "artisan", "serve"]
