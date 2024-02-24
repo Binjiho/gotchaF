@@ -64,14 +64,6 @@ jobs:
         tags: |
           ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }}
 
-#    - name: docker FE image build
-#      run: |
-#          cd ./frontend
-#          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }} .
-#    - name: docker Hub push
-#      run: |
-#        docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }}
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -104,8 +96,8 @@ jobs:
             script_stop: true
             script: |
               echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_BACK }} || exit 1
-              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }} || exit 1
+              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_BACK }} || exit 11
+              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
 
         #     docker-compose with blue-green
         - name: Deploy sh
