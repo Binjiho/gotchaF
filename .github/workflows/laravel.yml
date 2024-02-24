@@ -64,7 +64,7 @@ jobs:
         tags: |
           ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }}
 
-  deploy:
+  pull:
     needs: build
     runs-on: ubuntu-latest
     env:
@@ -100,22 +100,47 @@ jobs:
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
 
-        #deploy.sh 실행 image check,image 네임 변경
-        - name: Deploy sh
-          uses: appleboy/ssh-action@v1.0.3
-          with:
-            host: ${{ secrets.AWS_EC2_PUBLIC_DNS }}
-            username: ec2-user
-            key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-            port: 22
-            timeout: 40s
-            script_stop: true
-            script: |
-              pwd
-              ls
-              cd /home/ec2-user/deploy
-              sh deploy.sh
-
         - name: Remove Github Actions IP From Security Group
           run: |
             aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+  deploy:
+    needs: pull
+    runs-on: ubuntu-latest
+    env:
+      deploy-directory: ./deploy
+    steps:
+      - name: Get Github Actions IP
+        id: ip
+        uses: haythem/public-ip@v1.2
+
+      - name: Configure AWS Credentials For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_IAM_PUBLIC }}
+          aws-secret-access-key: ${{ secrets.AWS_IAM_PRIVATE }}
+          aws-region: ap-northeast-2
+
+      - name: Add Github Actions IP to Security group
+        run: |
+          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      #deploy.sh 실행 image check,image 네임 변경
+      - name: Deploy sh
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AWS_EC2_PUBLIC_DNS }}
+          username: ec2-user
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          port: 22
+          timeout: 40s
+          script_stop: true
+          script: |
+            pwd
+            ls
+            cd /home/ec2-user/deploy
+            sh deploy.sh
+
+      - name: Remove Github Actions IP From Security Group
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
