@@ -322,7 +322,7 @@ class MatchService extends Services
                     ->join('teams as t2', function ($join) {
                         $join->on('t2.sid', '=', 'matches.tid2');
                     })
-                    ->select('t1.title as title1', 't1.file_path as thum1', 't2.title as title2', 't2.file_path as thum2','matches.sid','matches.round','matches.order','matches.state')
+                    ->select('t1.title as title1', 't1.file_path as thum1', 't2.title as title2', 't2.file_path as thum2','matches.sid','matches.round','matches.order','matches.state','matches.t1_score','matches.t2_score','matches.matched_at')
                     ->where('matches.cid', '=', $cid)
                     ->where('matches.del_yn', '=', 'N')
                     ->orderBy('matches.round')
