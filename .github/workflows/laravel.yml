@@ -97,8 +97,8 @@ jobs:
             script_stop: true
             script: |
               echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_BACK }} || exit 11
-              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
+              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:laraback || exit 11
+              docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:larafront || exit 12
 
         #     docker-compose with blue-green
         - name: Deploy sh
