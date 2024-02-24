@@ -93,7 +93,7 @@ jobs:
             username: ec2-user
             key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
             port: 22
-            timeout: 1m
+            timeout: 2m
             script_stop: true
             script: |
               echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
@@ -101,20 +101,20 @@ jobs:
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
 
         #deploy.sh 실행 image check 실행
-#        - name: Deploy sh
-#          uses: appleboy/ssh-action@v1.0.0
-#          with:
-#            host: ${{ secrets.AWS_EC2_PUBLIC_DNS }}
-#            username: ec2-user
-#            key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-#            port: 22
-#            timeout: 40s
-#            script_stop: true
-#            script: |
-#              pwd
-#              ls
-#              cd /home/ec2-user/deploy
-#              sh deploy.sh
+        - name: Deploy sh
+          uses: appleboy/ssh-action@v1.0.3
+          with:
+            host: ${{ secrets.AWS_EC2_PUBLIC_DNS }}
+            username: ec2-user
+            key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+            port: 22
+            timeout: 40s
+            script_stop: true
+            script: |
+              pwd
+              ls
+              cd /home/ec2-user/deploy
+              sh deploy.sh
 
         - name: Remove Github Actions IP From Security Group
           run: |
