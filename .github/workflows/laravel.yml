@@ -97,8 +97,8 @@ jobs:
             script_stop: true
             script: |
               echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-              docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
+              docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
 
         #deploy.sh 실행
         - name: Deploy sh
