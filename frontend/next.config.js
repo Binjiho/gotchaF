@@ -7,7 +7,8 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `${process.env.API_HOST}/api/:path*`,
+        destination: `${process.env.API_URL}/api/:path*`,
+        // destination: `${process.env.API_HOST}/api/:path*`,
       },
       {
         source: "/map/:path*",
@@ -16,7 +17,8 @@ const nextConfig = {
     ];
   },
   publicRuntimeConfig: {
-    backendUrl: process.env.API_HOST,
+    backendUrl: process.env.API_URL,
+    // backendUrl: process.env.API_HOST,
   },
   webpack: config => {
     config.module.rules.push({
