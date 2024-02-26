@@ -285,11 +285,11 @@ export default function Id() {
                                   <b className={`text-green_primary`}>{index + 1}</b>
                                   {rank.title}
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{rank.step}</td>
+                                <td>{rank.tot_score}</td>
+                                <td>{rank.w_cnt}</td>
+                                <td>{rank.d_cnt}</td>
+                                <td>{rank.l_cnt}</td>
                               </tr>
                             );
                           })}

@@ -36,8 +36,8 @@ export default function Create() {
   useEffect(() => {
     if (!startDate || !endDate) return;
 
-    if (endDate < startDate) {
-      toast("마감일은 희망일보다 늦어야 합니다.");
+    if (endDate > startDate) {
+      toast("희망일은 마감일보다 늦어야 합니다.");
       setEndDate("");
     }
   }, [startDate, endDate]);

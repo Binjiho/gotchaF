@@ -6,8 +6,8 @@ export default function TeamMemberProfile({ item, size }) {
       <div
         className={`rounded-full overflow-hidden bg-gray1`}
         style={{ width: `${imageSize}px`, height: `${imageSize}px` }}>
-        {item.file_path && (
-          <img src={item.file_path} alt="" className={`w-full h-full object-fit-cover`} />
+        {item.thum && (
+          <img src={item.thum} alt="" className={`w-full h-full object-fit-cover`} />
         )}
       </div>
       <div>

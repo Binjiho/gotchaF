@@ -42,12 +42,12 @@ export default function RoundItem({ item }) {
                 className={`border-[1px] rounded-[3px] py-[18px] px-[24px] flex justify-between !border-gray4`}
                 key={match.sid}>
                 <div className={`flex flex-column gap-[6px] align-items-center w-[92px]`}>
-                  <RoundProfile size={46}></RoundProfile>
+                  <RoundProfile size={46} img={match.thum1}></RoundProfile>
                   <p className={`text-[13px] text-gray10 font-bold`}>{match.title1}</p>
                 </div>
                 <div
                   className={`w-full flex flex-column gap-[8px] justify-content-center`}>
-                  <div className={`date-input-hide`}>
+                  <div className={`date-input-hide text-center`}>
                     <input
                       type="date"
                       ref={inputRef}
@@ -56,7 +56,7 @@ export default function RoundItem({ item }) {
                       id={id}
                     />
                     <label
-                      className={`text-[13px] text-center  ${
+                      className={`text-[13px] ${
                         roundDate ? "text-black" : "text-gray7 "
                       }`}
                       onClick={onRefClick}
@@ -73,10 +73,8 @@ export default function RoundItem({ item }) {
                   </div>
                 </div>
                 <div className={`flex flex-column gap-[6px] align-items-center w-[92px]`}>
-                  <RoundProfile size={46}></RoundProfile>
-                  <p className={`text-[13px] text-gray10 font-bold`}>
-                    {match["title2 "]}
-                  </p>
+                  <RoundProfile size={46} img={match.thum2}></RoundProfile>
+                  <p className={`text-[13px] text-gray10 font-bold`}>{match.title2}</p>
                 </div>
               </li>
             );

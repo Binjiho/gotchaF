@@ -50,7 +50,7 @@ export default function ScoreSelect({ show, setShow, item }) {
                 <NumberSelect score={teamScore1} setScore={setTeamScore1}></NumberSelect>
               </li>
               <li>
-                <span>{item["title2 "]}</span>
+                <span>{item.title2}</span>
                 <NumberSelect score={teamScore2} setScore={setTeamScore2}></NumberSelect>
               </li>
             </ul>
