@@ -20,6 +20,7 @@ import TeamProfile from "@/components/team/TeamProfile";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import RoundItem from "@/components/competition/RoundItem";
+import RoundProfile from "@/components/image/RoundProfile";
 
 export default function Id() {
   const router = useRouter();
@@ -266,7 +267,7 @@ export default function Id() {
                           랭킹
                         </h3>
                       </div>
-                      <table className={`text-[13px]`}>
+                      <table className={`rank-table mt-[20px]`}>
                         <thead>
                           <tr>
                             <th>팀</th>
@@ -281,9 +282,10 @@ export default function Id() {
                           {rankInfo?.map((rank, index) => {
                             return (
                               <tr key={`rank-${index}`}>
-                                <td>
-                                  <b className={`text-green_primary`}>{index + 1}</b>
-                                  {rank.title}
+                                <td className={`team`}>
+                                  <b>{index + 1}</b>
+                                  <RoundProfile img={rank.thum} size={24}></RoundProfile>
+                                  <span>{rank.title}</span>
                                 </td>
                                 <td>{rank.step}</td>
                                 <td>{rank.tot_score}</td>
