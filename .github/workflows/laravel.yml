@@ -100,9 +100,6 @@ jobs:
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
               docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
 
-      # out: >> Remove previous image
-      #out: Deleted Images:
-      #out: untagged: blue:frontend
       #deploy.sh 실행 image check,image 네임 변경
         - name: Deploy sh
           uses: appleboy/ssh-action@v1.0.3
