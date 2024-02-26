@@ -316,10 +316,10 @@ class MatchService extends Services
 
             }else if($comp->type =='2'/*컵*/){
                 $matches = DB::table('matches')
-                    ->join('teams as t1', function ($join) {
+                    ->leftJoin('teams as t1', function ($join) {
                         $join->on('t1.sid', '=', 'matches.tid1');
                     })
-                    ->join('teams as t2', function ($join) {
+                    ->leftJoin('teams as t2', function ($join) {
                         $join->on('t2.sid', '=', 'matches.tid2');
                     })
                     ->select('t1.title as title1', 't1.file_path as thum1', 't2.title as title2', 't2.file_path as thum2','matches.sid','matches.round','matches.order','matches.state','matches.t1_score','matches.t2_score','matches.matched_at')
