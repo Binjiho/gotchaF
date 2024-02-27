@@ -21,6 +21,8 @@ RUN npm install && npm cache clean --force
 # copy over all files to the work directory
 ADD . /app
 
+RUN chown -R www-data:www-data /var/www
+
 # build the project
 #RUN npm run build
 
