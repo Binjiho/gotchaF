@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import UserIcon from "@/public/icons/social/user_line.svg";
 import SettingIcon from "@/public/icons/tool/settings.svg";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MyScoreList from "@/components/competition/MyScoreList";
 import RightIcon from "@/public/icons/system/arrow-right-s-line.svg";
 import TeamIcon from "@/public/icons/social/team_line.svg";
@@ -18,6 +18,8 @@ export default function Index() {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const [myTeam, setMyTeam] = useState(null);
+  const [myTeamRank, setMyTeamRank] = useState(null);
 
   const logout = async () => {
     const token = await getCookie("accessToken");
@@ -37,11 +39,21 @@ export default function Index() {
     );
   };
 
-  const getMyInfo = function () {};
+  const getMyInfo = async () => {
+    sendGet(`/api/mypage/detail`, {}, res => {
+      setMyTeam(res.data.myteam);
+      setMyTeamRank(res.data.myteam_ranks);
+    });
+  };
+
+  const getDetailMatch = async () => {
+    sendGet(`/api/mypage/detail/match`, {}, res => {});
+  };
 
   useEffect(() => {
     getMyInfo();
-  });
+    getDetailMatch();
+  }, []);
 
   return (
     <>
@@ -106,20 +118,31 @@ export default function Index() {
               <h3 className={`text-[16px] font-bold pb-[10px]`}>내 경기 일정</h3>
               <div
                 className={`text-green_sub2 bg-[#2AC670]/10 py-[13px] px-[25px] font-bold rounded-[5px]`}>
-                팀을 만들거나 팀에 가입해 같차를 시작해보세요!
+                {myTeam
+                  ? "아직 경기가 없습니다. 우리팀 경기에 참여해보세요!"
+                  : "팀을 만들거나 팀에 가입해 같차를 시작해보세요!"}
               </div>
             </div>
+            {/*  팀  */}
             <div className={`mt-[40px]`}>
               <h3 className={`text-[16px] font-bold pb-[10px]`}>내 팀</h3>
               <div className={`bg-gray1 rounded-[5px]`}>
                 <div
                   className={`py-[16px] px-[20px] border-b-[1px] !border-gray4 flex justify-between align-items-center`}>
                   <div
-                    className={`w-[30px] h-[30px] bg-gray7 rounded-[5px] text-white flex align-items-center justify-center`}>
-                    <TeamIcon width={17}></TeamIcon>
+                    className={`w-[30px] h-[30px] bg-gray7 rounded-[5px] text-white flex align-items-center justify-center overflow-hidden`}>
+                    {myTeam && myTeam.file_path ? (
+                      <img
+                        src={myTeam.file_path}
+                        alt=""
+                        className={"object-fit-cover w-full h-full"}
+                      />
+                    ) : (
+                      <TeamIcon width={17}></TeamIcon>
+                    )}
                   </div>
                   <p className={`ml-[12px] mr-auto text-[15px] font-medium text-gray10`}>
-                    아직 소속된 팀이 없습니다.
+                    {myTeam ? myTeam.title : "아직 소속된 팀이 없습니다."}
                   </p>
                   <button className={`text-gray7`}>
                     <RightIcon width={20}></RightIcon>
