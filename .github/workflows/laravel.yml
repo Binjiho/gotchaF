@@ -42,9 +42,11 @@ jobs:
 
     - name: Copy .env
       run: |
-         touch .env
-         echo "${{ secrets.ENV }}" >> ./env
-         shell: bash
+        cd /
+        touch ./.env
+        echo "${{ secrets.ENV }}" >> ./env
+        shell: bash
+
     - name: Install Dependencies
       run: composer install --ignore-platform-reqs -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
