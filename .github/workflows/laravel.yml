@@ -4,6 +4,12 @@ on:
   push:
     branches: [ "master" ]
 
+env:
+  # 이미지 이름을 환경변수로 등록합니다
+  IMAGE_NAME: jiyu1948/brave_webtoon
+  IMAGE_TAG_BACK: laraback
+  IMAGE_TAG_FRONT: larafront
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,14 +40,7 @@ jobs:
 #    - name: 'Create env file'
 #      run: |
 #        touch .env
-#        echo "${{ secrets.ENV_FILE }}" >> .env
-
-      # 애플리케이션을 이미지로 build 하고 push합니다.
-#    - name: Docker build
-#      run: |
-#        docker build -t jiyu1948/brave_webtoon:laraback .
-#        cd ./frontend
-#        docker build -t jiyu1948/brave_webtoon:larafront .
+#        echo "${{ secrets.DB_YML }}" >> ./application-db.yml
 
       # Container Registry에 로그인합니다.
     - name: DockerHub Login
@@ -50,17 +49,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#    - name: DockerHub push
-#      run: |
-#        docker push jiyu1948/brave_webtoon:laraback
-#        docker push jiyu1948/brave_webtoon:larafront
-
+      # 애플리케이션을 이미지로 build 하고 push합니다.
     - name: Push BE image to DockerRepository
       uses: docker/build-push-action@v5
       with:
         push: true
         tags: |
-          jiyu1948/brave_webtoon:laraback
+            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }}
 
     - name: Push FE image to DockerRepository
       uses: docker/build-push-action@v5
@@ -69,7 +64,7 @@ jobs:
         file: ./frontend/Dockerfile
         push: true
         tags: |
-          jiyu1948/brave_webtoon:larafront
+          ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }}
 
   deploy:
     needs: build
@@ -104,8 +99,8 @@ jobs:
             script_stop: true
             script: |
               echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-              docker pull jiyu1948/brave_webtoon:larafront || exit 12
-              docker pull jiyu1948/brave_webtoon:laraback || exit 11
+              docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_FRONT }} || exit 12
+              docker pull ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }} || exit 11
 
       #deploy.sh 실행 image check,image 네임 변경
         - name: Deploy sh
