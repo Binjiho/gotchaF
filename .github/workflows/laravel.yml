@@ -48,12 +48,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # 애플리케이션을 이미지로 build 하고 push합니다.
-#    - name: Push BE image to DockerRepository
-#      uses: docker/build-push-action@v5
-#      with:
-#        push: true
-#        tags: |
-#            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }}
+    - name: Push BE image to DockerRepository
+      uses: docker/build-push-action@v5
+      with:
+        push: true
+        tags: |
+            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_BACK }}
 
     - name: Push FE image to DockerRepository
       uses: docker/build-push-action@v5
