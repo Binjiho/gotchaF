@@ -42,6 +42,7 @@ jobs:
 
     - name: Copy .env
       run: |
+        chmod +x artisan
         cd /
         touch ./.env
         echo "${{ secrets.ENV }}" >> ./env
