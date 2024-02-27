@@ -23,7 +23,7 @@ yarn-error.log
 # frontend
 /frontend/node_modules
 /frontend/.pnp
-/frontend/.env.local
+#/frontend/.env.local
 .pnp.js
 
 # testing
