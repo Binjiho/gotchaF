@@ -21,6 +21,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import RoundItem from "@/components/competition/RoundItem";
 import RoundProfile from "@/components/image/RoundProfile";
+import CupRankItem from "@/components/competition/CupRankItem";
 
 export default function Id() {
   const router = useRouter();
@@ -30,6 +31,17 @@ export default function Id() {
   const [rankInfo, setRankInfo] = useState(null);
   const user = useSelector(state => state.user);
   const [key, setKey] = useState("home");
+  const isLeague = Number(competitionInfo?.type) === COMPETITION_TYPE.LEAGUE;
+  const isCup = Number(competitionInfo?.type) === COMPETITION_TYPE.CUP;
+
+  const countDivisionsByTwo = number => {
+    let count = 0;
+    while (number >= 2) {
+      number /= 2;
+      count++;
+    }
+    return count + 1;
+  };
 
   const getCompetition = function () {
     sendAnonymousGet(`/api/competitions/detail/${competitionId}`, null, res => {
@@ -70,7 +82,57 @@ export default function Id() {
 
   const getRank = () => {
     sendAnonymousGet(`/api/matches/ranking/${competitionId}`, null, res => {
-      setRankInfo(res.data.result);
+      const result = res.data.result;
+
+      if (isLeague) {
+        setRankInfo(result);
+      } else if (isCup) {
+        let rankList = [];
+        let round = 1;
+        let order = 1;
+
+        result.map(item => {
+          if (round < item.round) {
+            round = Number(item.round);
+            order = 1;
+          }
+
+          if (round === Number(item.round)) {
+            if (!rankList[round - 1]) {
+              rankList.push([]);
+            }
+
+            if (order < Number(item.order)) {
+              for (let i = order; i < item.order; i++) {
+                rankList[round - 1].push([{ order: i, round: item.round }]);
+              }
+              order = Number(item.order);
+              return;
+            }
+
+            rankList[round - 1].push(item);
+            order += 1;
+          }
+        });
+
+        const calNull = countDivisionsByTwo(rankList[0].length) - rankList.length;
+
+        if (calNull) {
+          let roundLength = rankList[rankList.length - 1].length / 2;
+
+          for (let i = 0; i < calNull; i++) {
+            rankList.push(
+              new Array(roundLength).fill({
+                round: rankList.length + 1,
+              })
+            );
+
+            roundLength = roundLength / 2;
+          }
+        }
+
+        setRankInfo(rankList);
+      }
     });
   };
 
@@ -261,42 +323,62 @@ export default function Id() {
                     <div>
                       <div className={`inner`}>
                         <h3>
-                          {Number(competitionInfo.type) === COMPETITION_TYPE.LEAGUE
-                            ? "리그 "
-                            : "컵 "}
+                          {isLeague ? "리그 " : isCup ? "컵 " : ""}
                           랭킹
                         </h3>
                       </div>
-                      <table className={`rank-table mt-[20px]`}>
-                        <thead>
-                          <tr>
-                            <th>팀</th>
-                            <th>경기</th>
-                            <th>승점</th>
-                            <th>승</th>
-                            <th>무</th>
-                            <th>패</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {rankInfo?.map((rank, index) => {
+                      {isLeague ? (
+                        <table className={`league-rank-table mt-[20px]`}>
+                          <thead>
+                            <tr>
+                              <th>팀</th>
+                              <th>경기</th>
+                              <th>승점</th>
+                              <th>승</th>
+                              <th>무</th>
+                              <th>패</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {rankInfo?.map((rank, index) => {
+                              return (
+                                <tr key={`rank-${index}`}>
+                                  <td className={`team`}>
+                                    <b>{index + 1}</b>
+                                    <RoundProfile
+                                      img={rank.thum}
+                                      size={24}></RoundProfile>
+                                    <span>{rank.title}</span>
+                                  </td>
+                                  <td>{rank.step}</td>
+                                  <td>{rank.tot_score}</td>
+                                  <td>{rank.w_cnt}</td>
+                                  <td>{rank.d_cnt}</td>
+                                  <td>{rank.l_cnt}</td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      ) : isCup ? (
+                        <div className={`cup-rank-table mt-[20px]`}>
+                          {rankInfo?.map((round, roundIdx) => {
                             return (
-                              <tr key={`rank-${index}`}>
-                                <td className={`team`}>
-                                  <b>{index + 1}</b>
-                                  <RoundProfile img={rank.thum} size={24}></RoundProfile>
-                                  <span>{rank.title}</span>
-                                </td>
-                                <td>{rank.step}</td>
-                                <td>{rank.tot_score}</td>
-                                <td>{rank.w_cnt}</td>
-                                <td>{rank.d_cnt}</td>
-                                <td>{rank.l_cnt}</td>
-                              </tr>
+                              <ul key={`round-${roundIdx}`}>
+                                {round.map((rank, index) => {
+                                  return (
+                                    <li key={`rank-${roundIdx}-${index}`}>
+                                      <CupRankItem rank={rank}></CupRankItem>
+                                    </li>
+                                  );
+                                })}
+                              </ul>
                             );
                           })}
-                        </tbody>
-                      </table>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="consult"></Tab.Pane>

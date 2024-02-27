@@ -113,7 +113,7 @@
   padding-right: 20px;
 }
 
-.rank-table {
+.league-rank-table {
   width: 100%;
   font-size: 13px;
   padding: 0;
@@ -192,6 +192,82 @@
 
     span {
       margin-left: 6px;
+    }
+  }
+}
+
+.cup-rank-table {
+  display: flex;
+  overflow-x: auto;
+  padding: 0 20px;
+
+  & > ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 30px;
+    position: relative;
+
+    & > li {
+      position: relative;
+      padding-right: 55px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      &::after {
+        content: "";
+        display: block;
+        width: 30px;
+        height: calc(50% + 15px);
+        position: absolute;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-1px);
+        border-top: 1px solid #cfd4d8;
+        border-right: 1px solid #cfd4d8;
+      }
+
+      &:nth-child(even) {
+        &::after {
+          border: none;
+          top: -15px;
+          border-bottom: 1px solid #cfd4d8;
+          border-right: 1px solid #cfd4d8;
+        }
+      }
+
+      &::before {
+        content: "";
+        display: block;
+        width: 26px;
+        height: 1px;
+        background: #cfd4d8;
+        position: absolute;
+        left: -26px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    &:first-child li {
+      &::before {
+        display: none;
+      }
+    }
+
+    &:last-child {
+      &::after {
+        display: none;
+      }
+
+      li {
+        padding-right: 0;
+
+        &::after {
+          display: none;
+        }
+      }
     }
   }
 }
