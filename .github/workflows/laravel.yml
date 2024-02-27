@@ -31,17 +31,17 @@ jobs:
 #        DB_DATABASE: database/database.sqlite
 #      run: vendor/bin/phpunit
 
-    - name: 'Create env file'
-      run: |
-        touch .env
-        echo "${{ secrets.ENV_FILE }}" >> .env
+#    - name: 'Create env file'
+#      run: |
+#        touch .env
+#        echo "${{ secrets.ENV_FILE }}" >> .env
 
       # 애플리케이션을 이미지로 build 하고 push합니다.
-    - name: Docker build
-      run: |
-        docker build -t jiyu1948/brave_webtoon:laraback .
-        cd ./frontend
-        docker build -t jiyu1948/brave_webtoon:larafront .
+#    - name: Docker build
+#      run: |
+#        docker build -t jiyu1948/brave_webtoon:laraback .
+#        cd ./frontend
+#        docker build -t jiyu1948/brave_webtoon:larafront .
 
       # Container Registry에 로그인합니다.
     - name: DockerHub Login
@@ -50,26 +50,27 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: DockerHub push
-      run: |
-        docker push jiyu1948/brave_webtoon:laraback
-        docker push jiyu1948/brave_webtoon:larafront
+#    - name: DockerHub push
+#      run: |
+#        docker push jiyu1948/brave_webtoon:laraback
+#        docker push jiyu1948/brave_webtoon:larafront
 
-#    - name: Push BE image to DockerRepository
-#      uses: docker/build-push-action@v5
-#      with:
-#        push: true
-#        tags: |
-#          jiyu1948/brave_webtoon:laraback
-#
-#    - name: Push FE image to DockerRepository
-#      uses: docker/build-push-action@v5
-#      with:
-#        context: ./frontend
-#        file: ./frontend/Dockerfile
-#        push: true
-#        tags: |
-#          jiyu1948/brave_webtoon:larafront
+    - name: Push BE image to DockerRepository
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          jiyu1948/brave_webtoon:laraback
+
+    - name: Push FE image to DockerRepository
+      uses: docker/build-push-action@v5
+      with:
+        context: ./frontend
+        file: ./frontend/Dockerfile
+        push: true
+        tags: |
+          jiyu1948/brave_webtoon:larafront
 
   deploy:
     needs: build
