@@ -9,36 +9,38 @@ import UploadContentImage from "@/components/image/UploadContentImage";
 import ResizeTextarea from "@/components/form/ResizeTextarea";
 
 export default function Create() {
-  const [noticeTitle, setNoticeTitle] = useState("");
-  const [noticeContents, setNoticeContents] = useState("");
+  const [consultTitle, setConsultTitle] = useState("");
+  const [consultContents, setConsultContents] = useState("");
   const [formClear, setFormClear] = useState(false);
   const [file, setFile] = useState(null);
   const router = useRouter();
-  const teamId = router.query.id;
+  const consultId = router.query.id;
 
   useEffect(() => {
-    if (!noticeTitle || !noticeContents) {
+    if (!consultTitle || !consultContents) {
       setFormClear(false);
       return;
     }
 
     setFormClear(true);
-  }, [noticeTitle, noticeContents]);
+  }, [consultTitle, consultContents]);
 
   const createTeam = () => {
     const formData = new FormData();
     formData.append("files[]", file);
-    formData.append("title", noticeTitle);
-    formData.append("contents", noticeContents);
+    formData.append("title", consultTitle);
+    formData.append("contents", consultContents);
 
     sendPost(
-      `/api/boards/board-notice/${teamId}`,
+      `/api/boards/board-inquire/${consultId}`,
       formData,
       res => {
-        toast("공지가 생성되었습니다.");
+        toast("공지/문의가 생성되었습니다.");
         router.back();
       },
-      () => {},
+      err => {
+        toast(err.response.data.message);
+      },
       REQUEST_HEADER_CONTENTS_FORM
     );
   };
@@ -65,16 +67,16 @@ export default function Create() {
             <Form.Control
               type="text"
               placeholder={`제목을 입력해주세요`}
-              value={noticeTitle}
-              onChange={e => setNoticeTitle(e.target.value)}
+              value={consultTitle}
+              onChange={e => setConsultTitle(e.target.value)}
               className={`border-none p-0 text-[16px]`}></Form.Control>
           </Form.Group>
           <hr className={"hr-line !h-[1px]"} />
           <div className={`inner`}>
             <Form.Group className={`my-[18px] `}>
               <ResizeTextarea
-                value={noticeContents}
-                setValue={setNoticeContents}
+                value={consultContents}
+                setValue={setConsultContents}
                 className={`p-0 border-0 rounded-0 text-[16px] mb-[20px] resize-none`}></ResizeTextarea>
             </Form.Group>
             <UploadContentImage file={file} setFile={setFile}></UploadContentImage>

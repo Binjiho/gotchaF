@@ -2,12 +2,12 @@ import MemberImage from "@/components/team/MemberImage";
 import { printDateTimeFormat } from "@/helper/value";
 import { useRouter } from "next/router";
 
-export default function NoticeItem({ item }) {
+export default function ConsultItem({ item }) {
   const router = useRouter();
-  const teamId = router.query.id;
+  const competitionId = router.query.id;
 
   const goNoticePage = sid => {
-    router.push(`/team/${teamId}/notice/${sid}`);
+    router.push(`/competition/${competitionId}/consult/${sid}`);
   };
 
   return (
@@ -16,8 +16,8 @@ export default function NoticeItem({ item }) {
       onClick={() => goNoticePage(item.sid)}>
       <div className={`flex justify-between align-items-center`}>
         <div className={`flex gap-[9px] align-items-center`}>
-          <MemberImage img={item.user_thum} size={20} role={item.level}></MemberImage>
-          <p className={`text-gray10 text-[13px]`}>{item.writer}</p>
+          <MemberImage img={item.user_thum} size={24} role={item.level}></MemberImage>
+          <p className={`text-gray10 text-[13px]`}>{item.team_name}</p>
         </div>
         <p className={`text-[13px] text-gray7`}>
           {printDateTimeFormat(item.created_at, "MM월 dd일")}
@@ -30,10 +30,10 @@ export default function NoticeItem({ item }) {
           </p>
           <p className={`text-[13px] text-gray9 text-overflow-dot-2`}>{item.contents}</p>
         </div>
-        {item.file_path && (
+        {item.file && (
           <div
             className={`w-[64px] h-[64px] bg-[#D9D9D9] rounded-[3px] overflow-hidden flex-none`}>
-            <img src={item.file_path} alt="" className={`w-full object-cover h-full`} />
+            <img src={item.file} alt="" className={`w-full object-cover h-full`} />
           </div>
         )}
       </div>

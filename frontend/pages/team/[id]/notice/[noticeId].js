@@ -32,7 +32,7 @@ export default function NoticeId() {
           공지글
         </h2>
       </PrevHeader>
-      <main>
+      <main className={`inner`}>
         {notice && (
           <>
             <div

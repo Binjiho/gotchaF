@@ -40,7 +40,9 @@ export default function Notice() {
           <>
             {teamNotice.map(item => (
               <div key={item.sid}>
-                <NoticeItem item={item}></NoticeItem>
+                <div className={`inner`}>
+                  <NoticeItem item={item}></NoticeItem>
+                </div>
                 <hr className={`hr-line`} />
               </div>
             ))}

@@ -22,6 +22,8 @@ import { Navigation } from "swiper/modules";
 import RoundItem from "@/components/competition/RoundItem";
 import RoundProfile from "@/components/image/RoundProfile";
 import CupRankItem from "@/components/competition/CupRankItem";
+import ConsultItem from "@/components/competition/ConsultItem";
+import FloatAddBtn from "@/components/btn/FloatAddBtn";
 
 export default function Id() {
   const router = useRouter();
@@ -29,6 +31,7 @@ export default function Id() {
   const [competitionInfo, setCompetitionInfo] = useState(null);
   const [matchInfo, setMatchInfo] = useState(null);
   const [rankInfo, setRankInfo] = useState(null);
+  const [consultList, setConsultList] = useState(null);
   const user = useSelector(state => state.user);
   const [key, setKey] = useState("home");
   const isLeague = Number(competitionInfo?.type) === COMPETITION_TYPE.LEAGUE;
@@ -136,6 +139,12 @@ export default function Id() {
     });
   };
 
+  const getNotice = () => {
+    sendAnonymousGet(`/api/boards/board-inquire/${competitionId}`, null, res => {
+      setConsultList(res.data.result);
+    });
+  };
+
   const goTeamSetting = () => {
     router.push(`/team/${competitionId}/setting`);
   };
@@ -150,6 +159,8 @@ export default function Id() {
       getMatches();
     } else if (key === "rank") {
       getRank();
+    } else if (key === "consult") {
+      getNotice();
     }
   }, [key]);
 
@@ -381,11 +392,33 @@ export default function Id() {
                       )}
                     </div>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="consult"></Tab.Pane>
+                  <Tab.Pane eventKey="consult">
+                    <div className={`inner pb-[13px] border-b-[1px] !border-gray3`}>
+                      <h3>
+                        게시글{" "}
+                        <span className={`text-green_primary`}>
+                          {consultList?.length || ""}
+                        </span>
+                      </h3>
+                    </div>
+                    {consultList?.map((consult, index) => {
+                      return (
+                        <div key={`consult-${index}`}>
+                          <div className={`inner`}>
+                            <ConsultItem item={consult}></ConsultItem>
+                          </div>
+                          <hr className={`hr-line`} />
+                        </div>
+                      );
+                    })}
+                    <FloatAddBtn
+                      path={`/competition/${competitionId}/consult/create`}
+                      text={"문의하기"}></FloatAddBtn>
+                  </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}
-              {user && user.tid && (
+              {user && user.tid && key !== "consult" && (
                 <div className={`bottom-fixed btns bg-white`}>
                   <Button className={`w-full`} variant="green-primary" size="50">
                     참가하기
