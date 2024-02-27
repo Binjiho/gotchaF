@@ -31,10 +31,10 @@ jobs:
 #        DB_DATABASE: database/database.sqlite
 #      run: vendor/bin/phpunit
 
-    - name: 'Create env file'
-      run: |
-        touch .env
-        echo "${{ secrets.ENV_FILE }}" >> .env
+#    - name: 'Create env file'
+#      run: |
+#        touch .env
+#        echo "${{ secrets.ENV_FILE }}" >> .env
 
       # 애플리케이션을 이미지로 build 하고 push합니다.
 #    - name: Docker build
@@ -65,7 +65,7 @@ jobs:
     - name: Push FE image to DockerRepository
       uses: docker/build-push-action@v5
       with:
-#        context: ./frontend
+        context: ./frontend
         file: ./frontend/Dockerfile
         push: true
         tags: |
