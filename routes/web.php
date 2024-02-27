@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Team;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get('/', function () {
+//    return view('welcome');
+//})->name('test');
 Route::get('/', function () {
-    return view('welcome');
-})->name('test');
+    $teams = Team::where( ['del_yn' => 'N' ])->get();
+    return $teams;
+});
 
 Route::get('/api/hello', function () {
     return view('hello');
