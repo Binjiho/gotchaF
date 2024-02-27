@@ -42,7 +42,7 @@ jobs:
 
     - name: Copy .env
       run: |
-         touch ./env
+         touch .env
          echo "${{ secrets.ENV }}" >> ./env
          shell: bash
     - name: Install Dependencies
