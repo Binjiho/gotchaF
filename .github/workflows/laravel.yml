@@ -39,7 +39,7 @@ jobs:
 
     - name: Copy .env
       run: |
-        .env
+        touch .env
         echo "${{ secrets.ENV }}" >> ./env
         shell: bash
 
