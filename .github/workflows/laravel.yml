@@ -31,7 +31,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v3
 
-      # Container Registry에 로그인합니다.
+      # Container Registry에 로그인합니다.asd
     - name: DockerHub Login
       uses: docker/login-action@v3
       with:
