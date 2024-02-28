@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # env 파일 secrets_variables로 생성
+    # env 파일 secrets_variables로 생성합니다.
     - name: create application-env.yml
       run: |
         touch .env
