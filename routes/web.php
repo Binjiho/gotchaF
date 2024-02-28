@@ -22,7 +22,7 @@ Route::get('/', function () {
     return $teams;
 });
 
-Route::get('/api/hello', function () {
+Route::get('/hello', function () {
     return view('hello');
 });
 
