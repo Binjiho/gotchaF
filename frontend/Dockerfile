@@ -13,7 +13,8 @@ RUN apk add git
 COPY ./package*.json /app/
 
 # install all depencies
-RUN npm install && npm cache clean --force
+RUN apk add curl bash --no-cache && \
+npm install && npm cache clean --force
 #RUN npm install -g npm && \
 #    npm install -g @vue/cli && \
 #    npm install -g @vue/cli-init
