@@ -30,5 +30,6 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 #/var/www/html/artisan serve --host=0.0.0.0 --port=80
 #ENTRYPOINT : 이미지가 컨테이너화 되며 실행될 명령어 지정
-ENTRYPOINT ["php", "artisan", "serve","--host","0.0.0.0", "--port","9002"]
+ENTRYPOINT ["php", "artisan", "serve","--host","0.0.0.0"]
+#ENTRYPOINT ["php", "artisan", "serve","--host","0.0.0.0", "--port","9002"]
 #ENTRYPOINT ["php", "artisan", "serve"]
