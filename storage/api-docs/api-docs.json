@@ -1400,28 +1400,13 @@
                 }
             }
         },
-        "/api/teams": {
-            "get": {
-                "tags": [
-                    "팀"
-                ],
-                "description": "팀 리스트 불러오기",
-                "operationId": "96d86695ce86b7ef00a0417e16d08e2c",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            },
+        "/api/teams/store": {
             "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 생성",
-                "operationId": "05cf31c00b37de3c1186ef4cef4d2539",
+                "operationId": "a583c960981641253d675229081b8d15",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1484,13 +1469,13 @@
                 }
             }
         },
-        "/api/teams/{tid}": {
+        "/api/teams/update/{tid}": {
             "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 수정",
-                "operationId": "df5edf59192ee28ff95892d5bc282164",
+                "operationId": "59944b863dda4aff9b3aa7484936be2d",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1558,6 +1543,23 @@
                 }
             }
         },
+        "/api/teams": {
+            "get": {
+                "tags": [
+                    "팀"
+                ],
+                "description": "팀 리스트 불러오기",
+                "operationId": "96d86695ce86b7ef00a0417e16d08e2c",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
         "/api/teams/searchTeams": {
             "post": {
                 "tags": [
@@ -1592,13 +1594,13 @@
                 }
             }
         },
-        "/api/teams/{$sid}": {
+        "/api/teams/{$tid}": {
             "get": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 상세 불러오기",
-                "operationId": "0d59eebd57389b50eb958210308cf803",
+                "operationId": "2ad53690620ecde4acaff1502420424e",
                 "responses": {
                     "200": {
                         "description": "Success"

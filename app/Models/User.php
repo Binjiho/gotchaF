@@ -35,6 +35,7 @@ class User extends Authenticatable
         'htel',
         'sex',
         'age',
+        'file_path',
     ];
 
     protected $hidden = [

@@ -11,10 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (!$this->app->isLocal()) {
-            //register your services you require for production
-            $this->app['request']->server->set('HTTPS', true);
-        }
+//        if (!$this->app->isLocal()) {
+//            //register your services you require for production
+//            $this->app['request']->server->set('HTTPS', true);
+//        }
     }
 
     /**

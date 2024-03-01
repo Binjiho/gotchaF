@@ -130,6 +130,7 @@ class BoardService extends Services
                 ->join('team_users', 'boards.uid', '=', 'team_users.uid')
                 ->select('boards.*', 'users.file_path as user_thum', 'team_users.level')
                 ->where('boards.ccode', '=', '1')
+                ->where('boards.sid', '=', $sid)
                 ->where('boards.tid', '=', $tid)
                 ->where('boards.display_yn', '=', 'Y')
                 ->where('boards.del_yn', '=', 'N')
@@ -383,6 +384,7 @@ class BoardService extends Services
                 $result[] = array(
                   'sid' => $board->sid,
                   'team_name' => $board->name,
+                  'thum' => $board->thum,
                   'level' => $board->level,
                   'title' => $board->title,
                   'contents' => $board->contents,

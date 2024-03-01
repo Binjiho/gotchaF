@@ -20,7 +20,7 @@ class TeamController extends BaseController
 
     /**
      * @OA\Post (
-     *     path="/api/teams",
+     *     path="/api/teams/store",
      *     tags={"팀"},
      *     description="팀 생성",
      *      @OA\RequestBody(
@@ -50,7 +50,7 @@ class TeamController extends BaseController
 
     /**
      * @OA\Post  (
-     *     path="/api/teams/{tid}",
+     *     path="/api/teams/update/{tid}",
      *     tags={"팀"},
      *     description="팀 수정",
      *      @OA\RequestBody(
@@ -120,16 +120,16 @@ class TeamController extends BaseController
 
     /**
      * @OA\Get (
-     *     path="/api/teams/{$sid}",
+     *     path="/api/teams/{$tid}",
      *     tags={"팀"},
      *     description="팀 상세 불러오기",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function showTeam(String $sid)
+    public function showTeam(String $tid)
     {
-        return $this->teamService->showTeam($sid);
+        return $this->teamService->showTeam($tid);
     }
 
     /**

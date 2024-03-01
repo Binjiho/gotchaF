@@ -53,7 +53,7 @@ class TeamService extends Services
             $team_user->save();
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/".$save_id."/thum";
+                $s3_path = "gotcha/teams/".$save_id."/thum";
 
                 foreach($request->file('files') as $file){
                     if ($file->isValid()) {
@@ -128,7 +128,7 @@ class TeamService extends Services
             $team->updated_at = $now;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/".$sid."/thum";
+                $s3_path = "gotcha/teams/".$sid."/thum";
 
                 //기존 이미지 삭제
                 if($team->file_path){
@@ -237,8 +237,13 @@ class TeamService extends Services
         }
 
         try {
-
             //팀 게시판
+            $team_notices = DB::table('boards')
+                ->Join('users','boards.uid','=','users.sid')
+                ->select('users.name','users.file_path','boards.*')
+                ->where('boards.ccode','=',1)
+                ->where('boards.tid','=',$tid)
+                ->get();
 
             //팀 경기일정
             $team_matches = DB::table('matches')
@@ -280,6 +285,7 @@ class TeamService extends Services
                     "team_info" => $team_info,
                     "team_matches" => $team_matches,
                     "team_users" => $team_users,
+                    "team_notices" => $team_notices,
                 ],
             ], 200);
         } catch (\Exception $e) {

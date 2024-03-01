@@ -69,11 +69,11 @@ Route::prefix('/mypage')->group(function () {
 Route::prefix('/teams')->group(function () {
     Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
-    Route::get('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
+    Route::get('/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
     Route::get('/detail-match/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeamMatch']);
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
-        Route::post('/{sid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
+        Route::post('/', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
+        Route::post('/update/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);
         Route::post('/signup/{tid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'signupTeam']);
         Route::post('/waitup/{sid}', [App\Http\Controllers\api\team\TeamAuthController::class, 'waitupTeam']);
         Route::post('/confirm', [App\Http\Controllers\api\team\TeamAuthController::class, 'confirm']);

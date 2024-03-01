@@ -22,7 +22,7 @@ class MypageService extends Services
             $team_users = DB::table('users')
                 ->leftJoin('team_users','users.sid','=','team_users.uid')
                 ->leftJoin('teams','teams.sid','=','team_users.tid')
-                ->select('teams.sid','team_users.level')
+                ->select('users.*','teams.sid','team_users.level')
                 ->where('users.sid','=',$user->sid)
                 ->first();
 
@@ -63,80 +63,72 @@ class MypageService extends Services
 
         try {
             //내 경기 일정
-            $mymatch = DB::table('matches')
-                ->join('teams as t1', function ($join) {
-                    $join->on('t1.sid', '=', 'matches.tid1');
-                })
-                ->join('teams as t2', function ($join) {
-                    $join->on('t2.sid', '=', 'matches.tid2');
-                })
-                ->join('match_users', function ($join) use ($user) {
-                    $join->on('match_users.mid', '=', 'matches.sid')
-                        ->where('match_users.uid', '=', $user->sid);
-                })
-                ->leftJoin('competitions as c','c.sid','=','matches.cid')
-                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
-                ->where('matches.del_yn', '=', 'N')
-                ->where('matches.state', '=', 'N')
-                ->where('matches.matched_at', '<>', null)
-                ->orderBy('matches.created_at')
-                ->first();
+            $mymatch = array();
+            if($myteam){
+                $mymatch = DB::table('matches')
+                    ->join('teams as t1', function ($join) {
+                        $join->on('t1.sid', '=', 'matches.tid1');
+                    })
+                    ->join('teams as t2', function ($join) {
+                        $join->on('t2.sid', '=', 'matches.tid2');
+                    })
+                    ->join('match_users', function ($join) use ($user) {
+                        $join->on('match_users.mid', '=', 'matches.sid')
+                            ->where('match_users.uid', '=', $user->sid);
+                    })
+                    ->leftJoin('competitions as c','c.sid','=','matches.cid')
+                    ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
+                    ->where('matches.del_yn', '=', 'N')
+                    ->where('matches.state', '=', 'N')
+                    ->where('matches.matched_at', '<>', null)
+                    ->orderBy('matches.created_at')
+                    ->first();
+            }
 
-            //내 팀 total rank, match rank
             /*내팀이 참여중인 경기*/
-            $myteams = DB::table('competitions')
-                ->join('competition_teams as ct', function ($join) use ($myteam) {
-                    $join->on('competitions.sid', '=', 'ct.cid')
-                        ->where('ct.tid', '=', $myteam->sid)
-                        ->where('ct.del_yn', '=', 'N');
-                })
-                ->select(DB::raw('competitions.sid, competitions.type, competitions.title'))
-                ->where('competitions.del_yn', '=', 'N')
-                ->where('competitions.state', '=', 'S')
-                ->get();
+            $myteams = array();
+            if($myteam){
+                $myteams = DB::table('competitions')
+                    ->join('competition_teams as ct', function ($join) use ($myteam) {
+                        $join->on('competitions.sid', '=', 'ct.cid')
+                            ->where('ct.tid', '=', $myteam->sid)
+                            ->where('ct.del_yn', '=', 'N');
+                    })
+                    ->select(DB::raw('competitions.sid, competitions.type, competitions.title'))
+                    ->where('competitions.del_yn', '=', 'N')
+                    ->where('competitions.state', '=', 'S')
+                    ->get();
+            }
 
             /*내팀 경기의 기록*/
-            /*
-             * type == 1 리그
-            SELECT tid, w_cnt, d_cnt, l_cnt, tot_score, ROW_NUMBER() OVER (ORDER BY tot_score DESC) AS `rank`
-            FROM competition_teams
-            WHERE del_yn = 'N' AND cid = 1
-            */
-
-            /*
-             * type == 2 컵 2승1패 4강 진출/탈락
-            SELECT tid, w_cnt, d_cnt, l_cnt, tot_score, step
-            FROM competition_teams
-            WHERE del_yn = 'N' AND cid = 1
-            */
             $myteam_ranks = array();
-            foreach($myteams as $mt){
-                $comp = DB::table('competition_teams as ct')
-                    ->select(DB::raw('ct.tid, ct.state,  ct.w_cnt, ct.d_cnt, ct.l_cnt, ct.tot_score, ct.step, ROW_NUMBER() OVER (ORDER BY ct.tot_score DESC) AS `rank`'))
-                    ->where('ct.cid', '=', $mt->sid)
-                    ->get();
-                foreach($comp as $cp){
-                    if($myteam->sid == $cp->tid){
-                        $myteam_ranks[$mt->sid] = [
-                            'sid' => $mt->sid,
-                            'title' => $mt->title,
-                            'type' => $mt->type,
-//                            'score' => $cp,
-                            'state' => $cp->state,
-                            'w_cnt' => $cp->w_cnt,
-                            'd_cnt' => $cp->d_cnt,
-                            'l_cnt' => $cp->l_cnt,
-                            'tot_score' => $cp->tot_score,
-                            'step' => $cp->step,
-                            'rank' => $cp->rank,
-                        ];
+            if($myteams){
+                foreach($myteams as $mt){
+                    $comp = DB::table('competition_teams as ct')
+                        ->select(DB::raw('ct.tid, ct.state,  ct.w_cnt, ct.d_cnt, ct.l_cnt, ct.tot_score, ct.step, ROW_NUMBER() OVER (ORDER BY ct.tot_score DESC) AS `rank`'))
+                        ->where('ct.cid', '=', $mt->sid)
+                        ->get();
+                    foreach($comp as $cp){
+                        if($myteam->sid == $cp->tid){
+                            $myteam_ranks[$mt->sid] = [
+                                'sid' => $mt->sid,
+                                'title' => $mt->title,
+                                'type' => $mt->type,
+                                'state' => $cp->state,
+                                'w_cnt' => $cp->w_cnt,
+                                'd_cnt' => $cp->d_cnt,
+                                'l_cnt' => $cp->l_cnt,
+                                'tot_score' => $cp->tot_score,
+                                'step' => $cp->step,
+                                'rank' => $cp->rank,
+                            ];
+                        }
                     }
                 }
-
             }
 
             return response()->json([
-                'message' => 'Successfully loaded myInfo!',
+                'message' => 'Successfully loaded 나의정보!',
                 'state' => "S",
                 "data" => [
                     "myinfo" => $user,
@@ -148,7 +140,7 @@ class MypageService extends Services
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error loaded myInfo!',
+                'message' => 'Error loaded 나의정보!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
