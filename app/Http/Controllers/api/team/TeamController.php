@@ -20,7 +20,7 @@ class TeamController extends BaseController
 
     /**
      * @OA\Post (
-     *     path="/api/teams/store",
+     *     path="/api/teams/",
      *     tags={"팀"},
      *     description="팀 생성",
      *      @OA\RequestBody(
@@ -85,14 +85,14 @@ class TeamController extends BaseController
      * @OA\Get (
      *     path="/api/teams",
      *     tags={"팀"},
-     *     description="팀 리스트 불러오기",
+     *     description="팀 리스트 불러오기 [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function indexTeams()
+    public function indexTeams(Request $request)
     {
-        return $this->teamService->indexTeams();
+        return $this->teamService->indexTeams($request);
     }
 
     /**

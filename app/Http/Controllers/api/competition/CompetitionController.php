@@ -54,7 +54,7 @@ class CompetitionController extends Controller
      * @OA\Get (
      *     path="/api/competitions?type=1&sorting",
      *     tags={"대회"},
-     *     description="대회 리스트 불러오기 [type=>0:리그,1:컵] [sorting =>pre:진행전,ing:진행중,end:종료된]",
+     *     description="대회 리스트 불러오기 [type=>0:리그,1:컵] [sorting =>pre:진행전,ing:진행중,end:종료된] [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )

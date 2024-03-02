@@ -174,24 +174,29 @@ class TeamService extends Services
     }
 
 
-    public function indexTeams()
+    public function indexTeams(Request $request)
     {
         try {
-//            $teams = Team::where( ['del_yn' => 'N' ])->get();
-            $teams = Team::where( ['del_yn' => 'N' ])->paginate(10);
+            if($request->per_page){
+                $per_page = $request->per_page;
+            }else{
+                $per_page = 10;
+            }
+
+            $teams = Team::where( ['del_yn' => 'N' ])->simplePaginate($per_page);
 
             foreach($teams as $team_idx => $team){
                 $team_count = Team_User::where( ['del_yn' => 'N', 'tid' => $team->sid ])->count();
                 $teams[$team_idx]['user_count'] = $team_count;
             }
             return response()->json([
-                'message' => 'Successfully loaded teams!',
+                'message' => 'Successfully loaded 팀리스트!',
                 'state' => "S",
                 "data" => ["teams" => $teams],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error loaded teams!',
+                'message' => 'Error loaded 팀리스트!',
                 'state' => "E",
                 'error' => $e,
             ], 500);

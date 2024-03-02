@@ -22,8 +22,7 @@ class BoardService extends Services
     public function storeNotice(Request $request, String $tid)
     {
         try {
-
-            $user = $request->user();
+            $user = auth()->user();
             if(!$user){
                 return response()->json([
                     'message' => 'Error load User!',
@@ -58,7 +57,7 @@ class BoardService extends Services
             $save_id = $board->sid;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/".$tid."/notice";
+                $s3_path = "gotcha/teams/".$tid."/notice";
                 foreach($request->file('files') as $file){
                     $extension = $file->getClientOriginalExtension();
                     $uuid = uniqid();
@@ -91,30 +90,34 @@ class BoardService extends Services
     }
 
 
-    public function indexNotice(String $tid)
+    public function indexNotice(Request $request, String $tid)
     {
         try {
+            if($request->per_page){
+                $per_page = $request->per_page;
+            }else{
+                $per_page = 10;
+            }
+
             $boards = DB::table('boards')
                 ->join('users', 'boards.uid', '=', 'users.sid')
-                ->join('team_users', function ($join) use ($tid) {
-                    $join->on('users.sid', '=', 'team_users.uid')
-                        ->where('team_users.tid', '=', $tid);
-                })
-                ->select('boards.*', 'users.file_path as user_thum', 'team_users.level')
+
+                ->select('boards.*', 'users.file_path as user_thum')
                 ->where('boards.ccode', '=', '1')
                 ->where('boards.tid', '=', $tid)
                 ->where('boards.display_yn', '=', 'Y')
                 ->where('boards.del_yn', '=', 'N')
-                ->paginate(10);
+                ->simplePaginate($per_page);
 
+//                $boards = Board::where( ['del_yn' => 'N' ])->simplePaginate($per_page);
             return response()->json([
-                'message' => 'Successfully loaded board Notices!',
+                'message' => 'Successfully loaded 팀공지사항 리스트!',
                 'state' => "S",
                 "data" => ["boards" => $boards],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error loaded board Notices!',
+                'message' => 'Error loaded 팀공지사항 리스트!',
                 'state' => "E",
                 'error' => $e,
             ], 500);
@@ -214,7 +217,7 @@ class BoardService extends Services
 //            $board->updated_at = $now;
 //
 //            if($request->hasFile('files')){
-//                $s3_path = "gotcha/".$tid."/notice";
+//                $s3_path = "gotcha/teams/".$tid."/notice";
 //
 //                //기존 이미지 삭제
 //                if($board->file_path){
@@ -294,7 +297,7 @@ class BoardService extends Services
             $board->created_at = $now;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/".$tid."/gallery";
+                $s3_path = "gotcha/teams/".$tid."/gallery";
 
                 foreach($request->file('files') as $file){
                     if ($file->isValid()) {

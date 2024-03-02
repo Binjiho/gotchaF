@@ -100,55 +100,13 @@
                 }
             }
         },
-        "/api/boards/board-notice/{tid}": {
+        "/api/boards/board-notice/{tid}{per_page?}{page?}": {
             "get": {
                 "tags": [
                     "게시판"
                 ],
-                "description": "팀 공지사항 리스트",
-                "operationId": "49189282bc743233e6317d0d294d8b33",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    },
-                    "500": {
-                        "description": "Fail"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "게시판"
-                ],
-                "description": "팀 공지사항 생성",
-                "operationId": "bdf815c25e141dad5bea342ba0904d14",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "title": {
-                                        "description": "제목",
-                                        "type": "string",
-                                        "example": "제목"
-                                    },
-                                    "contents": {
-                                        "description": "내용",
-                                        "type": "string",
-                                        "example": "내용"
-                                    },
-                                    "files[]": {
-                                        "description": "이미지 input name=files[]",
-                                        "type": "file",
-                                        "example": "file.jpg"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
+                "description": "팀 공지사항 리스트 [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
+                "operationId": "7d209b331abc45241844fe90f6b24351",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -201,6 +159,50 @@
                                         "description": "삭제유무",
                                         "type": "string",
                                         "example": "Y"
+                                    },
+                                    "files[]": {
+                                        "description": "이미지 input name=files[]",
+                                        "type": "file",
+                                        "example": "file.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/boards/board-notice/{tid}": {
+            "post": {
+                "tags": [
+                    "게시판"
+                ],
+                "description": "팀 공지사항 생성",
+                "operationId": "bdf815c25e141dad5bea342ba0904d14",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "description": "제목",
+                                        "type": "string",
+                                        "example": "제목"
+                                    },
+                                    "contents": {
+                                        "description": "내용",
+                                        "type": "string",
+                                        "example": "내용"
                                     },
                                     "files[]": {
                                         "description": "이미지 input name=files[]",
@@ -496,7 +498,7 @@
                 "tags": [
                     "대회"
                 ],
-                "description": "대회 리스트 불러오기 [type=>0:리그,1:컵] [sorting =>pre:진행전,ing:진행중,end:종료된]",
+                "description": "대회 리스트 불러오기 [type=>0:리그,1:컵] [sorting =>pre:진행전,ing:진행중,end:종료된] [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
                 "operationId": "d056644719313e2bceed8a24f7efebdd",
                 "responses": {
                     "200": {
@@ -1400,13 +1402,13 @@
                 }
             }
         },
-        "/api/teams/store": {
+        "/api/teams/": {
             "post": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 생성",
-                "operationId": "a583c960981641253d675229081b8d15",
+                "operationId": "fe0ee24d5e23fe8d1d33e40ad10107e4",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1548,7 +1550,7 @@
                 "tags": [
                     "팀"
                 ],
-                "description": "팀 리스트 불러오기",
+                "description": "팀 리스트 불러오기 [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
                 "operationId": "96d86695ce86b7ef00a0417e16d08e2c",
                 "responses": {
                     "200": {

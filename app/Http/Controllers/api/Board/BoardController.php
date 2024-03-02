@@ -54,16 +54,16 @@ class BoardController extends Controller
 
     /**
      * @OA\Get (
-     *     path="/api/boards/board-notice/{tid}",
+     *     path="/api/boards/board-notice/{tid}{per_page?}{page?}",
      *     tags={"게시판"},
-     *     description="팀 공지사항 리스트",
+     *     description="팀 공지사항 리스트 [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
      *     @OA\Response(response="200", description="Success"),
      *     @OA\Response(response="500", description="Fail")
      * )
      */
-    public function indexNotice(String $tid)
+    public function indexNotice(Request $request,String $tid)
     {
-        return $this->boardService->indexNotice($tid);
+        return $this->boardService->indexNotice($request, $tid);
     }
 
     /**

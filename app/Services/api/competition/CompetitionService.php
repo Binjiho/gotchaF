@@ -23,15 +23,16 @@ class CompetitionService extends Services
     public function storeCompetition(Request $request)
     {
         $user = auth()->user();
-        $user_level = Team_User::where( [
+        $user_leader = Team_User::where( [
             'del_yn' => 'N',
             'uid' => $user->sid,
             'tid' => $request->tid,
+            'level' => 'L'
         ])->first();
 
-        if($user_level->level != 'L'){
+        if(!$user_leader){
             return response()->json([
-                'message' => '팀의 리더만 경기를 만들 수 있습니다.',
+                'message' => '해당팀의 리더만 경기를 만들 수 있습니다.',
                 'state' => "E",
             ], 500);
         }
@@ -62,21 +63,24 @@ class CompetitionService extends Services
             $save_id = $comp->sid;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/competitions/".$save_id;
+                $s3_path = "gotcha/competitions/".$save_id."/thum";
+
                 foreach($request->file('files') as $file){
-                    $extension = $file->getClientOriginalExtension();
-                    $uuid = uniqid();
-                    $filename = $uuid. '_' . time() . '.' . $extension;
-                    $filepath = $s3_path . '/' . $filename;
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid . '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
 
-                    // S3에 파일 저장
-                    Storage::disk('s3')->put($filepath, $file);
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
 
-                    $comp = Competition::find($save_id);
-                    $comp->file_originalname = $file->getClientOriginalName();
-                    $comp->file_realname = $filename;
-                    $comp->file_path = Storage::disk('s3')->url($filepath);
-                    $comp->save();
+                        $comp = Competition::find($save_id);
+                        $comp->file_originalname = $file->getClientOriginalName();
+                        $comp->file_realname = $filename;
+                        $comp->file_path = Storage::disk('s3')->url($filepath);
+                        $comp->save();
+                    }
                 }
             }
 
@@ -117,6 +121,12 @@ class CompetitionService extends Services
         }else{
             $type = $request->type;
         }
+
+        if($request->per_page){
+            $per_page = $request->per_page;
+        }else{
+            $per_page = 10;
+        }
         try {
             $query = DB::table('competitions')
                 ->select(DB::raw("*, ( CASE WHEN DATEDIFF( regist_edate,NOW() ) > 0 THEN DATEDIFF(regist_edate,NOW() ) ELSE 0 END ) as d_day, ( CASE WHEN DATEDIFF( NOW(),event_edate ) >= 0 THEN 'Y' ELSE 'N' END ) AS end_yn
@@ -150,7 +160,7 @@ class CompetitionService extends Services
              */
             $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
 
-            $comps = $query->paginate(1);
+            $comps = $query->simplePaginate($per_page);
 
             foreach($comps as $comp_idx => $comp) {
                 $team_count = Competition_Team::where(['del_yn' => 'N', 'cid' => $comp->sid])->count();
@@ -308,8 +318,7 @@ class CompetitionService extends Services
             $comp->updated_at = $now;
 
             if($request->hasFile('files')){
-                $s3_path = "gotcha/competitions/".$cid;
-
+                $s3_path = "gotcha/competitions/".$cid."/thum";
                 //기존 이미지 삭제
                 if($comp->file_path){
                     $file_uploaded_name = $comp->file_realname;

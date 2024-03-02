@@ -67,7 +67,7 @@ Route::prefix('/mypage')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/teams')->group(function () {
-    Route::get('', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
+    Route::get('{per_page?}{page?}', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
     Route::get('/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
     Route::get('/detail-match/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeamMatch']);
@@ -92,7 +92,7 @@ Route::prefix('/teams')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/competitions')->group(function () {
-    Route::get('{type?}{sorting?}', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']); //전체
+    Route::get('{type?}{sorting?}{per_page?}{page?}', [App\Http\Controllers\api\competition\CompetitionController::class, 'indexCompetition']); //전체
     Route::post('/search', [App\Http\Controllers\api\competition\CompetitionController::class, 'searchCompetition']); //대회 검색
     Route::get('/detail/{cid}', [App\Http\Controllers\api\competition\CompetitionController::class, 'showCompetition']);
     Route::middleware('auth:sanctum')->group(function () {
@@ -130,7 +130,7 @@ Route::prefix('/matches')->group(function () {
 Route::prefix('/boards')->group(function () {
     Route::get('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexGallery']);
 
-    Route::get('/board-notice/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexNotice']);
+    Route::get('/board-notice/{tid}{per_page?}{page?}', [App\Http\Controllers\api\board\BoardController::class, 'index Notice']);
     Route::get('/board-notice/{tid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showNotice']);
 
     Route::get('/board-inquire/{cid}', [App\Http\Controllers\api\board\BoardController::class, 'indexInquire']);
