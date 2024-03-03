@@ -25,6 +25,13 @@ Route::prefix('/auth')->group(function () {
     Route::get('redirect/google', function () {
         return Socialite::driver('google')->stateless()->redirect();
     });
+    Route::get('redirect/naver', function () {
+        return Socialite::driver('naver')->stateless()->redirect();
+    });
+    Route::get('redirect/facebook', function () {
+        return Socialite::driver('facebook')->stateless()->redirect();
+    });
+
     Route::get('callback/{provider}',[App\Http\Controllers\api\member\AuthController::class, 'callback']);
 
     Route::get('snsSignup/{provider?}', function ($email=null, $provider=null) {
