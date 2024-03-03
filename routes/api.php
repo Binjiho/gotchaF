@@ -137,7 +137,7 @@ Route::prefix('/matches')->group(function () {
 Route::prefix('/boards')->group(function () {
     Route::get('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexGallery']);
 
-    Route::get('/board-notice/{tid}{per_page?}{page?}', [App\Http\Controllers\api\board\BoardController::class, 'index Notice']);
+    Route::get('/board-notice/{tid}{per_page?}{page?}', [App\Http\Controllers\api\board\BoardController::class, 'indexNotice']);
     Route::get('/board-notice/{tid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showNotice']);
 
     Route::get('/board-inquire/{cid}', [App\Http\Controllers\api\board\BoardController::class, 'indexInquire']);
