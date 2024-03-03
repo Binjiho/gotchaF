@@ -13,8 +13,8 @@ export default function SignIn() {
         <SnsLoginBtn type="kakao" href="/api/auth/redirect/kakao">카카오로 시작하기</SnsLoginBtn>
         {toggleSnsJoin && (
           <>
-            <SnsLoginBtn type="naver">네이버로 시작하기</SnsLoginBtn>
-            <SnsLoginBtn type="facebook">facebook으로 시작하기</SnsLoginBtn>
+            <SnsLoginBtn type="naver" href="/api/auth/redirect/naver">네이버로 시작하기</SnsLoginBtn>
+            <SnsLoginBtn type="facebook" href="/api/auth/redirect/facebook">facebook으로 시작하기</SnsLoginBtn>
             <SnsLoginBtn type="google" href="/api/auth/redirect/google">
               google로 시작하기
             </SnsLoginBtn>
