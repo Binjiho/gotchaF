@@ -120,7 +120,7 @@ class TeamController extends BaseController
 
     /**
      * @OA\Get (
-     *     path="/api/teams/{$tid}",
+     *     path="/api/teams/detail/{$tid}",
      *     tags={"팀"},
      *     description="팀 상세 불러오기",
      *     @OA\Response(response="200", description="Success"),
