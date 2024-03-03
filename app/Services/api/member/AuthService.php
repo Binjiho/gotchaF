@@ -129,17 +129,8 @@ class AuthService extends Services
                 }
             }else{
                 $user = Socialite::driver($provider)->user();
-                return redirect()->route('snsSignup',['email'=>$user->getEmail() , 'provider'=>$provider]);
-//                $user = Socialite::driver($provider)->user();
-//                return response()->json([
-//                    'message' => 'please sns Signup',
-//                    'state' => "S",
-//                    'data' => [
-//                        "email" => $user->getEmail(),
-//                        "provider" => $provider,
-//                        ]
-//                ], 200);
-
+                return redirect()->away("https://www.match.com/auth/snsSignin.js?provider=".$provider."&email=".$user->getEmail());
+//                return redirect()->route('snsSignup',['email'=>$user->getEmail() , 'provider'=>$provider]);
             }
         } catch (\Exception $e) {
             return response()->json([
