@@ -5,7 +5,6 @@ import UploadImage from "@/components/image/UploadImage";
 import AreaSelect from "@/components/team/AreaSelect";
 import { toast } from "react-toastify";
 import { sendPost } from "@/helper/api";
-import { calculateAge } from "@/helper/value";
 import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import EditItemSelect from "@/components/team/EditItemSelect";
@@ -58,8 +57,8 @@ export default function Create() {
     formData.append("region", address[0].name);
     formData.append("limit_person", personnel);
     formData.append("sex", genderType);
-    formData.append("min_age", calculateAge(minYear));
-    formData.append("max_age", calculateAge(maxYear));
+    formData.append("min_age", Number(minYear));
+    formData.append("max_age", Number(maxYear));
 
     sendPost(
       "/api/teams",

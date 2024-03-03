@@ -31,7 +31,7 @@ export default function Index() {
   const [isMember, setIsMember] = useState(false);
 
   const getTeam = function () {
-    sendAnonymousGet(`/api/teams/${teamId}`, null, res => {
+    sendAnonymousGet(`/api/teams/detail/${teamId}`, null, res => {
       setTeamInfo(res.data.team_info[0]);
       setIsSendJoin(res.data.team_users.find(item => item.sid === user.sid));
 
@@ -202,7 +202,7 @@ export default function Index() {
                           ))}
                         </Swiper>
                       ) : (
-                        <>
+                        <div className={`inner`}>
                           {isLeader ? (
                             <RecommendBtn
                               title={`공지사항을 작성해보세요.`}
@@ -216,7 +216,7 @@ export default function Index() {
                             <NoContentText
                               title={`작성된 공지사항이 없습니다.`}></NoContentText>
                           )}
-                        </>
+                        </div>
                       )}
                     </div>
                     <div>
