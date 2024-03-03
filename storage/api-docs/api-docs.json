@@ -1596,13 +1596,13 @@
                 }
             }
         },
-        "/api/teams/{$tid}": {
+        "/api/teams/detail/{$tid}": {
             "get": {
                 "tags": [
                     "팀"
                 ],
                 "description": "팀 상세 불러오기",
-                "operationId": "2ad53690620ecde4acaff1502420424e",
+                "operationId": "f7a4ddfbed6f1c0a0ab9e2330ce9dca1",
                 "responses": {
                     "200": {
                         "description": "Success"
