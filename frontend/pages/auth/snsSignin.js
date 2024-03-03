@@ -22,7 +22,7 @@ export default function EmailSignin() {
             password: userPw,
         };
 
-        sendAnonymousPost("/api/auth/signin", data, res => {
+        sendAnonymousPost("/api/auth/signup", data, res => {
             if (!res?.data?.token) {
                 toast("잘못된 아이디이거나 비밀번호 입니다.");
                 return;
