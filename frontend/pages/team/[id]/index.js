@@ -155,7 +155,9 @@ export default function Index() {
                         {SEX_TYPE[teamInfo.sex]}
                       </Badge>
                       <Badge pill bg="secondary">
-                        {`${teamInfo.min_age}~${teamInfo.max_age}세`}
+                        {`${calculateAge(teamInfo.min_age)}~${calculateAge(
+                          teamInfo.max_age
+                        )}세`}
                       </Badge>
                       <Badge pill bg="primary">
                         모집중
@@ -247,31 +249,33 @@ export default function Index() {
                       <LinkHeader
                         title={"멤버"}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
-                      {nowTeamUser && (
-                        <div className={`flex flex-column gap-[20px] mb-[40px]`}>
-                          {nowTeamUser?.map((item, index) => (
-                            <TeamMemberProfile
-                              item={item}
-                              key={`member-${index}`}></TeamMemberProfile>
-                          ))}
-                        </div>
-                      )}
-                      {isMember && (
-                        <RecommendBtn
-                          title={`새로운 멤버를 초대해 보세요.`}
-                          content={`SNS나 문자, 링크로 공유하고 쉽게 초대하세요.`}
-                          btnMessage={`멤버 초대하기`}
-                          active={shareNowUrl}></RecommendBtn>
-                      )}
-                      {isLeader && (
-                        <RecommendBtn
-                          title={`운영진 멤버를 선정하고 권한을 설정하세요.`}
-                          content={`공지사항 작성, 경기 만들기 등 팀의 일을 함께 할 운영진을 선정하고 권한을 설정하세요.`}
-                          btnMessage={`팀 설정 관리`}
-                          btnVariant={"green-sub"}
-                          className={"mt-[10px]"}
-                          active={() => {}}></RecommendBtn>
-                      )}
+                      <div className={`inner`}>
+                        {nowTeamUser && (
+                          <div className={`flex flex-column gap-[20px] mb-[40px]`}>
+                            {nowTeamUser?.map((item, index) => (
+                              <TeamMemberProfile
+                                item={item}
+                                key={`member-${index}`}></TeamMemberProfile>
+                            ))}
+                          </div>
+                        )}
+                        {isMember && (
+                          <RecommendBtn
+                            title={`새로운 멤버를 초대해 보세요.`}
+                            content={`SNS나 문자, 링크로 공유하고 쉽게 초대하세요.`}
+                            btnMessage={`멤버 초대하기`}
+                            active={shareNowUrl}></RecommendBtn>
+                        )}
+                        {isLeader && (
+                          <RecommendBtn
+                            title={`운영진 멤버를 선정하고 권한을 설정하세요.`}
+                            content={`공지사항 작성, 경기 만들기 등 팀의 일을 함께 할 운영진을 선정하고 권한을 설정하세요.`}
+                            btnMessage={`팀 설정 관리`}
+                            btnVariant={"green-sub"}
+                            className={"mt-[10px]"}
+                            active={() => {}}></RecommendBtn>
+                        )}
+                      </div>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="record">Second tab content</Tab.Pane>

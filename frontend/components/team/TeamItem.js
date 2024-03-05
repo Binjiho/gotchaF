@@ -2,6 +2,7 @@ import { Badge } from "react-bootstrap";
 import { SEX_TYPE } from "@/constants/serviceConstants";
 import { useRouter } from "next/router";
 import { replaceSpacesWithDot } from "@/helper/UIHelper";
+import { calculateAge } from "@/helper/value";
 
 export default function TeamItem({ item }) {
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function TeamItem({ item }) {
               {SEX_TYPE[item.sex]}
             </Badge>
             <Badge pill bg="secondary">
-              {`${item.min_age}~${item.max_age}세`}
+              {`${calculateAge(item.min_age)}~${calculateAge(item.max_age)}세`}
             </Badge>
           </div>
         </div>
