@@ -7,7 +7,7 @@ export default function TeamMemberProfile({ item }) {
     item.level === TEAM_MEMBER_LEVEL.MANAGEMENT;
 
   return (
-    <div className={`flex gap-[16px] inner`}>
+    <div className={`flex gap-[16px]`}>
       <MemberImage img={item.img} role={item.level} size={42}></MemberImage>
       <div>
         <p className={`text-[14px] font-medium`}>{item.name}</p>

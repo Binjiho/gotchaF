@@ -76,7 +76,7 @@ export default function Index() {
     const token = await getCookie("accessToken");
 
     const data = {
-      tid: teamId,
+      tid: Number(teamId),
       uid: token,
     };
 

@@ -67,7 +67,7 @@ export default function Join() {
             <p className={`text-gray7 text-[14px]`}>가입대기 인원이 없습니다.</p>
           </div>
         ) : (
-          <>
+          <div className={`inner`}>
             {waitUserList.map(item => (
               <div
                 key={item.sid}
@@ -91,7 +91,7 @@ export default function Join() {
                 )}
               </div>
             ))}
-          </>
+          </div>
         )}
       </main>
     </>
