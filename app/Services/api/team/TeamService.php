@@ -259,7 +259,7 @@ class TeamService extends Services
                     $join->on('t2.sid', '=', 'matches.tid2');
                 })
                 ->leftJoin('competitions as c','c.sid','=','matches.cid')
-                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order, (SELECT count(match_users.sid) FROM match_users WHERE match_users.mid=matches.sid AND match_users.del_yn="N" AND match_users.tid='.$tid.') as match_user_cnt'))
+                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, matches.matched_at, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order, (SELECT count(match_users.sid) FROM match_users WHERE match_users.mid=matches.sid AND match_users.del_yn="N" AND match_users.tid='.$tid.') as match_user_cnt'))
                 ->where('matches.del_yn', '=', 'N')
                 ->where('matches.state', '=', 'N')
                 ->where('matches.matched_at', '<>', null)
