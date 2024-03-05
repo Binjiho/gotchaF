@@ -12,7 +12,7 @@ import FloatAddBtn from "@/components/btn/FloatAddBtn";
 
 const initialSearch = {
   page: 1,
-  limit: 10,
+  limit: 100,
   type: COMPETITION_TYPE.LEAGUE,
   sorting: COMPETITION_SORTING.ALL,
 };

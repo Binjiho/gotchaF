@@ -96,8 +96,9 @@ export default function CompetitionItem({ item }) {
             )}
           </p>
         </div>
-        <div className={`w-[80px] h-[75px] bg-gray1 rounded-[5px] flex-[0_0_80px]`}>
-          <img src="" alt="" />
+        <div
+          className={`w-[80px] h-[75px] bg-gray1 rounded-[5px] flex-[0_0_80px] overflow-hidden`}>
+          <img src={item.file_path} alt="" className={`object-cover w-full h-full`} />
         </div>
       </div>
     </div>

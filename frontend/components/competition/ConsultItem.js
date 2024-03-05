@@ -16,7 +16,7 @@ export default function ConsultItem({ item }) {
       onClick={() => goNoticePage(item.sid)}>
       <div className={`flex justify-between align-items-center`}>
         <div className={`flex gap-[9px] align-items-center`}>
-          <MemberImage img={item.user_thum} size={24} role={item.level}></MemberImage>
+          <MemberImage img={item.thum} size={24} role={item.level}></MemberImage>
           <p className={`text-gray10 text-[13px]`}>{item.team_name}</p>
         </div>
         <p className={`text-[13px] text-gray7`}>

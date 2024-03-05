@@ -11,7 +11,7 @@ import UserLineIcon from "@/public/icons/social/map-pin-user-line.svg";
 import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
-import { sendAnonymousGet } from "@/helper/api";
+import { sendAnonymousGet, sendPost } from "@/helper/api";
 import { COMPETITION_KIND, COMPETITION_TYPE } from "@/constants/serviceConstants";
 import { printDateTimeFormat } from "@/helper/value";
 import { convertWeek, calculateDday } from "@/helper/UIHelper";
@@ -24,6 +24,7 @@ import RoundProfile from "@/components/image/RoundProfile";
 import CupRankItem from "@/components/competition/CupRankItem";
 import ConsultItem from "@/components/competition/ConsultItem";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
+import { toast } from "react-toastify";
 
 export default function Id() {
   const router = useRouter();
@@ -163,6 +164,15 @@ export default function Id() {
       getNotice();
     }
   }, [key]);
+
+  const joinCompetition = () => {
+    sendPost(`/api/competitions/apply/${competitionId}`, null, res => {
+      if (res.data?.result?.sid) {
+        toast("참가 신청이 되었습니다.");
+        getCompetition();
+      }
+    });
+  };
 
   return (
     <>
@@ -420,7 +430,11 @@ export default function Id() {
               {/*탭 end*/}
               {user && user.tid && key !== "consult" && (
                 <div className={`bottom-fixed btns bg-white`}>
-                  <Button className={`w-full`} variant="green-primary" size="50">
+                  <Button
+                    className={`w-full`}
+                    variant="green-primary"
+                    size="50"
+                    onClick={joinCompetition}>
                     참가하기
                   </Button>
                 </div>
