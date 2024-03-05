@@ -49,13 +49,57 @@ textarea.form-control {
   }
 }
 
+.form-label {
+  &.required {
+    &::after {
+      content: "*";
+      color: $red_primary;
+    }
+  }
+}
+
 .form-label,
 .form-check-label {
   margin-bottom: 8px;
   font-size: 14px;
 }
 
+.form-check {
+  padding-left: 0;
+
+  .form-check-input {
+    color: #000;
+    border-radius: 0 !important;
+    width: 18px;
+    height: 18px;
+    margin-left: 0;
+    margin-right: 8px;
+    margin-top: 2px;
+
+    &:focus {
+      outline: 0 !important;
+    }
+  }
+
+  .form-check-label {
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+}
+
 .input-group {
+  input:focus {
+    border-color: #000;
+  }
+
+  input:first-child {
+    border-right: none !important;
+  }
+
+  input:last-child {
+    border-left: none !important;
+  }
+
   input + .input-group-text {
     border-left: none;
   }
@@ -64,10 +108,18 @@ textarea.form-control {
     border-color: #000;
   }
 
+  .input-group-text:has(+ input:focus) {
+    border-color: #000;
+  }
+
   .input-group-text {
     background: white;
     border-color: $gray4;
     border-radius: 3px;
+  }
+
+  .input-group-text:empty {
+    padding: 1px !important;
   }
 }
 

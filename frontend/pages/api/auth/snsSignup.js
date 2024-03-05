@@ -21,30 +21,6 @@ export default function snsSignup() {
               className={`height-50`}
             />
           </div>
-          <div className={styles.agree_item}>
-            <Form.Check
-              inline
-              label="[필수] 만 14세 이상이며 모두 동의합니다."
-              name="group1"
-              type={`checkbox`}
-              id={`inline-checkbox-1`}
-            />
-            <button className={styles.plusBtn}>
-              <PlusIcon />
-            </button>
-          </div>
-          <div className={styles.agree_item}>
-            <Form.Check
-              inline
-              label="[선택] 광고성 정보 수신에 모두 동의합니다."
-              name="group1"
-              type={`checkbox`}
-              id={`inline-checkbox-2`}
-            />
-            <button className={styles.plusBtn}>
-              <PlusIcon />
-            </button>
-          </div>
         </Form>
         <div className={`bottom-fixed btns`}>
           <Button className={`w-full`} variant="black" size="50" disabled>

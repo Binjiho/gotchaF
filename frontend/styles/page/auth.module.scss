@@ -35,28 +35,3 @@
     font-weight: 700;
   }
 }
-
-.agree_item {
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-  justify-content: space-between;
-  font-size: 14px;
-
-  & > div {
-    margin-bottom: 0;
-    min-height: unset;
-  }
-}
-
-.plusBtn {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  svg {
-    width: 20px;
-  }
-}
