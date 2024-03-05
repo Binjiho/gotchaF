@@ -8,16 +8,40 @@ export default function SignIn() {
   const [toggleSnsJoin, setToggleSnsJoin] = useState(false);
 
   const signGoogle = () => {
-    sendAnonymousGet("/api/auth/redirect/google", null, res => {
-      console.log(res);
-    });
+    // fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/redirect/google`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Access-Control-Allow-Headers": true,
+    //   },
+    // });
+    sendAnonymousGet(
+      "/api/auth/callback/google",
+      null,
+      res => {
+        console.log(res);
+      },
+      err => {},
+      {}
+    );
+  };
+
+  const signKakao = () => {
+    sendAnonymousGet(
+      "/api/auth/callback/kakao",
+      null,
+      res => {
+        console.log(res);
+      },
+      err => {},
+      {}
+    );
   };
 
   return (
     <main className={`pt-[10vh] min-h-[100vh] pb-10 inner`}>
       <div className={styles.logo}></div>
       <div className={`flex align-items-center flex-column w-full gap-[10px] mb-[10px]`}>
-        <SnsLoginBtn type="kakao" href="/api/auth/redirect/kakao">
+        <SnsLoginBtn type="kakao" click={signKakao}>
           카카오로 시작하기
         </SnsLoginBtn>
         {toggleSnsJoin && (
