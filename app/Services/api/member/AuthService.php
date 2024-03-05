@@ -6,6 +6,7 @@ use App\Models\Team_User;
 use App\Models\User;
 use App\Services\Services;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
@@ -121,7 +122,9 @@ class AuthService extends Services
             if($user){
                 if(Auth::loginUsingId($user['sid'])) {
                     $token = auth()->user()->createToken('gotcha')->plainTextToken;
-                    return redirect("https://www.matchwt.com")->withHeaders(['Authorization' => 'Bearer ' . $token]);
+                    $cookie = Cookie::make('token', $token);
+                    return redirect("https://www.matchwt.com")->withCookie($cookie);
+//                    return redirect("https://www.matchwt.com")->withHeaders(['Authorization' => 'Bearer ' . $token]);
 //                    return response()->json([
 //                        'message' => 'Successfully login!',
 //                        'state' => "S",
