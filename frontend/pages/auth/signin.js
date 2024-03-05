@@ -3,38 +3,20 @@ import { useState } from "react";
 import styles from "@/styles/page/auth.module.scss";
 import SnsLoginBtn from "@/components/btn/SnsLoginBtn";
 import { sendAnonymousGet } from "@/helper/api";
+import { useRouter } from "next/router";
+
+export const dynamic = "force-dynamic";
 
 export default function SignIn() {
   const [toggleSnsJoin, setToggleSnsJoin] = useState(false);
+  const router = useRouter();
 
   const signGoogle = () => {
-    // fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/redirect/google`, {
-    //   method: "GET",
-    //   headers: {
-    //     "Access-Control-Allow-Headers": true,
-    //   },
-    // });
-    sendAnonymousGet(
-      "/api/auth/callback/google",
-      null,
-      res => {
-        console.log(res);
-      },
-      err => {},
-      {}
-    );
+    router.push("/api/auth/redirect/google");
   };
 
   const signKakao = () => {
-    sendAnonymousGet(
-      "/api/auth/callback/kakao",
-      null,
-      res => {
-        console.log(res);
-      },
-      err => {},
-      {}
-    );
+    router.push("/api/auth/redirect/kakao");
   };
 
   return (
