@@ -59,6 +59,7 @@ class MypageService extends Services
             })
             ->select('teams.*')
             ->where('team_users.uid','=',$user->sid)
+            ->where('team_users.level', '!=', 'W')
             ->first();
 
         try {

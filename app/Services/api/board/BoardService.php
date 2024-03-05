@@ -527,7 +527,7 @@ class BoardService extends Services
                     $filepath = $s3_path . '/' . $filename;
 
                     // S3에 파일 저장
-                    Storage::disk('s3')->put($filepath, $file);
+                    Storage::disk('s3')->put($filepath, file_get_contents($file));
 
                     $board = Board::find($save_id);
                     $board->file_originalname = $file->getClientOriginalName();
