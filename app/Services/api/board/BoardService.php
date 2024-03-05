@@ -109,7 +109,7 @@ class BoardService extends Services
                 ->where('boards.del_yn', '=', 'N')
                 ->simplePaginate($per_page);
 
-//                $boards = Board::where( ['del_yn' => 'N' ])->simplePaginate($per_page);
+//                $boards = board::where( ['del_yn' => 'N' ])->simplePaginate($per_page);
             return response()->json([
                 'message' => 'Successfully loaded 팀공지사항 리스트!',
                 'state' => "S",
@@ -192,7 +192,7 @@ class BoardService extends Services
 //                ], 555);
 //            }
 //
-//            $board = Board::where( [
+//            $board = board::where( [
 //                    'display_yn' => 'Y',
 //                    'del_yn' => 'N',
 //                    'tid' => $tid,
@@ -201,7 +201,7 @@ class BoardService extends Services
 //            )->first();
 //            if(!$board){
 //                return response()->json([
-//                    'message' => 'Error load Board Notice!',
+//                    'message' => 'Error load board Notice!',
 //                    'state' => "E",
 //                ], 500);
 //            }
