@@ -1,9 +1,9 @@
 import { Button } from "react-bootstrap";
 import styles from "@/styles/component/btn/snsLoginBtn.module.scss";
 
-export default function SnsLoginBtn({ children, type, href = "#" }) {
+export default function SnsLoginBtn({ children, type, click }) {
   return (
-    <Button href={href} className={`${styles.btn} ${styles[type]}`}>
+    <Button onClick={click} className={`${styles.btn} ${styles[type]}`}>
       {children}
     </Button>
   );
