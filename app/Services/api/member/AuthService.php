@@ -121,7 +121,7 @@ class AuthService extends Services
             if($user){
                 if(Auth::loginUsingId($user['sid'])) {
                     $token = auth()->user()->createToken('gotcha')->plainTextToken;
-                    return redirect()->away("https://www.matchwt.com",['token' => $token]);
+                    return redirect("https://www.matchwt.com")->withHeaders(['Authorization' => 'Bearer ' . $token]);
 //                    return response()->json([
 //                        'message' => 'Successfully login!',
 //                        'state' => "S",
