@@ -134,22 +134,22 @@ Route::prefix('/matches')->group(function () {
 | BOARD
 |--------------------------------------------------------------------------
 */
-Route::prefix('/boards')->group(function () {
-    Route::get('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'indexGallery']);
+Route::controller(\App\Http\Controllers\api\board\BoardController::class)->prefix('/boards')->group(function () {
+    Route::get('/board-gallery/{tid}', 'indexGallery');
 
-    Route::get('/board-notice/{tid}{per_page?}{page?}', [App\Http\Controllers\api\board\BoardController::class, 'indexNotice']);
-    Route::get('/board-notice/{tid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showNotice']);
+    Route::get('/board-notice/{tid}{per_page?}{page?}','indexNotice');
+    Route::get('/board-notice/{tid}/{sid}', 'showNotice');
 
-    Route::get('/board-inquire/{cid}', [App\Http\Controllers\api\board\BoardController::class, 'indexInquire']);
-    Route::get('/board-inquire/{cid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'showInquire']);
+    Route::get('/board-inquire/{cid}', 'indexInquire');
+    Route::get('/board-inquire/{cid}/{sid}', 'showInquire');
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/board-notice/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'storeNotice']);
-        Route::post('/board-notice/{tid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateNotice']);
+        Route::post('/board-notice/{tid}', 'storeNotice');
+        Route::post('/board-notice/{tid}/{sid}', 'updateNotice');
 
-        Route::post('/board-inquire/{cid}', [App\Http\Controllers\api\board\BoardController::class, 'storeInquire']);
-        Route::post('/board-inquire/{cid}/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'updateInquire']);
-        Route::post('/board-reply/{sid}', [App\Http\Controllers\api\board\BoardController::class, 'replyInquire']);
+        Route::post('/board-inquire/{cid}', 'storeInquire');
+        Route::post('/board-inquire/{cid}/{sid}', 'updateInquire');
+        Route::post('/board-reply/{sid}', 'replyInquire');
 
         Route::post('/board-gallery/{tid}', [App\Http\Controllers\api\board\BoardController::class, 'storeGallery']);
     });
