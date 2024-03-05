@@ -46,3 +46,8 @@ export const TEAM_POSITION = {
   3: "수비수",
   4: "골키퍼",
 };
+
+export const COMPETITION_STATE = {
+  W: false,
+  S: true,
+};

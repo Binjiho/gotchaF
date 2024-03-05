@@ -17,6 +17,7 @@ import {
 import EditItemDateSelect from "@/components/team/EditItemDateSelect";
 import EditItemWeekSelect from "@/components/team/EditItemWeekSelect";
 import { useSelector } from "react-redux";
+import { COMPETITION_TYPE } from "@/constants/serviceConstants";
 
 export default function Create() {
   const [file, setFile] = useState(null);
@@ -55,7 +56,7 @@ export default function Create() {
     const formData = new FormData();
     formData.append("tid", user.tid);
     formData.append("kind", competitionKind);
-    formData.append("type", "0");
+    formData.append("type", COMPETITION_TYPE.LEAGUE);
     formData.append("title", title);
     formData.append("contents", "");
     formData.append("region", address[0].name);

@@ -15,6 +15,11 @@ export default function RoundItem({ item }) {
     }
   }, [showModal]);
 
+  // useEffect(() => {
+  //   console.log(item);
+  //   setRoundDate(item?.matched_at);
+  // }, [item]);
+
   const selectScore = item => {
     setShowModal(true);
     setNowItem(item);

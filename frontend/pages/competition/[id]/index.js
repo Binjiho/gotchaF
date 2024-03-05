@@ -12,7 +12,11 @@ import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
 import { sendAnonymousGet, sendPost } from "@/helper/api";
-import { COMPETITION_KIND, COMPETITION_TYPE } from "@/constants/serviceConstants";
+import {
+  COMPETITION_KIND,
+  COMPETITION_TYPE,
+  TEAM_MEMBER_LEVEL,
+} from "@/constants/serviceConstants";
 import { printDateTimeFormat } from "@/helper/value";
 import { convertWeek, calculateDday } from "@/helper/UIHelper";
 import TimeBadge from "@/components/competition/TimeBadge";
@@ -173,6 +177,29 @@ export default function Id() {
       }
     });
   };
+
+  const startCompetition = () => {
+    sendPost(`/api/competitions/start/${competitionId}`, null, res => {
+      toast("경기가 시작되었습니다.");
+    });
+  };
+
+  const isValidJoin = () => {
+    const isTeam = competitionInfo.join_teams.find(
+      team => Number(team.tid) === Number(user.tid)
+    );
+
+    return user && !isTeam && key !== "consult";
+  };
+
+  const isLeader = () => {
+    const team = Number(competitionInfo.tid) === Number(user.tid);
+    const leader = user.level === TEAM_MEMBER_LEVEL.LEADER;
+
+    return user && team && leader && key !== "consult";
+  };
+
+  const isStart = competitionInfo?.start === "S";
 
   return (
     <>
@@ -428,8 +455,16 @@ export default function Id() {
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}
-              {user && user.tid && key !== "consult" && (
-                <div className={`bottom-fixed btns bg-white`}>
+              {isLeader() && !isStart ? (
+                <Button
+                  className={`w-full`}
+                  variant="green-primary"
+                  size="50"
+                  onClick={startCompetition}>
+                  대회시작
+                </Button>
+              ) : isValidJoin() ? (
+                <div className={`bottom-fixed btns bg-white flex`}>
                   <Button
                     className={`w-full`}
                     variant="green-primary"
@@ -438,6 +473,8 @@ export default function Id() {
                     참가하기
                   </Button>
                 </div>
+              ) : (
+                ""
               )}
             </>
           ) : (
