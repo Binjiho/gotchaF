@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import Image from "@/public/icons/tool/image.svg";
 import Camera from "@/public/icons/tool/camera.svg";
@@ -10,6 +10,12 @@ export default function UploadImage({ file, setFile }) {
     setImage(URL.createObjectURL(e.target.files[0]));
     setFile(e.target.files[0]);
   }
+
+  useEffect(() => {
+    if (typeof file === "string") {
+      setImage(file);
+    }
+  }, [file]);
 
   return (
     <>

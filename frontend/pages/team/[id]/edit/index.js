@@ -4,7 +4,6 @@ import { Button, Form } from "react-bootstrap";
 import UploadImage from "@/components/image/UploadImage";
 import { toast } from "react-toastify";
 import { sendGet, sendPost, sendPatch } from "@/helper/api";
-import { calculateAge } from "@/helper/value";
 import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import EditItemSelect from "@/components/team/EditItemSelect";
@@ -23,17 +22,15 @@ export default function Index() {
   const teamId = router.query.id;
 
   const getTeam = function () {
-    sendGet(`/api/teams/${teamId}`, null, res => {
+    sendGet(`/api/teams/detail/${teamId}`, null, res => {
       const data = res.data.team_info[0];
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
 
       setTeamName(data.title);
       setTeamContents(data.contents);
       setFile(data.file_path);
       setGenderType(data.sex);
-      setMinYear(currentYear - Number(data.min_age) - 1);
-      setMaxYear(currentYear - Number(data.max_age) - 1);
+      setMinYear(data.min_age);
+      setMaxYear(data.max_age);
       setPersonnel(data.limit_person);
     });
   };
@@ -76,11 +73,11 @@ export default function Index() {
     formData.append("contents", teamContents);
     formData.append("limit_person", personnel);
     formData.append("sex", genderType);
-    formData.append("min_age", calculateAge(minYear));
-    formData.append("max_age", calculateAge(maxYear));
+    formData.append("min_age", minYear);
+    formData.append("max_age", maxYear);
 
     sendPost(
-      `/api/teams/${teamId}`,
+      `/api/teams/update/${teamId}`,
       formData,
       res => {
         toast("팀이 수정되었습니다");

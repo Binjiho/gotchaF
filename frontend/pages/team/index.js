@@ -10,7 +10,7 @@ import FloatAddBtn from "@/components/btn/FloatAddBtn";
 
 const searchFilter = {
   current_page: 1,
-  per_page: 3,
+  per_page: 10,
 };
 
 export default function Index() {

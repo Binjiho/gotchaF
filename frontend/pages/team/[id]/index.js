@@ -165,7 +165,7 @@ export default function Index() {
                     </div>
                   </div>
                   <div
-                    className={`border-t mt-[16px] pt-[16px] pb-[20px] text-[14px] text-gray10`}>
+                    className={`border-t mt-[16px] pt-[16px] pb-[20px] text-[14px] text-gray10 whitespace-pre-wrap`}>
                     {teamInfo.contents}
                   </div>
                 </div>
