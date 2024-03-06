@@ -2,7 +2,7 @@ import NavBottom from "@/components/layout/NavBottom";
 import LogoIcon from "@/public/icons/logos/black_logo.svg";
 import MainHeader from "@/components/layout/MainHeader";
 import { useDispatch } from "react-redux";
-import { getCookie, setCookie } from "@/helper/cookies";
+import { getCookie, removeCookie, setCookie } from "@/helper/cookies";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { sendGet } from "@/helper/api";
@@ -12,15 +12,13 @@ export default function Index() {
   const dispatch = useDispatch();
 
   const getToken = async () => {
-    console.log('getCookie("token"): ', getCookie("token"));
     return await getCookie("token");
   };
 
   useEffect(() => {
-    console.log("토큰");
     getToken().then(res => {
-      console.log("res: ", res);
       if (res) {
+        removeCookie("token");
         setCookie("accessToken", res);
         getUserInfo(res);
         toast("로그인 되었습니다.");
