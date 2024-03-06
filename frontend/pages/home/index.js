@@ -12,11 +12,14 @@ export default function Index() {
   const dispatch = useDispatch();
 
   const getToken = async () => {
+    console.log('getCookie("token"): ', getCookie("token"));
     return await getCookie("token");
   };
 
   useEffect(() => {
+    console.log("토큰");
     getToken().then(res => {
+      console.log("res: ", res);
       if (res) {
         setCookie("accessToken", res);
         getUserInfo(res);
