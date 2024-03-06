@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 export const dynamic = "force-dynamic";
 
 export default function SignIn() {
-  const [toggleSnsJoin, setToggleSnsJoin] = useState(false);
+  const [toggleSnsJoin, setToggleSnsJoin] = useState(true);
   const router = useRouter();
 
   const signGoogle = () => {
@@ -17,6 +17,10 @@ export default function SignIn() {
 
   const signKakao = () => {
     router.push("/api/auth/redirect/kakao");
+  };
+
+  const signEmail = () => {
+    router.push("/auth/emailSignin");
   };
 
   return (
@@ -28,30 +32,30 @@ export default function SignIn() {
         </SnsLoginBtn>
         {toggleSnsJoin && (
           <>
-            <SnsLoginBtn type="naver" href="/api/auth/redirect/naver">
-              네이버로 시작하기
-            </SnsLoginBtn>
-            <SnsLoginBtn type="facebook" href="/api/auth/redirect/facebook">
-              facebook으로 시작하기
-            </SnsLoginBtn>
+            {/*<SnsLoginBtn type="naver" href="/api/auth/redirect/naver">*/}
+            {/*  네이버로 시작하기*/}
+            {/*</SnsLoginBtn>*/}
+            {/*<SnsLoginBtn type="facebook" href="/api/auth/redirect/facebook">*/}
+            {/*  facebook으로 시작하기*/}
+            {/*</SnsLoginBtn>*/}
             <SnsLoginBtn type="google" click={signGoogle}>
               google로 시작하기
             </SnsLoginBtn>
-            <SnsLoginBtn type="email" href={`/auth/emailSignin`}>
+            <SnsLoginBtn type="email" click={signEmail}>
               이메일로 시작하기
             </SnsLoginBtn>
           </>
         )}
       </div>
-      {!toggleSnsJoin && (
-        <Button
-          onClick={() => setToggleSnsJoin(true)}
-          className={`w-full`}
-          variant="black"
-          size="50">
-          다른 방법으로 시작하기
-        </Button>
-      )}
+      {/*{!toggleSnsJoin && (*/}
+      {/*  <Button*/}
+      {/*    onClick={() => setToggleSnsJoin(true)}*/}
+      {/*    className={`w-full`}*/}
+      {/*    variant="black"*/}
+      {/*    size="50">*/}
+      {/*    다른 방법으로 시작하기*/}
+      {/*  </Button>*/}
+      {/*)}*/}
       <Button className={styles.forgetAccount} variant={"text"}>
         계정을 잊으셨나요?
       </Button>

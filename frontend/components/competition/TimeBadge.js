@@ -37,9 +37,9 @@ export default function TimeBadge({ eventStart, eventEnd, limit, teamCount }) {
         //진행
         <TimeBlock text={`진행중`} color={`text-blue_primary`} />
       ) : isGardeningImminent ? (
-        <TimeBlock text={`모집중 D-${eventDDay}`} color={`text-red_primary`} />
+        <TimeBlock text={`모집중 D${eventDDay}`} color={`text-red_primary`} />
       ) : (
-        <TimeBlock text={`모집중 D-${eventDDay}`} color={`text-green_primary`} />
+        <TimeBlock text={`모집중 D${eventDDay}`} color={`text-green_primary`} />
       )}
     </>
   );

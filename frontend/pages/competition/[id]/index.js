@@ -151,7 +151,7 @@ export default function Id() {
   };
 
   const goTeamSetting = () => {
-    router.push(`/team/${competitionId}/setting`);
+    router.push(`/competition/${competitionId}/setting`);
   };
 
   useEffect(() => {
@@ -456,15 +456,17 @@ export default function Id() {
               </Tab.Container>
               {/*탭 end*/}
               {isLeader() && !isStart ? (
-                <Button
-                  className={`w-full`}
-                  variant="green-primary"
-                  size="50"
-                  onClick={startCompetition}>
-                  대회시작
-                </Button>
+                <div className={`bottom-fixed btns bg-white`}>
+                  <Button
+                    className={`w-full`}
+                    variant="green-primary"
+                    size="50"
+                    onClick={startCompetition}>
+                    대회시작
+                  </Button>
+                </div>
               ) : isValidJoin() ? (
-                <div className={`bottom-fixed btns bg-white flex`}>
+                <div className={`bottom-fixed btns bg-white`}>
                   <Button
                     className={`w-full`}
                     variant="green-primary"

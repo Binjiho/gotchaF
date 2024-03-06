@@ -51,11 +51,13 @@ export default function CompetitionItem({ item }) {
   }
 
   const goDetailPage = () => {
-    router.push(`/competition/${item.uid}`);
+    router.push(`/competition/${item.sid}`);
   };
 
   return (
-    <div className={`border-b !border-b-gray4 py-[22px]`} onClick={goDetailPage}>
+    <div
+      className={`border-b !border-b-gray4 py-[22px] cursor-pointer`}
+      onClick={goDetailPage}>
       <div className={`flex gap-[5px]`}>
         <Badge pill bg="secondary" size={12}>
           {item.region}

@@ -46,7 +46,7 @@ export default function Index() {
       <SearchHeader onSearch={searchTeam}>
         <p type={"left"}>팀</p>
       </SearchHeader>
-      <main className={`pb-20`}>
+      <main className={`pb-20 inner`}>
         <div className={`pt-[20px] pb-[50px]`}>
           {!teamList ? (
             <div className={"text-center"}>

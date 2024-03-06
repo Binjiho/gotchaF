@@ -29,9 +29,21 @@ export default function AreaSelect({ value, setValue, title }) {
   }, [showModal]);
 
   useEffect(() => {
-    if (!value[0]?.code) return;
+    if (!value[0]?.code) {
+      if (typeof value === "string") {
+        getCityList();
+      }
+      return;
+    }
     setShowModal(false);
   }, [value]);
+
+  useEffect(() => {
+    if (typeof value === "string") {
+      const findArea = addressList.find(item => item.name === value);
+      setValue([findArea]);
+    }
+  }, [addressList]);
 
   return (
     <>
