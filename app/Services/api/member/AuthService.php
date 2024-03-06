@@ -122,7 +122,7 @@ class AuthService extends Services
             if($user){
                 if(Auth::loginUsingId($user['sid'])) {
                     $token = auth()->user()->createToken('gotcha')->plainTextToken;
-                    $cookie = Cookie::make('token', $token);
+                    $cookie = Cookie::make('token', $token)->withHttpOnly(false);
                     return redirect("https://www.matchwt.com")->withCookie($cookie);
 //                    return redirect("https://www.matchwt.com")->withHeaders(['Authorization' => 'Bearer ' . $token]);
 //                    return response()->json([
