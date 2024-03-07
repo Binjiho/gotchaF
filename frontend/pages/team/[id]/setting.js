@@ -60,15 +60,15 @@ export default function Setting() {
         </h2>
       </PrevHeader>
       <main>
-        <EditLabel title={"팀 기본 정보 관리"}></EditLabel>
-        <div className={`inner`}>
-          <EditItem
-            title={`팀 설정`}
-            style={`border-none`}
-            onButtonClick={() => router.push(`/team/${teamId}/edit`)}></EditItem>
-        </div>
         {isLeader() && (
           <>
+            <EditLabel title={"팀 기본 정보 관리"}></EditLabel>
+            <div className={`inner`}>
+              <EditItem
+                title={`팀 설정`}
+                style={`border-none`}
+                onButtonClick={() => router.push(`/team/${teamId}/edit`)}></EditItem>
+            </div>
             <EditLabel title={"멤버 가입 관리"}></EditLabel>
             <div className={`inner`}>
               <EditItem

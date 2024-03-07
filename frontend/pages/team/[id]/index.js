@@ -14,9 +14,10 @@ import TeamMemberProfile from "@/components/team/TeamMemberProfile";
 import NoticeCardItem from "@/components/team/NoticeCardItem";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCookie } from "@/helper/cookies";
+import { getCookie, setCookie } from "@/helper/cookies";
 import { toast } from "react-toastify";
 import { shareNowUrl } from "@/helper/UIHelper";
+import { setUser } from "@/actions/userActions";
 
 export default function Index() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function Index() {
   const [isLeader, setIsLeader] = useState(false);
   const [isManagement, setIsManagement] = useState(false);
   const [isMember, setIsMember] = useState(false);
+  const dispatch = useDispatch();
 
   const getTeam = function () {
     sendAnonymousGet(`/api/teams/detail/${teamId}`, null, res => {
@@ -83,6 +85,20 @@ export default function Index() {
 
     sendPost(`/api/teams/signup/${teamId}`, data, res => {
       toast("팀 가입신청을 보냈습니다.");
+      dispatch(
+        setUser({
+          ...user,
+          tid: teamId,
+        })
+      );
+      setCookie(
+        "user",
+        JSON.stringify({
+          ...user,
+          tid: teamId,
+        }),
+        7
+      );
       getTeam();
     });
   };

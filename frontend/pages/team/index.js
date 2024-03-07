@@ -6,6 +6,7 @@ import NavBottom from "@/components/layout/NavBottom";
 import { Spinner } from "react-bootstrap";
 import { useRouter } from "next/router";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
+import {useSelector} from "react-redux";
 //스크롤 추후 적용 필요
 
 const searchFilter = {
@@ -16,6 +17,7 @@ const searchFilter = {
 export default function Index() {
   const [teamList, setTeamList] = useState([]);
   const router = useRouter();
+    const user = useSelector(state => state.user);
 
   const getTeamList = function () {
     sendAnonymousGet(
@@ -60,7 +62,10 @@ export default function Index() {
             ))
           )}
         </div>
-        <FloatAddBtn path={"/team/create"} text={"팀만들기"} isNav></FloatAddBtn>
+          {!user.tid &&
+              <FloatAddBtn path={"/team/create"} text={"팀만들기"} isNav></FloatAddBtn>
+          }
+
       </main>
       <NavBottom></NavBottom>
     </div>

@@ -99,6 +99,10 @@ export default function Id() {
         let round = 1;
         let order = 1;
 
+        if (result.length === 0) {
+          return;
+        }
+
         result.map(item => {
           if (round < item.round) {
             round = Number(item.round);
@@ -191,7 +195,7 @@ export default function Id() {
 
     const isEnd = new Date(competitionInfo.event_sdate) < new Date();
 
-    return user && !isTeam && !isEnd && competitionInfo !== "S";
+    return user && user.tid && !isTeam && !isEnd && competitionInfo !== "S";
   };
 
   const isLeader = () => {
@@ -298,17 +302,17 @@ export default function Id() {
                       </p>
                     </li>
                     <li>
-                      <TimeLineIcon width={16} />
-                      <p>
-                        {printDateTimeFormat(competitionInfo.event_edate, "MM월 dd일")}{" "}
-                        마감
-                      </p>
-                    </li>
-                    <li>
                       <RightCircleIcon width={16} />
                       <p>
                         {printDateTimeFormat(competitionInfo.event_sdate, "MM월 dd일")}{" "}
                         시작
+                      </p>
+                    </li>
+                    <li>
+                      <TimeLineIcon width={16} />
+                      <p>
+                        {printDateTimeFormat(competitionInfo.event_edate, "MM월 dd일")}{" "}
+                        마감
                       </p>
                     </li>
                   </ul>

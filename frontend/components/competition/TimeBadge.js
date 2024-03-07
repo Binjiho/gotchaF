@@ -14,8 +14,8 @@ export default function TimeBadge({ eventStart, eventEnd, limit, teamCount }) {
     );
     setIsGardeningImminent(Number(limit) - 1 === Number(teamCount));
 
-    const milliseconds = new Date(eventEnd) - new Date(eventStart);
-    const days = Math.floor(milliseconds / (24 * 60 * 60 * 1000));
+    const milliseconds = new Date(eventStart) - new Date();
+    const days = Math.ceil(milliseconds / (24 * 60 * 60 * 1000));
 
     setEventDDay(days);
   }, [eventStart, eventEnd, limit, teamCount]);
@@ -37,9 +37,9 @@ export default function TimeBadge({ eventStart, eventEnd, limit, teamCount }) {
         //진행
         <TimeBlock text={`진행중`} color={`text-blue_primary`} />
       ) : isGardeningImminent ? (
-        <TimeBlock text={`모집중 D${eventDDay}`} color={`text-red_primary`} />
+        <TimeBlock text={`모집중 D-${eventDDay}`} color={`text-red_primary`} />
       ) : (
-        <TimeBlock text={`모집중 D${eventDDay}`} color={`text-green_primary`} />
+        <TimeBlock text={`모집중 D-${eventDDay}`} color={`text-green_primary`} />
       )}
     </>
   );

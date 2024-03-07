@@ -62,8 +62,8 @@ export default function Index() {
   useEffect(() => {
     if (!startDate || !endDate) return;
 
-    if (endDate > startDate) {
-      toast("희망일은 마감일보다 늦어야 합니다.");
+    if (endDate < startDate) {
+      toast("희망일은 마감일보다 빨라야 합니다.");
       setEndDate("");
     }
   }, [startDate, endDate]);
@@ -164,7 +164,7 @@ export default function Index() {
               setValue={setStartDate}></EditItemDateSelect>
             <EditItemDateSelect
               placeholder={`날짜 선택`}
-              title={`리그 모집 마감일`}
+              title={`경기 마감일`}
               value={endDate}
               setValue={setEndDate}></EditItemDateSelect>
             <EditItemSelect

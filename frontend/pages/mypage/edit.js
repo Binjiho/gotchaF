@@ -38,7 +38,7 @@ export default function Edit() {
   }, [userInfo]);
 
   useEffect(() => {
-    if (nickName.trim() === "" || !position) {
+    if (nickName?.trim() === "" || !position) {
       setFormClear(false);
       return;
     }

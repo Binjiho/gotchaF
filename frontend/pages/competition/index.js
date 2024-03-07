@@ -9,6 +9,7 @@ import { Spinner } from "react-bootstrap";
 import { removeEmptyObject, replaceQueryPage, getParameter } from "@/helper/UIHelper";
 import { COMPETITION_TYPE, COMPETITION_SORTING } from "@/constants/serviceConstants";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
+import { useSelector } from "react-redux";
 
 const initialSearch = {
   page: 1,
@@ -21,6 +22,7 @@ export default function Index() {
   const router = useRouter();
   const [competitionList, setCompetitionList] = useState(null);
   const [searchFilter, setSearchFilter] = useState(null);
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
     setSearchFilter(prevState => {
@@ -109,7 +111,7 @@ export default function Index() {
             <Nav.Link eventKey={COMPETITION_SORTING.END}>종료된</Nav.Link>
           </Nav.Item>
         </Nav>
-        <div className={`mt-[10px]`}>
+        <div className={`mt-[10px] pb-[100px]`}>
           {!competitionList ? (
             <div className={"text-center"}>
               <Spinner></Spinner>
@@ -124,7 +126,12 @@ export default function Index() {
             ))
           )}
         </div>
-        <FloatAddBtn path={"/competition/create"} text={"리그만들기"} isNav></FloatAddBtn>
+        {user.tid && (
+          <FloatAddBtn
+            path={`/competition/create?type=${searchFilter?.type}`}
+            text={`${Number(searchFilter?.type) === 1 ? "리그" : "컵"}만들기`}
+            isNav></FloatAddBtn>
+        )}
       </main>
       <NavBottom></NavBottom>
     </div>

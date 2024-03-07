@@ -33,12 +33,13 @@ export default function Create() {
   const [formClear, setFormClear] = useState(false);
   const router = useRouter();
   const user = useSelector(state => state.user);
+  const competitionType = Number(router.query.type);
 
   useEffect(() => {
     if (!startDate || !endDate) return;
 
-    if (endDate > startDate) {
-      toast("희망일은 마감일보다 늦어야 합니다.");
+    if (endDate < startDate) {
+      toast("희망일은 마감일보다 빨라야 합니다.");
       setEndDate("");
     }
   }, [startDate, endDate]);
@@ -81,6 +82,8 @@ export default function Create() {
     );
   };
 
+  const competitionName = competitionType === 1 ? "리그" : "컵";
+
   return (
     <>
       <PrevHeader>
@@ -101,7 +104,7 @@ export default function Create() {
             <Form.Group>
               <Form.Control
                 as={`textarea`}
-                placeholder={`리그 이름을 입력해주세요. (최대 30자)`}
+                placeholder={`${competitionName} 이름을 입력해주세요. (최대 30자)`}
                 value={title}
                 rows={1}
                 onChange={e => setTitle(e.target.value)}
@@ -139,7 +142,7 @@ export default function Create() {
               setValue={setStartDate}></EditItemDateSelect>
             <EditItemDateSelect
               placeholder={`날짜 선택`}
-              title={`리그 모집 마감일`}
+              title={`경기 마감일`}
               value={endDate}
               setValue={setEndDate}></EditItemDateSelect>
             <EditItemSelect
@@ -154,15 +157,17 @@ export default function Create() {
               setValue={setWeekDate}
               style={`!border-none`}></EditItemWeekSelect>
           </ul>
-          <div className={`mt-[60px] text-gray7 text-[13px] inner`}>
-            <h4 className={`font-bold`}>리그 형식</h4>
-            <ul className={`mt-[5px] flex flex-column `}>
-              <li className={`left-dot`}>단일 대결</li>
-              <li className={`left-dot`}>
-                승리당 점수 +3 / 무승부당 점수 +1 / 패배당 점수 +0
-              </li>
-            </ul>
-          </div>
+          {competitionType === 1 && (
+            <div className={`mt-[44px] text-gray7 text-[13px] inner`}>
+              <h4 className={`font-bold`}>리그 형식</h4>
+              <ul className={`mt-[5px] flex flex-column `}>
+                <li className={`left-dot`}>단일 대결</li>
+                <li className={`left-dot`}>
+                  승리당 점수 +3 / 무승부당 점수 +1 / 패배당 점수 +0
+                </li>
+              </ul>
+            </div>
+          )}
         </Form>
       </main>
     </>
