@@ -5,11 +5,14 @@ import { useRouter } from "next/router";
 import { useModal } from "@/context/ModalContext";
 import { sendPost } from "@/helper/api";
 import { toast } from "react-toastify";
+import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
+import { useSelector } from "react-redux";
 
 export default function Setting() {
   const router = useRouter();
   const teamId = router.query.id;
   const { openModal } = useModal();
+  const user = useSelector(state => state.user);
 
   const transConfirm = item => {
     const modalContent = (
@@ -28,6 +31,13 @@ export default function Setting() {
         return;
       }
     );
+  };
+
+  const isLeader = () => {
+    const team = Number(teamId) === Number(user.tid);
+    const leader = user.level === TEAM_MEMBER_LEVEL.LEADER;
+
+    return user && team && leader;
   };
 
   const deleteTeam = () => {
@@ -57,12 +67,16 @@ export default function Setting() {
             style={`border-none`}
             onButtonClick={() => router.push(`/team/${teamId}/edit`)}></EditItem>
         </div>
-        <EditLabel title={"멤버 가입 관리"}></EditLabel>
-        <div className={`inner`}>
-          <EditItem
-            title={`가입대기리스트`}
-            onButtonClick={() => router.push(`/team/${teamId}/edit/join`)}></EditItem>
-        </div>
+        {isLeader() && (
+          <>
+            <EditLabel title={"멤버 가입 관리"}></EditLabel>
+            <div className={`inner`}>
+              <EditItem
+                title={`가입대기리스트`}
+                onButtonClick={() => router.push(`/team/${teamId}/edit/join`)}></EditItem>
+            </div>
+          </>
+        )}
         <EditLabel title={"멤버 활동 관리"}></EditLabel>
         <div className={`inner`}>
           <EditItem
@@ -73,18 +87,24 @@ export default function Setting() {
             onButtonClick={() =>
               router.push(`/team/${teamId}/edit/management`)
             }></EditItem>
-          <EditItem
-            title={`리더 양도`}
-            style={`border-none`}
-            onButtonClick={() => router.push(`/team/${teamId}/edit/leader`)}></EditItem>
+          {isLeader() && (
+            <EditItem
+              title={`리더 양도`}
+              style={`border-none`}
+              onButtonClick={() => router.push(`/team/${teamId}/edit/leader`)}></EditItem>
+          )}
         </div>
-        <hr className={`hr-line`} />
-        <div className={`inner`}>
-          <EditItem
-            title={`팀 삭제하기`}
-            style={`text-red_primary`}
-            onButtonClick={transConfirm}></EditItem>
-        </div>
+        {isLeader() && (
+          <>
+            <hr className={`hr-line`} />
+            <div className={`inner`}>
+              <EditItem
+                title={`팀 삭제하기`}
+                style={`text-red_primary`}
+                onButtonClick={transConfirm}></EditItem>
+            </div>
+          </>
+        )}
       </main>
     </>
   );

@@ -5,11 +5,14 @@ import { sendGet } from "@/helper/api";
 import { useRouter } from "next/router";
 import NoticeItem from "@/components/team/NoticeItem";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
+import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
+import { useSelector } from "react-redux";
 
 export default function Notice() {
   const router = useRouter();
   const [teamNotice, setTeamNotice] = useState([]);
   const teamId = router.query.id;
+  const user = useSelector(state => state.user);
 
   const getNotice = function () {
     sendGet(`/api/boards/board-notice/${teamId}`, null, res => {
@@ -21,6 +24,13 @@ export default function Notice() {
     if (!teamId) return;
     getNotice();
   }, [teamId]);
+
+  const isLeader = () => {
+    const team = Number(teamId) === Number(user.tid);
+    const leader = user.level === TEAM_MEMBER_LEVEL.LEADER;
+
+    return user && team && leader;
+  };
 
   return (
     <>
@@ -46,9 +56,11 @@ export default function Notice() {
                 <hr className={`hr-line`} />
               </div>
             ))}
-            <FloatAddBtn
-              path={`/team/${teamId}/notice/create`}
-              text={"글쓰기"}></FloatAddBtn>
+            {isLeader() && (
+              <FloatAddBtn
+                path={`/team/${teamId}/notice/create`}
+                text={"글쓰기"}></FloatAddBtn>
+            )}
           </>
         )}
       </main>

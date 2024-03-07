@@ -5,7 +5,6 @@ import PrevHeader from "@/components/layout/PrevHeader";
 import { Badge, Button, Tab, Nav, Spinner } from "react-bootstrap";
 import { SEX_TYPE, TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
 import ShareIcon from "@/public/icons/social/share-line.svg";
-import HeartIcon from "@/public/icons/social/heart-line.svg";
 import MoreVerticalIcon from "@/public/icons/system/more-vertical.svg";
 import { calculateAge } from "@/helper/value";
 import LinkHeader from "@/components/btn/LinkHeader";
@@ -28,6 +27,7 @@ export default function Index() {
   const user = useSelector(state => state.user);
   const [isSendJoin, setIsSendJoin] = useState(false);
   const [isLeader, setIsLeader] = useState(false);
+  const [isManagement, setIsManagement] = useState(false);
   const [isMember, setIsMember] = useState(false);
 
   const getTeam = function () {
@@ -43,11 +43,12 @@ export default function Index() {
         }
 
         if (item.sid === user.sid) {
-          if (
-            item.level === TEAM_MEMBER_LEVEL.LEADER ||
-            item.level === TEAM_MEMBER_LEVEL.MANAGEMENT
-          ) {
+          if (item.level === TEAM_MEMBER_LEVEL.LEADER) {
             setIsLeader(true);
+          }
+
+          if (item.level === TEAM_MEMBER_LEVEL.MANAGEMENT) {
+            setIsManagement(true);
           }
 
           if (item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN) {
@@ -93,7 +94,7 @@ export default function Index() {
   return (
     <>
       <PrevHeader transparent={true}>
-        {isLeader && (
+        {(isLeader || isManagement) && (
           <Button
             variant={`text`}
             type={`right`}
@@ -229,7 +230,7 @@ export default function Index() {
                         active={() => {}}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
                       <div className={`inner`}>
-                        {isLeader ? (
+                        {isLeader || isManagement ? (
                           <RecommendBtn
                             title={`경기를 시작해보세요.`}
                             content={
@@ -268,7 +269,7 @@ export default function Index() {
                             btnMessage={`멤버 초대하기`}
                             active={shareNowUrl}></RecommendBtn>
                         )}
-                        {isLeader && (
+                        {(isLeader || isManagement) && (
                           <RecommendBtn
                             title={`운영진 멤버를 선정하고 권한을 설정하세요.`}
                             content={`공지사항 작성, 경기 만들기 등 팀의 일을 함께 할 운영진을 선정하고 권한을 설정하세요.`}
