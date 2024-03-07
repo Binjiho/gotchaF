@@ -6,14 +6,12 @@ import TodoLineIcon from "@/public/icons/other/todo-line.svg";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
-import { useModal } from "@/context/ModalContext";
 import TeamMemberProfile from "@/components/team/TeamMemberProfile";
 
-export default function Leader() {
+export default function Management() {
   const router = useRouter();
   const teamId = router.query.id;
   const [nowTeamUser, setNowTeamUser] = useState([]);
-  const { openModal } = useModal();
 
   const getTeam = function () {
     sendGet(`/api/teams/detail/${teamId}`, null, res => {
@@ -37,41 +35,22 @@ export default function Leader() {
     getTeam();
   }, [teamId]);
 
-  const transConfirm = item => {
-    const modalContent = (
-      <div className={`text-center`}>
-        <strong className={`text-[18px]`}>리더 양도</strong>
-        <p className={`text-[14px] mt-[10px]`}>
-          000님에게 리더를 양도하시겠습니까?
-          <br />
-          양도 후에는 취소하실 수 없습니다.
-        </p>
-      </div>
-    );
-
-    openModal(
-      modalContent,
-      async () => {
-        await transLeader(item);
-      },
-      () => {
-        return;
-      }
-    );
-  };
-
-  const transLeader = item => {
+  const toggleManagement = item => {
     const data = {
       tid: teamId,
       uid: item.sid,
     };
 
     sendPost(
-      `/api/teams/mendate`,
+      `/api/teams/manager-member`,
       data,
       res => {
-        router.back();
-        toast("리더가 양도되었습니다.");
+        toast(
+          `${item.name}님이 ${
+            item.level === TEAM_MEMBER_LEVEL.MANAGEMENT ? "일반회원" : "운영진"
+          }이 되었습니다.`
+        );
+        getTeam();
       },
       res => {
         toast(res.response.data.message);
@@ -83,7 +62,7 @@ export default function Leader() {
     <>
       <PrevHeader>
         <h2 type={"middle"} className={`text-[15px]`}>
-          리더 양도
+          운영진 관리
         </h2>
       </PrevHeader>
       <main className={`inner`}>
@@ -100,13 +79,23 @@ export default function Leader() {
                 key={item.sid}
                 className={`flex justify-between align-items-center py-[10px]`}>
                 <TeamMemberProfile item={item}></TeamMemberProfile>
-                <Button
-                  variant="black"
-                  size="32"
-                  className={`w-[81px] !flex-[0_0_81px]`}
-                  onClick={() => transConfirm(item)}>
-                  양도
-                </Button>
+                {item.level === TEAM_MEMBER_LEVEL.MANAGEMENT ? (
+                  <Button
+                    variant="gray2"
+                    size="32"
+                    className={`w-[61px] !flex-[0_0_61px]`}
+                    onClick={() => toggleManagement(item)}>
+                    일반
+                  </Button>
+                ) : (
+                  <Button
+                    variant="yellow-primary"
+                    size="32"
+                    className={`w-[61px] !flex-[0_0_61px]`}
+                    onClick={() => toggleManagement(item)}>
+                    운영진
+                  </Button>
+                )}
               </div>
             ))}
           </>

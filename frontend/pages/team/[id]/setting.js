@@ -68,7 +68,11 @@ export default function Setting() {
           <EditItem
             title={`멤버 탈퇴`}
             onButtonClick={() => router.push(`/team/${teamId}/edit/quit`)}></EditItem>
-          <EditItem title={`운영진 관리`}></EditItem>
+          <EditItem
+            title={`운영진 관리`}
+            onButtonClick={() =>
+              router.push(`/team/${teamId}/edit/management`)
+            }></EditItem>
           <EditItem
             title={`리더 양도`}
             style={`border-none`}

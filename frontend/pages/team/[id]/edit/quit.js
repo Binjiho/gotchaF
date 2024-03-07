@@ -14,11 +14,14 @@ export default function Quit() {
   const [nowTeamUser, setNowTeamUser] = useState([]);
 
   const getTeam = function () {
-    sendGet(`/api/teams/${teamId}`, null, res => {
+    sendGet(`/api/teams/detail/${teamId}`, null, res => {
       const nowTeam = [];
 
       res.data.team_users.map(item => {
-        if (item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN) {
+        if (
+          item.level !== TEAM_MEMBER_LEVEL.WAITING_JOIN &&
+          item.level !== TEAM_MEMBER_LEVEL.LEADER
+        ) {
           nowTeam.push(item);
         }
       });
@@ -58,7 +61,7 @@ export default function Quit() {
           멤버 탈퇴
         </h2>
       </PrevHeader>
-      <main>
+      <main className={`inner`}>
         {!nowTeamUser.length ? (
           <div
             className={`flex flex-column align-items-center justify-center gap-[12px] pt-[100px]`}>

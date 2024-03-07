@@ -1,6 +1,6 @@
 import PrevHeader from "@/components/layout/PrevHeader";
 import { useEffect, useState } from "react";
-import { sendPost } from "@/helper/api";
+import { sendGet, sendPost } from "@/helper/api";
 import { toast } from "react-toastify";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import { useRouter } from "next/router";
@@ -15,6 +15,7 @@ export default function Create() {
   const [file, setFile] = useState(null);
   const router = useRouter();
   const teamId = router.query.id;
+  const editId = router.query.edit;
 
   useEffect(() => {
     if (!noticeTitle || !noticeContents) {
@@ -25,11 +26,33 @@ export default function Create() {
     setFormClear(true);
   }, [noticeTitle, noticeContents]);
 
-  const createTeam = () => {
+  useEffect(() => {
+    if (editId) {
+      getNotice();
+    }
+  }, [editId]);
+
+  const getNotice = function () {
+    sendGet(`/api/boards/board-notice/${teamId}/${editId}`, null, res => {
+      const notice = res.data.board;
+
+      setNoticeTitle(notice.title);
+      setNoticeContents(notice.contents);
+      setFile(notice.file_path);
+    });
+  };
+
+  const getFormData = () => {
     const formData = new FormData();
     formData.append("files[]", file);
     formData.append("title", noticeTitle);
     formData.append("contents", noticeContents);
+
+    return formData;
+  };
+
+  const createNotice = () => {
+    const formData = getFormData();
 
     sendPost(
       `/api/boards/board-notice/${teamId}`,
@@ -43,20 +66,47 @@ export default function Create() {
     );
   };
 
+  const editNotice = () => {
+    const formData = getFormData();
+
+    formData.append("del_yn", "N");
+
+    sendPost(
+      `/api/boards/board-notice/${teamId}/${editId}`,
+      formData,
+      res => {
+        toast("공지가 수정되었습니다.");
+        router.back();
+      },
+      () => {},
+      REQUEST_HEADER_CONTENTS_FORM
+    );
+  };
+
   return (
     <>
       <PrevHeader>
         <h2 type={"middle"} className={`text-[15px]`}>
-          글쓰기
+          {editId ? "글 수정하기" : "글쓰기"}
         </h2>
         <div type={"right"}>
-          <Button
-            variant={"text"}
-            className={`text-[15px] text-green_primary bg-white [&:disabled]:!text-gray7`}
-            disabled={!formClear}
-            onClick={createTeam}>
-            등록
-          </Button>
+          {editId ? (
+            <Button
+              variant={"text"}
+              className={`text-[15px] text-green_primary bg-white [&:disabled]:!text-gray7`}
+              disabled={!formClear}
+              onClick={editNotice}>
+              수정
+            </Button>
+          ) : (
+            <Button
+              variant={"text"}
+              className={`text-[15px] text-green_primary bg-white [&:disabled]:!text-gray7`}
+              disabled={!formClear}
+              onClick={createNotice}>
+              등록
+            </Button>
+          )}
         </div>
       </PrevHeader>
       <main className={`pb-[20px]`}>

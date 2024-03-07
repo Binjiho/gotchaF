@@ -189,14 +189,16 @@ export default function Id() {
       team => Number(team.tid) === Number(user.tid)
     );
 
-    return user && !isTeam && key !== "consult";
+    const isEnd = new Date(competitionInfo.event_sdate) < new Date();
+
+    return user && !isTeam && !isEnd && competitionInfo !== "S";
   };
 
   const isLeader = () => {
-    const team = Number(competitionInfo.tid) === Number(user.tid);
+    const team = Number(competitionInfo?.tid) === Number(user.tid);
     const leader = user.level === TEAM_MEMBER_LEVEL.LEADER;
 
-    return user && team && leader && key !== "consult";
+    return user && team && leader;
   };
 
   const isStart = competitionInfo?.start === "S";
@@ -204,13 +206,15 @@ export default function Id() {
   return (
     <>
       <PrevHeader transparent={true}>
-        <Button
-          variant={`text`}
-          type={`right`}
-          className={`text-current`}
-          onClick={goTeamSetting}>
-          <MoreVerticalIcon width={24} />
-        </Button>
+        {isLeader() && (
+          <Button
+            variant={`text`}
+            type={`right`}
+            className={`text-current`}
+            onClick={goTeamSetting}>
+            <MoreVerticalIcon width={24} />
+          </Button>
+        )}
       </PrevHeader>
       <main className={`position-relative`}>
         <div
@@ -455,28 +459,32 @@ export default function Id() {
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}
-              {isLeader() && !isStart ? (
-                <div className={`bottom-fixed btns bg-white`}>
-                  <Button
-                    className={`w-full`}
-                    variant="green-primary"
-                    size="50"
-                    onClick={startCompetition}>
-                    대회시작
-                  </Button>
-                </div>
-              ) : isValidJoin() ? (
-                <div className={`bottom-fixed btns bg-white`}>
-                  <Button
-                    className={`w-full`}
-                    variant="green-primary"
-                    size="50"
-                    onClick={joinCompetition}>
-                    참가하기
-                  </Button>
-                </div>
-              ) : (
-                ""
+              {key !== "consult" && (
+                <>
+                  {isLeader() && !isStart ? (
+                    <div className={`bottom-fixed btns bg-white`}>
+                      <Button
+                        className={`w-full`}
+                        variant="green-primary"
+                        size="50"
+                        onClick={startCompetition}>
+                        대회시작
+                      </Button>
+                    </div>
+                  ) : isValidJoin() ? (
+                    <div className={`bottom-fixed btns bg-white`}>
+                      <Button
+                        className={`w-full`}
+                        variant="green-primary"
+                        size="50"
+                        onClick={joinCompetition}>
+                        참가하기
+                      </Button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </>
               )}
             </>
           ) : (

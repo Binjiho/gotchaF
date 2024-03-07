@@ -187,6 +187,16 @@ textarea.form-control {
     }
   }
 
+  &.btn-yellow-primary {
+    background: $yellow_primary;
+    color: #fff;
+
+    &:active {
+      background: #cc9813;
+      color: #fff;
+    }
+  }
+
   &.btn-green-primary {
     background: $green_primary;
     color: #fff;

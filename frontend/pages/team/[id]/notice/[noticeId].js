@@ -25,12 +25,23 @@ export default function NoticeId() {
     getNotice();
   }, [noticeId]);
 
+  const editNotice = () => {
+    router.push(`/team/${teamId}/notice/create?edit=${noticeId}`);
+  };
+
   return (
     <>
       <PrevHeader>
         <h2 type={"middle"} className={`text-[15px]`}>
           공지글
         </h2>
+        <Button
+          variant={`text`}
+          type={`right`}
+          className={`text-green_primary`}
+          onClick={editNotice}>
+          수정
+        </Button>
       </PrevHeader>
       <main className={`inner`}>
         {notice && (
@@ -50,7 +61,9 @@ export default function NoticeId() {
             </div>
             <div className={`pt-[20px]`}>
               <h3 className={`text-[18px] text-gray10 font-medium`}>{notice.title}</h3>
-              <p className={`pt-[20px] text-[15px] text-gray10`}>{notice.contents}</p>
+              <p className={`pt-[20px] text-[15px] text-gray10 whitespace-pre-wrap`}>
+                {notice.contents}
+              </p>
               <div className={`mt-[20px]`}>
                 <img src={notice.file_path} alt="" className={`w-full`} />
               </div>

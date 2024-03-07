@@ -93,13 +93,15 @@ export default function Index() {
   return (
     <>
       <PrevHeader transparent={true}>
-        <Button
-          variant={`text`}
-          type={`right`}
-          className={`text-current`}
-          onClick={goTeamSetting}>
-          <MoreVerticalIcon width={24} />
-        </Button>
+        {isLeader && (
+          <Button
+            variant={`text`}
+            type={`right`}
+            className={`text-current`}
+            onClick={goTeamSetting}>
+            <MoreVerticalIcon width={24} />
+          </Button>
+        )}
       </PrevHeader>
       <main className={`position-relative`}>
         <div
