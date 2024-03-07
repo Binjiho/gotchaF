@@ -24,7 +24,7 @@ export default function UploadImage({ file, setFile }) {
           controlId="formImage"
           className={`w-[100px] h-[100px] bg-gray3 rounded-[3px]`}>
           <Form.Label
-            className={`w-full h-full flex flex-column align-items-center justify-center text-gray7 mb-0`}>
+            className={`w-full h-full flex flex-column align-items-center justify-center text-gray7 mb-0 cursor-pointer`}>
             <Image width={`32px`} className={`text-gray6`}></Image>
             <span className={`text-[14px] mt-[2px]`}>사진 추가</span>
           </Form.Label>
@@ -39,7 +39,7 @@ export default function UploadImage({ file, setFile }) {
       {file && (
         <div
           className={`w-[100px] h-[100px] bg-gray3 rounded-[3px] overflow-hidden relative`}>
-          <img src={image} className={`object-cover w-full`} />
+          <img src={image} className={`object-cover w-full h-full`} />
           <Form.Group
             controlId="formImage"
             className={`absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]`}>

@@ -55,6 +55,10 @@ export default function Index() {
     getDetailMatch();
   }, []);
 
+  const userEdit = () => {
+    router.push("/mypage/edit");
+  };
+
   return (
     <>
       <SearchHeader>
@@ -110,7 +114,10 @@ export default function Index() {
                 </div>
                 <p className={`text-[13px] text-gray7`}>{user.email}</p>
               </div>
-              <Button variant={`text`} className={`!p-[10px] ml-auto text-gray6`}>
+              <Button
+                variant={`text`}
+                className={`!p-[10px] ml-auto text-gray6`}
+                onClick={userEdit}>
                 <SettingIcon width={20}></SettingIcon>
               </Button>
             </div>

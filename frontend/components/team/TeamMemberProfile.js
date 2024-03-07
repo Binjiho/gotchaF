@@ -8,7 +8,7 @@ export default function TeamMemberProfile({ item }) {
 
   return (
     <div className={`flex gap-[16px]`}>
-      <MemberImage img={item.img} role={item.level} size={42}></MemberImage>
+      <MemberImage img={item.file_path} role={item.level} size={42}></MemberImage>
       <div>
         <p className={`text-[14px] font-medium`}>{item.name}</p>
         <div className={`text-[#A2A6A9] text-[13px] flex align-items-center`}>

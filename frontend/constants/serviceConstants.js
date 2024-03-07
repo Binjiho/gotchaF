@@ -45,6 +45,11 @@ export const TEAM_POSITION = {
   2: "중원",
   3: "수비수",
   4: "골키퍼",
+  ALL: 0,
+  ATTACK: 1,
+  MIDFIELD: 2,
+  DEFENCE: 3,
+  GOALKEEPER: 4,
 };
 
 export const COMPETITION_STATE = {

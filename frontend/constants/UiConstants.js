@@ -1,4 +1,4 @@
-import { COMPETITION_KIND, SEX_TYPE } from "@/constants/serviceConstants";
+import { COMPETITION_KIND, SEX_TYPE, TEAM_POSITION } from "@/constants/serviceConstants";
 
 export const competitionKindList = [
   {
@@ -127,5 +127,28 @@ export const weekList = [
   {
     value: 0,
     name: "일",
+  },
+];
+
+export const teamPositionList = [
+  {
+    value: TEAM_POSITION.ALL,
+    name: TEAM_POSITION[0],
+  },
+  {
+    value: TEAM_POSITION.ATTACK,
+    name: TEAM_POSITION[1],
+  },
+  {
+    value: TEAM_POSITION.MIDFIELD,
+    name: TEAM_POSITION[2],
+  },
+  {
+    value: TEAM_POSITION.DEFENCE,
+    name: TEAM_POSITION[3],
+  },
+  {
+    value: TEAM_POSITION.GOALKEEPER,
+    name: TEAM_POSITION[4],
   },
 ];
