@@ -18,12 +18,14 @@ import { getCookie, setCookie } from "@/helper/cookies";
 import { toast } from "react-toastify";
 import { shareNowUrl } from "@/helper/UIHelper";
 import { setUser } from "@/actions/userActions";
+import FloatAddBtn from "@/components/btn/FloatAddBtn";
 
 export default function Index() {
   const router = useRouter();
   const [teamInfo, setTeamInfo] = useState(null);
   const [nowTeamUser, setNowTeamUser] = useState([]);
   const [teamNotice, setTeamNotice] = useState([]);
+  const [teamGallery, setTeamGallery] = useState([]);
   const teamId = router.query.id;
   const user = useSelector(state => state.user);
   const [isSendJoin, setIsSendJoin] = useState(false);
@@ -31,6 +33,7 @@ export default function Index() {
   const [isManagement, setIsManagement] = useState(false);
   const [isMember, setIsMember] = useState(false);
   const dispatch = useDispatch();
+  const [key, setKey] = useState("home");
 
   const getTeam = function () {
     sendAnonymousGet(`/api/teams/detail/${teamId}`, null, res => {
@@ -69,11 +72,23 @@ export default function Index() {
     });
   };
 
+  const getGallery = function () {
+    sendAnonymousGet(`/api/boards/board-gallery/${teamId}`, null, res => {
+      setTeamGallery(res.data.boards);
+    });
+  };
+
   useEffect(() => {
     if (!teamId) return;
-    getTeam();
-    getNotice();
-  }, [teamId]);
+
+    if (key === "home") {
+      getTeam();
+      getNotice();
+    } else if (key === "record") {
+    } else if (key === "gallery") {
+      getGallery();
+    }
+  }, [key, teamId]);
 
   const joinTeam = async () => {
     const token = await getCookie("accessToken");
@@ -190,7 +205,10 @@ export default function Index() {
                 </div>
               </div>
               {/*탭 start*/}
-              <Tab.Container id="left-tabs-example" defaultActiveKey="home">
+              <Tab.Container
+                id="left-tabs-example"
+                activeKey={key}
+                onSelect={k => setKey(k)}>
                 <Nav variant="underline">
                   <Nav.Item>
                     <Nav.Link eventKey="home">홈</Nav.Link>
@@ -298,7 +316,26 @@ export default function Index() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="record">Second tab content</Tab.Pane>
-                  <Tab.Pane eventKey="gallery">Second tab content</Tab.Pane>
+                  <Tab.Pane eventKey="gallery">
+                    <div className={`inner pt-[20px] pb-[80px]`}>
+                      <ul className={`grid grid-cols-4 gap-[7px]`}>
+                        {teamGallery.map((item, index) => (
+                          <li
+                            key={`gallery-${index}`}
+                            className={`w-[100%] position-relative after:content-[''] after:block after:pb-[100%] rounded-[3px] overflow-hidden`}>
+                            <img
+                              src={item.file_path}
+                              alt=""
+                              className={`w-full h-full object-cover position-absolute`}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <FloatAddBtn
+                      path={`/team/${teamId}/gallery/create`}
+                      text={"등록"}></FloatAddBtn>
+                  </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
               {/*탭 end*/}
