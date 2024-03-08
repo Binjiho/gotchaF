@@ -3,7 +3,11 @@ import { sendAnonymousGet, sendGet, sendPost } from "@/helper/api";
 import { useRouter } from "next/router";
 import PrevHeader from "@/components/layout/PrevHeader";
 import { Badge, Button, Tab, Nav, Spinner } from "react-bootstrap";
-import { SEX_TYPE, TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
+import {
+  COMPETITION_TYPE,
+  SEX_TYPE,
+  TEAM_MEMBER_LEVEL,
+} from "@/constants/serviceConstants";
 import ShareIcon from "@/public/icons/social/share-line.svg";
 import MoreVerticalIcon from "@/public/icons/system/more-vertical.svg";
 import { calculateAge } from "@/helper/value";
@@ -20,6 +24,7 @@ import { shareNowUrl } from "@/helper/UIHelper";
 import { setUser } from "@/actions/userActions";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
 import Image from "@/public/icons/tool/image.svg";
+import MatchItem from "@/components/team/MatchItem";
 
 export default function Index() {
   const router = useRouter();
@@ -27,6 +32,7 @@ export default function Index() {
   const [nowTeamUser, setNowTeamUser] = useState([]);
   const [teamNotice, setTeamNotice] = useState([]);
   const [teamGallery, setTeamGallery] = useState([]);
+  const [teamMatch, setTeamMatch] = useState([]);
   const teamId = router.query.id;
   const user = useSelector(state => state.user);
   const [isSendJoin, setIsSendJoin] = useState(false);
@@ -79,6 +85,12 @@ export default function Index() {
     });
   };
 
+  const getTeamMatch = function () {
+    sendAnonymousGet(`/api/teams/detail-match/${teamId}`, null, res => {
+      setTeamMatch(res.data.result);
+    });
+  };
+
   useEffect(() => {
     if (!teamId) return;
 
@@ -86,6 +98,7 @@ export default function Index() {
       getTeam();
       getNotice();
     } else if (key === "record") {
+      getTeamMatch();
     } else if (key === "gallery") {
       getGallery();
     }
@@ -316,7 +329,38 @@ export default function Index() {
                       </div>
                     </div>
                   </Tab.Pane>
-                  <Tab.Pane eventKey="record">Second tab content</Tab.Pane>
+                  <Tab.Pane eventKey="record">
+                    <LinkHeader
+                      title={"경기별기록"}
+                      className={`pt-[30px] mb-[18px]`}></LinkHeader>
+                    <div className={`inner`}>
+                      <Nav
+                        variant="pills"
+                        className={`[&_.nav-link.active]:!bg-green_primary`}
+                        defaultActiveKey={COMPETITION_TYPE.ALL}>
+                        <Nav.Item>
+                          <Nav.Link eventKey={COMPETITION_TYPE.ALL}>전체</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                          <Nav.Link eventKey={COMPETITION_TYPE.LEAGUE}>리그</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                          <Nav.Link eventKey={COMPETITION_TYPE.CUP}>컵</Nav.Link>
+                        </Nav.Item>
+                      </Nav>
+                      {teamMatch.length > 0 ? (
+                        <div className={`mt-[18px] flex flex-column gap-[10px]`}>
+                          {teamMatch.map((match, index) => (
+                            <MatchItem match={match} key={`match-${index}`}></MatchItem>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className={`text-gray7 text-[14px] text-center mt-[30px]`}>
+                          아직 경기 기록이 없습니다.
+                        </p>
+                      )}
+                    </div>
+                  </Tab.Pane>
                   <Tab.Pane eventKey="gallery">
                     <div className={`inner pt-[20px] pb-[80px]`}>
                       {teamGallery.length === 0 ? (

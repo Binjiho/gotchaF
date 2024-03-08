@@ -19,8 +19,10 @@ export const TEAM_MEMBER_LEVEL = {
 };
 
 export const COMPETITION_TYPE = {
+  ALL: 0,
   LEAGUE: 1,
   CUP: 2,
+  0: "ALL",
   1: "LEAGUE",
   2: "CUP",
 };
