@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { shareNowUrl } from "@/helper/UIHelper";
 import { setUser } from "@/actions/userActions";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
+import Image from "@/public/icons/tool/image.svg";
 
 export default function Index() {
   const router = useRouter();
@@ -318,19 +319,32 @@ export default function Index() {
                   <Tab.Pane eventKey="record">Second tab content</Tab.Pane>
                   <Tab.Pane eventKey="gallery">
                     <div className={`inner pt-[20px] pb-[80px]`}>
-                      <ul className={`grid grid-cols-4 gap-[7px]`}>
-                        {teamGallery.map((item, index) => (
-                          <li
-                            key={`gallery-${index}`}
-                            className={`w-[100%] position-relative after:content-[''] after:block after:pb-[100%] rounded-[3px] overflow-hidden`}>
-                            <img
-                              src={item.file_path}
-                              alt=""
-                              className={`w-full h-full object-cover position-absolute`}
-                            />
-                          </li>
-                        ))}
-                      </ul>
+                      {teamGallery.length === 0 ? (
+                        <div className={`text-center pt-[80px]`}>
+                          <Image
+                            width={50}
+                            className={`text-gray6 mx-auto mb-[12px]`}></Image>
+                          <p className={`text-gray7 text-[14px]`}>
+                            멤버들과 사진을 공유하는
+                            <br />
+                            갤러리입니다.
+                          </p>
+                        </div>
+                      ) : (
+                        <ul className={`grid grid-cols-4 gap-[7px]`}>
+                          {teamGallery.map((item, index) => (
+                            <li
+                              key={`gallery-${index}`}
+                              className={`w-[100%] position-relative after:content-[''] after:block after:pb-[100%] rounded-[3px] overflow-hidden`}>
+                              <img
+                                src={item.file_path}
+                                alt=""
+                                className={`w-full h-full object-cover position-absolute`}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                     <FloatAddBtn
                       path={`/team/${teamId}/gallery/create`}
