@@ -7,7 +7,11 @@ import { sendAnonymousGet } from "@/helper/api";
 import CompetitionItem from "@/components/competition/CompetitionItem";
 import { Spinner } from "react-bootstrap";
 import { removeEmptyObject, replaceQueryPage, getParameter } from "@/helper/UIHelper";
-import { COMPETITION_TYPE, COMPETITION_SORTING } from "@/constants/serviceConstants";
+import {
+  COMPETITION_TYPE,
+  COMPETITION_SORTING,
+  TEAM_MEMBER_LEVEL,
+} from "@/constants/serviceConstants";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
 import { useSelector } from "react-redux";
 
@@ -72,6 +76,8 @@ export default function Index() {
     });
   };
 
+  const isLeader = user.tid && user.level === TEAM_MEMBER_LEVEL.LEADER;
+
   return (
     <div>
       <SearchHeader onSearch={searchTeam}>
@@ -126,7 +132,7 @@ export default function Index() {
             ))
           )}
         </div>
-        {user.tid && (
+        {isLeader && (
           <FloatAddBtn
             path={`/competition/create?type=${searchFilter?.type}`}
             text={`${Number(searchFilter?.type) === 1 ? "리그" : "컵"}만들기`}

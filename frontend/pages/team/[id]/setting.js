@@ -6,14 +6,16 @@ import { useModal } from "@/context/ModalContext";
 import { sendPost } from "@/helper/api";
 import { toast } from "react-toastify";
 import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/actions/userActions";
+import { setCookie } from "@/helper/cookies";
 
 export default function Setting() {
   const router = useRouter();
   const teamId = router.query.id;
   const { openModal } = useModal();
   const user = useSelector(state => state.user);
-
+  const dispatch = useDispatch();
   const transConfirm = item => {
     const modalContent = (
       <div className={`text-center`}>
@@ -46,7 +48,21 @@ export default function Setting() {
       null,
       res => {
         toast("팀이 삭제되었습니다");
-        router.back();
+        setCookie(
+          "user",
+          JSON.stringify({
+            ...user,
+            tid: null,
+          }),
+          7
+        );
+        dispatch(
+          setUser({
+            ...user,
+            tid: null,
+          })
+        );
+        router.push("/team");
       },
       () => {}
     );

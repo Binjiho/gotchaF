@@ -26,6 +26,7 @@ export default function Index() {
   const [address, setAddress] = useState([]);
   const [teamLength, setTeamLength] = useState("");
   const [competitionKind, setCompetitionKind] = useState("");
+  const [competitionType, setCompetitionType] = useState("");
   const [numberPlayers, setNumberPlayers] = useState("");
   const [frequencyGame, setFrequencyGame] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -46,6 +47,7 @@ export default function Index() {
       setAddress(data.region);
       setTeamLength(data.limit_team);
       setCompetitionKind(data.kind);
+      setCompetitionType(Number(data.type));
       setNumberPlayers(data.person_vs);
       setFrequencyGame(data.frequency);
       setStartDate(printDateTimeFormat(data.event_sdate, "YYYY-MM-dd"));
@@ -81,7 +83,7 @@ export default function Index() {
     const formData = new FormData();
     formData.append("tid", user.tid);
     formData.append("kind", competitionKind);
-    formData.append("type", COMPETITION_TYPE.LEAGUE);
+    formData.append("type", competitionType);
     formData.append("title", title);
     formData.append("contents", "");
     formData.append("region", address[0].name);

@@ -9,6 +9,9 @@ import { useRouter } from "next/router";
 import { REQUEST_HEADER_CONTENTS_FORM } from "@/constants/httpRequest";
 import EditItemSelect from "@/components/team/EditItemSelect";
 import { genderTypeList, yearList, personnelList } from "@/constants/UiConstants";
+import { setUser } from "@/actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import { setCookie } from "@/helper/cookies";
 
 export default function Create() {
   const [teamName, setTeamName] = useState("");
@@ -21,6 +24,8 @@ export default function Create() {
   const [personnel, setPersonnel] = useState("");
   const [formClear, setFormClear] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
     if (!minYear || !maxYear) return;
@@ -66,6 +71,20 @@ export default function Create() {
       res => {
         toast("팀이 생성되었습니다");
         router.back();
+        setCookie(
+          "user",
+          JSON.stringify({
+            ...user,
+            tid: res.data?.team?.sid,
+          }),
+          7
+        );
+        dispatch(
+          setUser({
+            ...user,
+            tid: res.data?.team?.sid,
+          })
+        );
       },
       () => {},
       REQUEST_HEADER_CONTENTS_FORM

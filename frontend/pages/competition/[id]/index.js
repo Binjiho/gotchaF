@@ -193,7 +193,7 @@ export default function Id() {
       team => Number(team.tid) === Number(user.tid)
     );
 
-    const isEnd = new Date(competitionInfo.event_sdate) < new Date();
+    const isEnd = new Date(competitionInfo.event_edate) < new Date();
 
     return user && user.tid && !isTeam && !isEnd && competitionInfo !== "S";
   };
@@ -206,6 +206,8 @@ export default function Id() {
   };
 
   const isStart = competitionInfo?.start === "S";
+  const isJoinCount =
+    Number(competitionInfo?.limit_team) > Number(competitionInfo?.team_count);
 
   return (
     <>
@@ -475,7 +477,7 @@ export default function Id() {
                         대회시작
                       </Button>
                     </div>
-                  ) : isValidJoin() ? (
+                  ) : isValidJoin() && isJoinCount ? (
                     <div className={`bottom-fixed btns bg-white`}>
                       <Button
                         className={`w-full`}

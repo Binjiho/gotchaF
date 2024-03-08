@@ -57,7 +57,7 @@ export default function Create() {
     const formData = new FormData();
     formData.append("tid", user.tid);
     formData.append("kind", competitionKind);
-    formData.append("type", COMPETITION_TYPE.LEAGUE);
+    formData.append("type", competitionType);
     formData.append("title", title);
     formData.append("contents", "");
     formData.append("region", address[0].name);
