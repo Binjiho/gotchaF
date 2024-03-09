@@ -24,7 +24,8 @@ import { shareNowUrl } from "@/helper/UIHelper";
 import { setUser } from "@/actions/userActions";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
 import Image from "@/public/icons/tool/image.svg";
-import MatchItem from "@/components/team/MatchItem";
+import MatchRecordItem from "@/components/team/MatchRecordItem";
+import MatchScheduleItem from "@/components/team/MatchScheduleItem";
 
 export default function Index() {
   const router = useRouter();
@@ -70,6 +71,7 @@ export default function Index() {
       });
 
       setNowTeamUser(nowTeam);
+      setTeamMatch(res.data.team_matches);
     });
   };
 
@@ -85,11 +87,11 @@ export default function Index() {
     });
   };
 
-  const getTeamMatch = function () {
-    sendAnonymousGet(`/api/teams/detail-match/${teamId}`, null, res => {
-      setTeamMatch(res.data.result);
-    });
-  };
+  // const getTeamMatch = function () {
+  //   sendAnonymousGet(`/api/teams/detail-match/${teamId}`, null, res => {
+  //     setTeamMatch(res.data.result);
+  //   });
+  // };
 
   useEffect(() => {
     if (!teamId) return;
@@ -98,7 +100,7 @@ export default function Index() {
       getTeam();
       getNotice();
     } else if (key === "record") {
-      getTeamMatch();
+      // getTeamMatch();
     } else if (key === "gallery") {
       getGallery();
     }
@@ -242,14 +244,13 @@ export default function Index() {
                         title={"공지사항"}
                         active={() => router.push(`/team/${teamId}/notice`)}
                         className={`pt-[30px] mb-[18px]`}></LinkHeader>
-
                       {teamNotice.length ? (
                         <Swiper
                           spaceBetween={10}
                           slidesPerView={teamNotice.length === 1 ? 1 : 1.2}
-                          className={`pl-[20px]`}>
+                          className={`px-[20px]`}>
                           {teamNotice.map(item => (
-                            <SwiperSlide key={item.sid}>
+                            <SwiperSlide key={`notice-${item.sid}`}>
                               <NoticeCardItem item={item}></NoticeCardItem>
                             </SwiperSlide>
                           ))}
@@ -277,8 +278,19 @@ export default function Index() {
                         title={"경기 일정"}
                         active={() => {}}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
-                      <div className={`inner`}>
-                        {isLeader || isManagement ? (
+                      {teamMatch.length > 0 ? (
+                        <Swiper
+                          spaceBetween={10}
+                          slidesPerView={teamMatch.length === 1 ? 1 : 1.2}
+                          className={`px-[20px]`}>
+                          {teamMatch.map(match => (
+                            <SwiperSlide key={`match-${match.sid}`}>
+                              <MatchScheduleItem match={match}></MatchScheduleItem>
+                            </SwiperSlide>
+                          ))}
+                        </Swiper>
+                      ) : isLeader || isManagement ? (
+                        <div className={`inner`}>
                           <RecommendBtn
                             title={`경기를 시작해보세요.`}
                             content={
@@ -289,12 +301,16 @@ export default function Index() {
                               </>
                             }
                             btnMessage={`경기 시작하기`}
-                            active={() => {}}></RecommendBtn>
-                        ) : (
+                            active={() => {
+                              router.push("/competition");
+                            }}></RecommendBtn>
+                        </div>
+                      ) : (
+                        <div className={`inner`}>
                           <NoContentText
                             title={`아직 경기 일정이 없습니다.`}></NoContentText>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <LinkHeader
@@ -324,7 +340,9 @@ export default function Index() {
                             btnMessage={`팀 설정 관리`}
                             btnVariant={"green-sub"}
                             className={"mt-[10px]"}
-                            active={() => {}}></RecommendBtn>
+                            active={() => {
+                              router.push(`/team/${teamId}/edit/management`);
+                            }}></RecommendBtn>
                         )}
                       </div>
                     </div>
@@ -351,7 +369,9 @@ export default function Index() {
                       {teamMatch.length > 0 ? (
                         <div className={`mt-[18px] flex flex-column gap-[10px]`}>
                           {teamMatch.map((match, index) => (
-                            <MatchItem match={match} key={`match-${index}`}></MatchItem>
+                            <MatchRecordItem
+                              match={match}
+                              key={`match-${index}`}></MatchRecordItem>
                           ))}
                         </div>
                       ) : (

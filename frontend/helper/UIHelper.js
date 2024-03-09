@@ -90,3 +90,9 @@ export const calculateDday = targetDate => {
 
   return dayDiff;
 };
+
+export const printDday = targetDate => {
+  const day = calculateDday(targetDate);
+
+  return day < 0 ? `D+${Math.abs(day)}` : day === 0 ? "D-Day" : `D-${day}`;
+};

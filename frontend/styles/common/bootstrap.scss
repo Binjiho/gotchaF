@@ -254,6 +254,17 @@ textarea.form-control {
     }
   }
 
+  &.btn-white {
+    background: white;
+    color: $gray10;
+    border: 1px solid $gray8;
+
+    &:active {
+      background: $gray1;
+      color: $gray10;
+    }
+  }
+
   &.btn-text {
     padding: 0;
   }

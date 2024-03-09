@@ -1,7 +1,7 @@
 import RoundProfile from "@/components/image/RoundProfile";
 import React from "react";
 
-export default function MatchItem({ match }) {
+export default function MatchRecordItem({ match }) {
   const resultScore = 1;
 
   return (

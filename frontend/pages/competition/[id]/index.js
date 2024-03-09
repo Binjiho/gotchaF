@@ -18,7 +18,7 @@ import {
   TEAM_MEMBER_LEVEL,
 } from "@/constants/serviceConstants";
 import { printDateTimeFormat } from "@/helper/value";
-import { convertWeek, calculateDday } from "@/helper/UIHelper";
+import { convertWeek, calculateDday, printDday } from "@/helper/UIHelper";
 import TimeBadge from "@/components/competition/TimeBadge";
 import TeamProfile from "@/components/team/TeamProfile";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -250,7 +250,7 @@ export default function Id() {
                         <div
                           className={`text-red_primary flex align-items-center gap-[5px]`}>
                           <TimeIcon width={16} />
-                          <b>D-{calculateDday(competitionInfo.regist_edate)}</b>
+                          <b>{printDday(competitionInfo.regist_edate)}</b>
                         </div>
                         <span className={`gap-line`}></span>
                         <p className={`text-gray10`}>
