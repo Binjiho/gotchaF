@@ -2,9 +2,7 @@ import { Badge, Button } from "react-bootstrap";
 import NavBottom from "@/components/layout/NavBottom";
 import SearchHeader from "@/components/layout/SearchHeader";
 import { sendGet } from "@/helper/api";
-import { getCookie, removeCookie, setCookie } from "@/helper/cookies";
 import { useRouter } from "next/router";
-import { logoutUser } from "@/actions/userActions";
 import { useDispatch } from "react-redux";
 import UserIcon from "@/public/icons/social/user_line.svg";
 import SettingIcon from "@/public/icons/tool/settings.svg";
@@ -20,24 +18,6 @@ export default function Index() {
   const user = useSelector(state => state.user);
   const [myTeam, setMyTeam] = useState(null);
   const [myTeamRank, setMyTeamRank] = useState(null);
-
-  const logout = async () => {
-    const token = await getCookie("accessToken");
-
-    sendGet(
-      `/api/auth/logout`,
-      {
-        token: token,
-      },
-      res => {
-        dispatch(logoutUser());
-        localStorage.removeItem("persist:user");
-        removeCookie("user");
-        removeCookie("accessToken");
-        router.push("/");
-      }
-    );
-  };
 
   const getMyInfo = async () => {
     sendGet(`/api/mypage/detail`, {}, res => {
@@ -57,6 +37,12 @@ export default function Index() {
 
   const userEdit = () => {
     router.push("/mypage/edit");
+  };
+
+  const goMyTeam = () => {
+    if (myTeam?.sid) {
+      router.push(`/team/${myTeam.sid}`);
+    }
   };
 
   return (
@@ -133,7 +119,7 @@ export default function Index() {
             {/*  팀  */}
             <div className={`mt-[40px]`}>
               <h3 className={`text-[16px] font-bold pb-[10px]`}>내 팀</h3>
-              <div className={`bg-gray1 rounded-[5px]`}>
+              <div className={`bg-gray1 rounded-[5px]`} onClick={goMyTeam}>
                 <div
                   className={`py-[16px] px-[20px] border-b-[1px] !border-gray4 flex justify-between align-items-center`}>
                   <div
@@ -157,28 +143,23 @@ export default function Index() {
                 </div>
                 <MyScoreList
                   list={[
-                    { title: "승", score: 0 },
-                    { title: "무", score: 0 },
-                    { title: "패", score: 0 },
-                    { title: "TOTAL", score: 0 },
+                    { title: "승", score: myTeamRank?.w_cnt || 0 },
+                    { title: "무", score: myTeamRank?.d_cnt || 0 },
+                    { title: "패", score: myTeamRank?.l_cnt || 0 },
+                    { title: "TOTAL", score: myTeamRank?.step || 0 },
                   ]}></MyScoreList>
               </div>
             </div>
-            <div className={`mt-[40px]`}>
-              <h3 className={`text-[16px] font-bold pb-[10px]`}>내 기록</h3>
-              <MyScoreList
-                list={[
-                  { title: "경기", score: 6 },
-                  { title: "득점", score: 1 },
-                  { title: "도움", score: 3 },
-                  { title: "TOTAL", score: 10 },
-                ]}></MyScoreList>
-            </div>
-            <div className={`grid mt-[40px]`}>
-              <Button variant="green-primary-line" size={50} onClick={logout}>
-                로그아웃
-              </Button>
-            </div>
+            {/*<div className={`mt-[40px]`}>*/}
+            {/*  <h3 className={`text-[16px] font-bold pb-[10px]`}>내 기록</h3>*/}
+            {/*  <MyScoreList*/}
+            {/*    list={[*/}
+            {/*      { title: "경기", score: 6 },*/}
+            {/*      { title: "득점", score: 1 },*/}
+            {/*      { title: "도움", score: 3 },*/}
+            {/*      { title: "TOTAL", score: 10 },*/}
+            {/*    ]}></MyScoreList>*/}
+            {/*</div>*/}
           </>
         )}
       </main>
