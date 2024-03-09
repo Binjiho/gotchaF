@@ -167,96 +167,79 @@ class BoardService extends Services
         }
     }
 
+    public function updateNotice(Request $request, String $tid, String $sid)
+    {
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'message' => 'Error load User!',
+                'state' => "E",
+            ], 500);
+        }
 
-//    public function updateNotice(Request $request, String $tid, String $sid)
-//    {
-//        try {
-//            $user = $request->user();
-//            if(!$user){
-//                return response()->json([
-//                    'message' => 'Error load User!',
-//                    'state' => "E",
-//                ], 500);
-//            }
-//
-//            $leader_user = Team_User::where( [
-//                'del_yn' => 'N',
-//                'uid' => $user->sid,
-//                'tid' => $tid,
-//                'level' => 'L'
-//            ])->first();
-//            if(!$leader_user){
-//                return response()->json([
-//                    'message' => 'Error load Leader User!',
-//                    'state' => "E",
-//                ], 555);
-//            }
-//
-//            $board = board::where( [
-//                    'display_yn' => 'Y',
-//                    'del_yn' => 'N',
-//                    'tid' => $tid,
-//                    'sid' => $sid,
-//                ]
-//            )->first();
-//            if(!$board){
-//                return response()->json([
-//                    'message' => 'Error load board Notice!',
-//                    'state' => "E",
-//                ], 500);
-//            }
-//
-//            $this->transaction();
-//
-//            $now = date('Y-m-d H:i:s');
-//
-//            if($request->title) $board->title = $request->title;
-//            if($request->contents) $board->contents = $request->contents;
-//            if($request->del_yn) $board->del_yn = $request->del_yn;
-//
-//            $board->updated_at = $now;
-//
-//            if($request->hasFile('files')){
-//                $s3_path = "gotcha/teams/".$tid."/notice";
-//
-//                //기존 이미지 삭제
-//                if($board->file_path){
-//                    $file_uploaded_name = $board->file_realname;
-//                    $file_uploaded_path = $s3_path."/".$file_uploaded_name;
-//                    // Delete a file
-//                    Storage::disk('s3')->delete($file_uploaded_path);
-//                }
-//
-//                //새로운 이미지 저장
-//                foreach($request->file('files') as $file){
-//                    if ($file->isValid()) {
-//                        $extension = $file->getClientOriginalExtension();
-//                        $uuid = uniqid();
-//                        $filename = $uuid. '_' . time() . '.' . $extension;
-//                        $filepath = $s3_path . '/' . $filename;
-//
-//                        // S3에 파일 저장
-//                        Storage::disk('s3')->put($filepath, file_get_contents($file));
-//                        $board->file_originalname = $file->getClientOriginalName();
-//                        $board->file_realname = $filename;
-//                        $board->file_path = Storage::disk('s3')->url($filepath);
-//                    }
-//                }
-//            }
-//
-//            $board->save();
-//
-//            $this->dbCommit('팀 공지사항 수정 및 삭제');
-//
-//            return response()->json([
-//                'message' => 'Successfully update delete Notice!',
-//                'state' => "S",
-//                "data" => ["board" => $board],
-//            ], 200);
-//        } catch (\Exception $e) {
-//            return $this->dbRollback('Error update delete Notice!',$e);
-//        }
-//    }
+        $board = Board::where( [
+            'sid' => $sid,
+            'uid' => $user->sid,
+        ])->first();
+        if(!$board){
+            return response()->json([
+                'message' => '게시글 작성자가 아닙니다!',
+                'state' => "E",
+            ], 555);
+        }
+
+        try {
+            $now = date('Y-m-d H:i:s');
+
+            $this->transaction();
+
+            if($request->title) $board->title = $request->title;
+            if($request->contents) $board->contents = $request->contents;
+            if($request->del_yn) $board->del_yn = $request->del_yn;
+
+            $board->updated_at = $now;
+
+            if($request->hasFile('files')){
+                $s3_path = "gotcha/teams/".$tid."/notice";
+
+                //기존 이미지 삭제
+                if($board->file_path){
+                    $file_uploaded_name = $board->file_realname;
+                    $file_uploaded_path = $s3_path."/".$file_uploaded_name;
+                    // Delete a file
+                    Storage::disk('s3')->delete($file_uploaded_path);
+                }
+
+                //새로운 이미지 저장
+                foreach($request->file('files') as $file){
+                    if ($file->isValid()) {
+                        $extension = $file->getClientOriginalExtension();
+                        $uuid = uniqid();
+                        $filename = $uuid. '_' . time() . '.' . $extension;
+                        $filepath = $s3_path . '/' . $filename;
+
+                        // S3에 파일 저장
+                        Storage::disk('s3')->put($filepath, file_get_contents($file));
+                        $board->file_originalname = $file->getClientOriginalName();
+                        $board->file_realname = $filename;
+                        $board->file_path = Storage::disk('s3')->url($filepath);
+                    }
+                }
+            }
+
+            $board->save();
+
+            $this->dbCommit('팀 공지사항 수정 및 삭제');
+
+            return response()->json([
+                'message' => 'Successfully update delete Notice!',
+                'state' => "S",
+                "data" => ["board" => $board],
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error update delete Notice!',$e);
+        }
+    }
 
 
 
@@ -422,7 +405,7 @@ class BoardService extends Services
                     $join->on('teams.sid', '=', 'c.tid')
                         ->where('c.cid', '=', $cid);
                 })
-                ->select('boards.*', 'teams.title as name','teams.file_path as thum', 'c.level')
+                ->select('boards.*', 'teams.title as name','teams.file_path as team_thum', 'c.level')
                 ->where('boards.ccode', '=', '3')
                 ->where('boards.cid', '=', $cid)
                 ->where('boards.display_yn', '=', 'Y')
@@ -443,6 +426,7 @@ class BoardService extends Services
             $result = array(
                 'sid' => $board->sid,
                 'team_name' => $board->name,
+                'team_thum' => $board->team_thum,
                 'level' => $board->level,
                 'title' => $board->title,
                 'contents' => $board->contents,

@@ -52,7 +52,7 @@
                     "게시판"
                 ],
                 "description": "팀 갤러리 사진 리스트",
-                "operationId": "7c3dd583e4326428b7efb52f2b9af98b",
+                "operationId": "7addb08f2fcffde14813304554bed30b",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -67,7 +67,7 @@
                     "게시판"
                 ],
                 "description": "팀 갤러리 사진 생성",
-                "operationId": "f0fd7af58803f36991231d6f16fcd4a8",
+                "operationId": "be96fe29a206834c5709fac0317d32c2",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -106,7 +106,7 @@
                     "게시판"
                 ],
                 "description": "팀 공지사항 리스트 [per_page=>페이지 당 레코드 갯수] [page =>보여줄 페이지]",
-                "operationId": "7d209b331abc45241844fe90f6b24351",
+                "operationId": "860283ea32900f11d7aa6d2ca3b5c3fd",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -123,7 +123,7 @@
                     "게시판"
                 ],
                 "description": "팀 공지사항 상세 불러오기",
-                "operationId": "5310f80bceb9bbd5a7e9d6f03fca9cc7",
+                "operationId": "bb1be6ebc2365dbf005abcfbd760636a",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -138,7 +138,7 @@
                     "게시판"
                 ],
                 "description": "팀 공지사항 게시판 수정 및 삭제",
-                "operationId": "d85a7182310f75209bbaa30698520da0",
+                "operationId": "15aec06cd0f15d97235f25e369a9eeca",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -187,7 +187,7 @@
                     "게시판"
                 ],
                 "description": "팀 공지사항 생성",
-                "operationId": "bdf815c25e141dad5bea342ba0904d14",
+                "operationId": "e62d6af315616a28ce884ed9d50ad868",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -231,7 +231,7 @@
                     "게시판"
                 ],
                 "description": "경기 공지/문의 리스트",
-                "operationId": "a737c97d28a3082b7fe86ea3ae69fcf8",
+                "operationId": "73448ceccc2c9ca388213ccc64c1e42c",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -246,7 +246,7 @@
                     "게시판"
                 ],
                 "description": "경기 공지/문의 생성",
-                "operationId": "4d9b65992724ac9ac6d4319d100e4ac2",
+                "operationId": "3592f6954182d15306b9d36f62a55b52",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -290,7 +290,7 @@
                     "게시판"
                 ],
                 "description": "경기 공지/문의  상세 불러오기",
-                "operationId": "bdc84b81e9ef4d24f2e95bc183b8a6b9",
+                "operationId": "afed137d95296f8ac6b399e8072d82d7",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -307,7 +307,7 @@
                     "게시판"
                 ],
                 "description": "경기 공지/문의 수정 및 삭제",
-                "operationId": "44a7b3f9ac58e85bcc28edec20bed95c",
+                "operationId": "6c5163581621231bbf6ac662d7569666",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -356,7 +356,7 @@
                     "게시판"
                 ],
                 "description": "경기 공지/문의 댓글달기",
-                "operationId": "b8929128d3cb92288945b8a34b111cd0",
+                "operationId": "617abde50473a33a730a2e177d8c6b58",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -447,8 +447,8 @@
                                         "type": "string",
                                         "example": "5:5,11:11 형태로 구분"
                                     },
-                                    "regist_sdate": {
-                                        "description": "모집시작일",
+                                    "regist_edate": {
+                                        "description": "모집마감일",
                                         "type": "string",
                                         "example": "2024-01-01 00:00:00"
                                     },
@@ -1613,13 +1613,13 @@
                 }
             }
         },
-        "/api/teams/detail-match/{$tid}": {
+        "/api/teams/detail-match/{$tid}{$type?}": {
             "get": {
                 "tags": [
                     "팀"
                 ],
-                "description": "팀 경기 상세 불러오기",
-                "operationId": "ee00833541e10ec8137d522367ff238a",
+                "description": "팀 경기 상세 불러오기 type 1:리그, 2:컵",
+                "operationId": "7a5ceffb137eebb041262379fc7af1c1",
                 "responses": {
                     "200": {
                         "description": "Success"

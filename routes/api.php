@@ -77,7 +77,7 @@ Route::prefix('/teams')->group(function () {
     Route::get('{per_page?}{page?}', [App\Http\Controllers\api\team\TeamController::class, 'indexTeams']);
     Route::post('/searchTeams', [App\Http\Controllers\api\team\TeamController::class, 'searchTeams']);
     Route::get('/detail/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeam']);
-    Route::get('/detail-match/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'showTeamMatch']);
+    Route::get('/detail-match/{tid}{type?}', [App\Http\Controllers\api\team\TeamController::class, 'showTeamMatch']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [App\Http\Controllers\api\team\TeamController::class, 'storeTeam']);
         Route::post('/update/{tid}', [App\Http\Controllers\api\team\TeamController::class, 'updateTeam']);

@@ -439,10 +439,10 @@ class CompetitionService extends Services
     public function startCompetition(String $cid)
     {
         $user = auth()->user();
-        $user_level = Competition_Team::where( [
+        $user_level = Competition::where( [
             'del_yn' => 'N',
-            'tid' => $user->sid,
-            'level' => 'L',
+            'sid' => $cid,
+            'uid' => $user->sid,
         ])->first();
 
         if(!$user_level){

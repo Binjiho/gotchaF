@@ -302,7 +302,7 @@ class TeamService extends Services
         }
     }
 
-    public function showTeamMatch(String $tid)
+    public function showTeamMatch(String $tid, Request $request)
     {
         $team_info = Team::where( [
             'del_yn' => 'N',
@@ -318,7 +318,28 @@ class TeamService extends Services
 
         try {
             //팀 경기일정
-            $team_matches = DB::table('matches')
+//            $team_matches = DB::table('matches')
+//                ->join('teams as t1', function ($join) {
+//                    $join->on('t1.sid', '=', 'matches.tid1');
+//                })
+//                ->join('teams as t2', function ($join) {
+//                    $join->on('t2.sid', '=', 'matches.tid2');
+//                })
+//                ->leftJoin('competitions as c','c.sid','=','matches.cid')
+//                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, c.type, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
+//                ->where('matches.del_yn', '=', 'N')
+//                ->where('matches.state', '=', 'N')
+//                ->where('matches.matched_at', '<>', null)
+//                ->where(function ($query) use ($tid) {
+//                    $query->where('matches.tid1', '=', $tid)
+//                        ->orWhere('matches.tid2', '=', $tid);
+//                })
+//
+//                ->orderBy('matches.round')
+//                ->orderBy('matches.order')
+//                ->get();
+
+            $query = DB::table('matches')
                 ->join('teams as t1', function ($join) {
                     $join->on('t1.sid', '=', 'matches.tid1');
                 })
@@ -326,17 +347,21 @@ class TeamService extends Services
                     $join->on('t2.sid', '=', 'matches.tid2');
                 })
                 ->leftJoin('competitions as c','c.sid','=','matches.cid')
-                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
+                ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, c.type, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
                 ->where('matches.del_yn', '=', 'N')
                 ->where('matches.state', '=', 'N')
                 ->where('matches.matched_at', '<>', null)
                 ->where(function ($query) use ($tid) {
                     $query->where('matches.tid1', '=', $tid)
                         ->orWhere('matches.tid2', '=', $tid);
-                })
-                ->orderBy('matches.round')
-                ->orderBy('matches.order')
-                ->get();
+                });
+            if($request->type){
+                $query->where('c.type', '=', $request->type);
+            }
+            $query->orderBy('matches.round');
+            $query->orderBy('matches.order');
+
+            $team_matches = $query->get();
 
             return response()->json([
                 'message' => 'Successfully loaded team!',
