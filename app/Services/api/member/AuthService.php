@@ -154,6 +154,7 @@ class AuthService extends Services
                 ->leftJoin('team_users','users.sid','=','team_users.uid')
                 ->select('team_users.tid','team_users.level','users.*')
                 ->where('users.sid','=',$user->sid)
+                ->where('team_users.del','=','N')
                 ->first();
 
             return response()->json([
