@@ -17,7 +17,6 @@ import {
 import EditItemDateSelect from "@/components/team/EditItemDateSelect";
 import EditItemWeekSelect from "@/components/team/EditItemWeekSelect";
 import { useSelector } from "react-redux";
-import { COMPETITION_TYPE } from "@/constants/serviceConstants";
 import { printDateTimeFormat } from "@/helper/value";
 
 export default function Index() {
@@ -29,8 +28,9 @@ export default function Index() {
   const [competitionType, setCompetitionType] = useState("");
   const [numberPlayers, setNumberPlayers] = useState("");
   const [frequencyGame, setFrequencyGame] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [eventStartDate, setEventStartDate] = useState("");
+  const [eventEndDate, setEventEndDate] = useState("");
+  const [registEndDate, setRegistEndDate] = useState("");
   const [weekDate, setWeekDate] = useState([]);
   const [formClear, setFormClear] = useState(false);
   const router = useRouter();
@@ -50,8 +50,9 @@ export default function Index() {
       setCompetitionType(Number(data.type));
       setNumberPlayers(data.person_vs);
       setFrequencyGame(data.frequency);
-      setStartDate(printDateTimeFormat(data.event_sdate, "YYYY-MM-dd"));
-      setEndDate(printDateTimeFormat(data.event_edate, "YYYY-MM-dd"));
+      setEventStartDate(printDateTimeFormat(data.event_sdate, "YYYY-MM-dd"));
+      setEventEndDate(printDateTimeFormat(data.event_edate, "YYYY-MM-dd"));
+      setRegistEndDate(printDateTimeFormat(data.regist_edate, "YYYY-MM-dd"));
       setWeekDate(yoilArr);
     });
   };
@@ -62,13 +63,22 @@ export default function Index() {
   }, [competitionId]);
 
   useEffect(() => {
-    if (!startDate || !endDate) return;
+    if (!eventStartDate || !eventEndDate) return;
 
-    if (endDate < startDate) {
-      toast("희망일은 마감일보다 빨라야 합니다.");
-      setEndDate("");
+    if (eventEndDate < eventStartDate) {
+      toast("경기 마감일은 희망일보다 늦어야 합니다.");
+      setEventEndDate("");
     }
-  }, [startDate, endDate]);
+  }, [eventStartDate, eventEndDate]);
+
+  useEffect(() => {
+    if (!registEndDate || !eventStartDate) return;
+
+    if (eventStartDate < registEndDate) {
+      toast("모집 마감일은 경기 시작 희망일보다 빨라야 합니다.");
+      setRegistEndDate("");
+    }
+  }, [eventStartDate, registEndDate]);
 
   useEffect(() => {
     if (!title || !file || !address) {
@@ -89,9 +99,9 @@ export default function Index() {
     formData.append("region", address[0].name);
     formData.append("limit_team", teamLength);
     formData.append("person_vs", numberPlayers);
-    formData.append("regist_sdate", new Date());
-    formData.append("event_sdate", startDate);
-    formData.append("event_edate", endDate);
+    formData.append("regist_edate", registEndDate);
+    formData.append("event_sdate", eventStartDate);
+    formData.append("event_edate", eventEndDate);
     formData.append("frequency", frequencyGame);
     formData.append("yoil", weekDate.join(","));
     formData.append("files[]", file);
@@ -162,13 +172,18 @@ export default function Index() {
             <EditItemDateSelect
               placeholder={`날짜 선택`}
               title={`경기 시작 희망일`}
-              value={startDate}
-              setValue={setStartDate}></EditItemDateSelect>
+              value={eventStartDate}
+              setValue={setEventStartDate}></EditItemDateSelect>
             <EditItemDateSelect
               placeholder={`날짜 선택`}
               title={`경기 마감일`}
-              value={endDate}
-              setValue={setEndDate}></EditItemDateSelect>
+              value={eventEndDate}
+              setValue={setEventEndDate}></EditItemDateSelect>
+            <EditItemDateSelect
+              placeholder={`날짜 선택`}
+              title={`모집 마감일`}
+              value={registEndDate}
+              setValue={setRegistEndDate}></EditItemDateSelect>
             <EditItemSelect
               placeholder={`빈도 선택`}
               title={`경기 빈도`}

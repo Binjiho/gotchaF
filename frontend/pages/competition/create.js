@@ -27,8 +27,9 @@ export default function Create() {
   const [competitionKind, setCompetitionKind] = useState("");
   const [numberPlayers, setNumberPlayers] = useState("");
   const [frequencyGame, setFrequencyGame] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [eventStartDate, setEventStartDate] = useState("");
+  const [eventEndDate, setEventEndDate] = useState("");
+  const [registEndDate, setRegistEndDate] = useState("");
   const [weekDate, setWeekDate] = useState([]);
   const [formClear, setFormClear] = useState(false);
   const router = useRouter();
@@ -36,13 +37,22 @@ export default function Create() {
   const competitionType = Number(router.query.type);
 
   useEffect(() => {
-    if (!startDate || !endDate) return;
+    if (!eventStartDate || !eventEndDate) return;
 
-    if (endDate < startDate) {
-      toast("희망일은 마감일보다 빨라야 합니다.");
-      setEndDate("");
+    if (eventEndDate < eventStartDate) {
+      toast("경기 마감일은 희망일보다 늦어야 합니다.");
+      setEventEndDate("");
     }
-  }, [startDate, endDate]);
+  }, [eventStartDate, eventEndDate]);
+
+  useEffect(() => {
+    if (!registEndDate || !eventStartDate) return;
+
+    if (eventStartDate < registEndDate) {
+      toast("모집 마감일은 경기 시작 희망일보다 빨라야 합니다.");
+      setRegistEndDate("");
+    }
+  }, [eventStartDate, registEndDate]);
 
   useEffect(() => {
     if (!title || !file || !address) {
@@ -63,9 +73,9 @@ export default function Create() {
     formData.append("region", address[0].name);
     formData.append("limit_team", teamLength);
     formData.append("person_vs", numberPlayers);
-    formData.append("regist_sdate", new Date());
-    formData.append("event_sdate", startDate);
-    formData.append("event_edate", endDate);
+    formData.append("regist_edate", registEndDate);
+    formData.append("event_sdate", eventStartDate);
+    formData.append("event_edate", eventEndDate);
     formData.append("frequency", frequencyGame);
     formData.append("yoil", weekDate.join(","));
     formData.append("files[]", file);
@@ -138,13 +148,18 @@ export default function Create() {
             <EditItemDateSelect
               placeholder={`날짜 선택`}
               title={`경기 시작 희망일`}
-              value={startDate}
-              setValue={setStartDate}></EditItemDateSelect>
+              value={eventStartDate}
+              setValue={setEventStartDate}></EditItemDateSelect>
             <EditItemDateSelect
               placeholder={`날짜 선택`}
               title={`경기 마감일`}
-              value={endDate}
-              setValue={setEndDate}></EditItemDateSelect>
+              value={eventEndDate}
+              setValue={setEventEndDate}></EditItemDateSelect>
+            <EditItemDateSelect
+              placeholder={`날짜 선택`}
+              title={`모집 마감일`}
+              value={registEndDate}
+              setValue={setRegistEndDate}></EditItemDateSelect>
             <EditItemSelect
               placeholder={`빈도 선택`}
               title={`경기 빈도`}
