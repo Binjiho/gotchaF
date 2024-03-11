@@ -185,6 +185,7 @@ export default function Id() {
   const startCompetition = () => {
     sendPost(`/api/competitions/start/${competitionId}`, null, res => {
       toast("경기가 시작되었습니다.");
+      getCompetition();
     });
   };
 
@@ -205,7 +206,7 @@ export default function Id() {
     return user && team && leader;
   };
 
-  const isStart = competitionInfo?.start === "S";
+  const isStart = competitionInfo?.state === "S";
   const isJoinCount =
     Number(competitionInfo?.limit_team) > Number(competitionInfo?.team_count);
 

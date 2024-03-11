@@ -135,21 +135,21 @@ export default function Index() {
   };
 
   const goTeamSetting = () => {
-    router.push(`/team/${teamId}/setting`);
+    if (isLeader) {
+      router.push(`/team/${teamId}/setting`);
+    }
   };
 
   return (
     <>
       <PrevHeader transparent={true}>
-        {(isLeader || isManagement) && (
-          <Button
-            variant={`text`}
-            type={`right`}
-            className={`text-current`}
-            onClick={goTeamSetting}>
-            <MoreVerticalIcon width={24} />
-          </Button>
-        )}
+        <Button
+          variant={`text`}
+          type={`right`}
+          className={`text-current`}
+          onClick={goTeamSetting}>
+          <MoreVerticalIcon width={24} />
+        </Button>
       </PrevHeader>
       <main className={`position-relative`}>
         <div

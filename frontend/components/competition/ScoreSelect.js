@@ -33,7 +33,9 @@ export default function ScoreSelect({ show, setShow, item }) {
       res => {
         console.log(res);
       },
-      () => {}
+      err => {
+        console.log(err);
+      }
     );
   };
 

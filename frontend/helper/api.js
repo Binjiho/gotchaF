@@ -18,7 +18,7 @@ export const sendGet = async (
   addTokenToHeader(accessToken);
 
   if (accessToken !== null) {
-    requestGet(url, requestData, successFun, failureFun, contentsType);
+    await requestGet(url, requestData, successFun, failureFun, contentsType);
   }
 };
 
@@ -33,7 +33,7 @@ export const sendPost = async (
   addTokenToHeader(accessToken);
 
   if (accessToken !== null) {
-    requestPost(url, requestData, successFun, failureFun, contentsType);
+    await requestPost(url, requestData, successFun, failureFun, contentsType);
   }
 };
 
@@ -48,7 +48,7 @@ export const sendPatch = async (
   addTokenToHeader(accessToken);
 
   if (accessToken !== null) {
-    requestPatch(url, requestData, successFun, failureFun, contentsType);
+    await requestPatch(url, requestData, successFun, failureFun, contentsType);
   }
 };
 
@@ -61,7 +61,7 @@ export const sendAnonymousPost = async (
 ) => {
   addTokenToHeader(null);
 
-  requestPost(url, requestData, successFun, failureFun, contentsType);
+  await requestPost(url, requestData, successFun, failureFun, contentsType);
 };
 
 export const sendAnonymousGet = async (
@@ -73,7 +73,7 @@ export const sendAnonymousGet = async (
 ) => {
   addTokenToHeader(null);
 
-  requestGet(url, requestData, successFun, failureFun, contentsType);
+  await requestGet(url, requestData, successFun, failureFun, contentsType);
 };
 
 export const requestGet = async (
