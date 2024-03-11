@@ -153,7 +153,7 @@ class AuthService extends Services
             $team_users = DB::table('users')
                 ->leftJoin('team_users', function ($join) {
                     $join->on('users.sid', '=', 'team_users.uid')
-                        ->where('team_users.del', '=', 'N');
+                        ->where('team_users.del_yn', '=', 'N');
                 })
                 ->select('team_users.tid','team_users.level','users.*')
                 ->where('users.sid','=',$user->sid)
