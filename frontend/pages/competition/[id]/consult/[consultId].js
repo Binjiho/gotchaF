@@ -34,7 +34,7 @@ export default function ConsultId() {
             <div
               className={`flex gap-[9px] align-items-center border-b-[1px] border-gray2 py-[15px]`}>
               <MemberImage
-                img={consult.user_thum}
+                img={consult.team_thum}
                 role={consult.level}
                 size={38}></MemberImage>
               <div className={`flex flex-column `}>

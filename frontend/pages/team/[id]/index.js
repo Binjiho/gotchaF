@@ -33,7 +33,8 @@ export default function Index() {
   const [nowTeamUser, setNowTeamUser] = useState([]);
   const [teamNotice, setTeamNotice] = useState([]);
   const [teamGallery, setTeamGallery] = useState([]);
-  const [teamMatch, setTeamMatch] = useState([]);
+  const [teamMatchSchedule, setTeamMatchSchedule] = useState([]);
+  const [teamMatchRecord, setTeamMatchRecord] = useState([]);
   const teamId = router.query.id;
   const user = useSelector(state => state.user);
   const [isSendJoin, setIsSendJoin] = useState(false);
@@ -71,7 +72,7 @@ export default function Index() {
       });
 
       setNowTeamUser(nowTeam);
-      setTeamMatch(res.data.team_matches);
+      setTeamMatchSchedule(res.data.team_matches);
     });
   };
 
@@ -87,11 +88,11 @@ export default function Index() {
     });
   };
 
-  // const getTeamMatch = function () {
-  //   sendAnonymousGet(`/api/teams/detail-match/${teamId}`, null, res => {
-  //     setTeamMatch(res.data.result);
-  //   });
-  // };
+  const getTeamMatch = function () {
+    sendAnonymousGet(`/api/teams/detail-match/${teamId}`, null, res => {
+      setTeamMatchRecord(res.data.result);
+    });
+  };
 
   useEffect(() => {
     if (!teamId) return;
@@ -100,7 +101,7 @@ export default function Index() {
       getTeam();
       getNotice();
     } else if (key === "record") {
-      // getTeamMatch();
+      getTeamMatch();
     } else if (key === "gallery") {
       getGallery();
     }
@@ -278,12 +279,12 @@ export default function Index() {
                         title={"경기 일정"}
                         active={() => {}}
                         className={`pt-[50px] mb-[18px]`}></LinkHeader>
-                      {teamMatch.length > 0 ? (
+                      {teamMatchSchedule.length > 0 ? (
                         <Swiper
                           spaceBetween={10}
-                          slidesPerView={teamMatch.length === 1 ? 1 : 1.2}
+                          slidesPerView={teamMatchSchedule.length === 1 ? 1 : 1.2}
                           className={`px-[20px]`}>
-                          {teamMatch.map(match => (
+                          {teamMatchSchedule.map(match => (
                             <SwiperSlide key={`match-${match.sid}`}>
                               <MatchScheduleItem match={match}></MatchScheduleItem>
                             </SwiperSlide>
@@ -366,9 +367,9 @@ export default function Index() {
                           <Nav.Link eventKey={COMPETITION_TYPE.CUP}>컵</Nav.Link>
                         </Nav.Item>
                       </Nav>
-                      {teamMatch.length > 0 ? (
+                      {teamMatchRecord.length > 0 ? (
                         <div className={`mt-[18px] flex flex-column gap-[10px]`}>
-                          {teamMatch.map((match, index) => (
+                          {teamMatchRecord.map((match, index) => (
                             <MatchRecordItem
                               match={match}
                               key={`match-${index}`}></MatchRecordItem>

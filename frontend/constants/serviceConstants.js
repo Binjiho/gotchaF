@@ -58,3 +58,12 @@ export const COMPETITION_STATE = {
   W: false,
   S: true,
 };
+
+export const CUP_STATE = {
+  "S": "SUCCESS", //우승
+  "L": "LOSE", //탈락
+  "W": "WIN", //진출
+  SUCCESS: "S",
+  LOSE: "L",
+  WIN: "W",
+};
