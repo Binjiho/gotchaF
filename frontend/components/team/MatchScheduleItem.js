@@ -7,7 +7,7 @@ import UserLineIcon from "@/public/icons/social/map-pin-user-line.svg";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { sendPost } from "@/helper/api";
+import { sendGet } from "@/helper/api";
 import { toast } from "react-toastify";
 
 export default function MatchScheduleItem({ match }) {
@@ -24,9 +24,9 @@ export default function MatchScheduleItem({ match }) {
   const joinCompetition = e => {
     e.stopPropagation();
 
-    sendPost(`/api/competitions/apply/${match.sid}`, null, res => {
+    sendGet(`/api/matches/match-in/${match.sid}`, null, res => {
       if (res.data?.result?.sid) {
-        toast("참가 신청이 되었습니다.");
+        toast("참여 신청이 되었습니다.");
       }
     });
   };

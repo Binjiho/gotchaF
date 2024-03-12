@@ -1,24 +1,31 @@
 import { useEffect, useState } from "react";
 import TimeIcon from "@/public/icons/system/time-line.svg";
 
-export default function TimeBadge({ eventStart, eventEnd, limit, teamCount }) {
+export default function TimeBadge({ matchInfo }) {
   const [isEnd, setIsEnd] = useState(false);
   const [isProgress, setIsProgress] = useState(false);
-  const [isGardeningImminent, setIsGardeningImminent] = useState(false);
+  const [isGardeningImminent, setIsGardeningImminent] = useState(false); //임박
   const [eventDDay, setEventDDay] = useState(0);
 
   useEffect(() => {
-    setIsEnd(new Date(eventEnd) < new Date());
-    setIsProgress(
-      new Date(eventStart) < new Date() || Number(limit) === Number(teamCount)
-    );
-    setIsGardeningImminent(Number(limit) - 1 === Number(teamCount));
+    if (!matchInfo) return;
 
-    const milliseconds = new Date(eventStart) - new Date();
+    const today = new Date();
+
+    setIsEnd(new Date(matchInfo.event_edate) < today);
+    setIsProgress(
+      new Date(matchInfo.event_sdate) < today ||
+        Number(matchInfo.limit_team) === Number(matchInfo.team_count)
+    );
+    setIsGardeningImminent(
+      Number(matchInfo.limit_team) - 1 === Number(matchInfo.team_count)
+    );
+
+    const milliseconds = new Date(matchInfo.event_sdate) - today;
     const days = Math.ceil(milliseconds / (24 * 60 * 60 * 1000));
 
     setEventDDay(days);
-  }, [eventStart, eventEnd, limit, teamCount]);
+  }, [matchInfo]);
 
   function TimeBlock({ text, color }) {
     return (

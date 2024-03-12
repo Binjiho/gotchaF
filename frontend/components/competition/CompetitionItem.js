@@ -69,11 +69,7 @@ export default function CompetitionItem({ item }) {
           {item.person_vs}
         </Badge>
         <div className={`ml-auto`}>
-          <TimeBadge
-            eventStart={item.event_sdate}
-            eventEnd={item.event_edate}
-            limit={item.limit_team}
-            teamCount={item.team_count}></TimeBadge>
+          <TimeBadge matchInfo={item}></TimeBadge>
         </div>
       </div>
       <div className={`mt-[12px] flex gap-[20px]`}>

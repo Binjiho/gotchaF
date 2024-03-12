@@ -4,13 +4,13 @@ import PrevHeader from "@/components/layout/PrevHeader";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import TimeIcon from "@/public/icons/system/time-line.svg";
 import EarthLineIcon from "@/public/icons/other/earth-line.svg";
 import MapIcon from "@/public/icons/social/map.svg";
 import UserLineIcon from "@/public/icons/social/map-pin-user-line.svg";
 import TimeLineIcon from "@/public/icons/system/time-line.svg";
 import CalendarIcon from "@/public/icons/social/calendar.svg";
 import RightCircleIcon from "@/public/icons/system/arrow-right-circle-line.svg";
+import ListCheckIcon from "@/public/icons/system/list-check.svg";
 import { sendAnonymousGet, sendPost } from "@/helper/api";
 import {
   COMPETITION_KIND,
@@ -34,9 +34,9 @@ export default function Id() {
   const router = useRouter();
   const competitionId = router.query.id;
   const [competitionInfo, setCompetitionInfo] = useState(null);
-  const [matchInfo, setMatchInfo] = useState(null);
+  const [matchInfo, setMatchInfo] = useState([]);
   const [rankInfo, setRankInfo] = useState(null);
-  const [consultList, setConsultList] = useState(null);
+  const [consultList, setConsultList] = useState([]);
   const user = useSelector(state => state.user);
   const [key, setKey] = useState("home");
   const isLeague = Number(competitionInfo?.type) === COMPETITION_TYPE.LEAGUE;
@@ -246,29 +246,12 @@ export default function Id() {
                   </p>
                   <div
                     className={`mt-[8px] flex align-items-center gap-[5px] text-[14px]`}>
-                    {calculateDday(competitionInfo.regist_edate) > 0 ? (
-                      <>
-                        <div
-                          className={`text-red_primary flex align-items-center gap-[5px]`}>
-                          <TimeIcon width={16} />
-                          <b>{printDday(competitionInfo.regist_edate)}</b>
-                        </div>
-                        <span className={`gap-line`}></span>
-                        <p className={`text-gray10`}>
-                          {printDateTimeFormat(
-                            competitionInfo.regist_edate,
-                            "MM월 dd일(E) "
-                          )}
-                          모집 마감
-                        </p>
-                      </>
-                    ) : (
-                      <TimeBadge
-                        eventStart={competitionInfo.event_sdate}
-                        eventEnd={competitionInfo.event_edate}
-                        limit={competitionInfo.limit_team}
-                        teamCount={competitionInfo.team_count}></TimeBadge>
-                    )}
+                    <TimeBadge matchInfo={competitionInfo}></TimeBadge>
+                    <span className={`gap-line`}></span>
+                    <p className={`text-gray10`}>
+                      {printDateTimeFormat(competitionInfo.regist_edate, "MM월 dd일(E) ")}
+                      모집 마감
+                    </p>
                   </div>
                 </div>
                 <div className={`mb-[20px]`}>
@@ -367,16 +350,28 @@ export default function Id() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="competition" className={"inner"}>
-                    <Swiper
-                      modules={[Navigation]}
-                      navigation
-                      className={`swiper-custom-btn size-24 [&_.swiper-button-next]:top-[27px] [&_.swiper-button-prev]:top-[27px]`}>
-                      {matchInfo?.map((item, index) => (
-                        <SwiperSlide key={`match-${index}`}>
-                          <RoundItem item={item} changeRound={getMatches}></RoundItem>
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
+                    {matchInfo.length > 0 ? (
+                      <Swiper
+                        modules={[Navigation]}
+                        navigation
+                        className={`swiper-custom-btn size-24 [&_.swiper-button-next]:top-[27px] [&_.swiper-button-prev]:top-[27px]`}>
+                        {matchInfo?.map((item, index) => (
+                          <SwiperSlide key={`match-${index}`}>
+                            <RoundItem item={item} changeRound={getMatches}></RoundItem>
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                    ) : (
+                      <div
+                        className={`flex flex-column gap-[12px] text-center items-center justify-center pt-[100px] text-gray7`}>
+                        <ListCheckIcon width={50}></ListCheckIcon>
+                        <p className={`text-gray7`}>
+                          아직 대회 시작 전입니다.
+                          <br />
+                          대회가 시작되면 자동으로 대진표가 생성됩니다.
+                        </p>
+                      </div>
+                    )}
                   </Tab.Pane>
                   <Tab.Pane eventKey="rank">
                     <div>
@@ -441,24 +436,34 @@ export default function Id() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="consult">
-                    <div className={`inner pb-[13px] border-b-[1px] !border-gray3`}>
-                      <h3>
-                        게시글{" "}
-                        <span className={`text-green_primary`}>
-                          {consultList?.length || ""}
-                        </span>
-                      </h3>
-                    </div>
-                    {consultList?.map((consult, index) => {
-                      return (
-                        <div key={`consult-${index}`}>
-                          <div className={`inner`}>
-                            <ConsultItem item={consult}></ConsultItem>
-                          </div>
-                          <hr className={`hr-line`} />
+                    {consultList.length > 0 ? (
+                      <>
+                        <div className={`inner pb-[13px] border-b-[1px] !border-gray3`}>
+                          <h3>
+                            게시글{" "}
+                            <span className={`text-green_primary`}>
+                              {consultList?.length || ""}
+                            </span>
+                          </h3>
                         </div>
-                      );
-                    })}
+                        {consultList?.map((consult, index) => {
+                          return (
+                            <div key={`consult-${index}`}>
+                              <div className={`inner`}>
+                                <ConsultItem item={consult}></ConsultItem>
+                              </div>
+                              <hr className={`hr-line`} />
+                            </div>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <div
+                        className={`flex flex-column gap-[12px] text-center items-center justify-center pt-[100px] text-gray7`}>
+                        <ListCheckIcon width={50}></ListCheckIcon>
+                        <p className={`text-gray7`}>작성된 문의가 없습니다.</p>
+                      </div>
+                    )}
                     <FloatAddBtn
                       path={`/competition/${competitionId}/consult/create`}
                       text={"문의하기"}></FloatAddBtn>
@@ -474,7 +479,8 @@ export default function Id() {
                         className={`w-full`}
                         variant="green-primary"
                         size="50"
-                        onClick={startCompetition}>
+                        onClick={startCompetition}
+                        disabled={competitionInfo.team_count < 4}>
                         대회시작
                       </Button>
                     </div>
