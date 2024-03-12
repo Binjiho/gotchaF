@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import NumberSelect from "@/components/form/NumberSelect";
 import { Button } from "react-bootstrap";
 import { sendPost } from "@/helper/api";
-import { printDateTimeFormat } from "@/helper/value";
+import { toast } from "react-toastify";
 
-export default function ScoreSelect({ show, setShow, item }) {
+export default function ScoreSelect({ show, setShow, item, changeScore }) {
   const [teamScore1, setTeamScore1] = useState(0);
   const [teamScore2, setTeamScore2] = useState(0);
 
@@ -19,11 +19,16 @@ export default function ScoreSelect({ show, setShow, item }) {
     }
   }, [teamScore1, teamScore2]);
 
+  useEffect(() => {
+    if (!item) return;
+    setTeamScore1(item.t1_score);
+    setTeamScore2(item.t2_score);
+  }, [item]);
+
   const createScore = () => {
     const data = {
       t1_score: teamScore1,
       t2_score: teamScore2,
-      matched_at: printDateTimeFormat(new Date(), "YYYY-MM-dd HH:mm"),
       state: "Y",
     };
 
@@ -31,10 +36,12 @@ export default function ScoreSelect({ show, setShow, item }) {
       `/api/matches/score/${item.sid}`,
       data,
       res => {
-        console.log(res);
+        changeScore();
+        setShow(false);
+        toast("점수가 변경되었습니다.");
       },
       err => {
-        console.log(err);
+        toast("점수 변경에 실패했습니다.");
       }
     );
   };

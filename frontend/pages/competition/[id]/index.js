@@ -373,7 +373,7 @@ export default function Id() {
                       className={`swiper-custom-btn size-24 [&_.swiper-button-next]:top-[27px] [&_.swiper-button-prev]:top-[27px]`}>
                       {matchInfo?.map((item, index) => (
                         <SwiperSlide key={`match-${index}`}>
-                          <RoundItem item={item}></RoundItem>
+                          <RoundItem item={item} changeRound={getMatches}></RoundItem>
                         </SwiperSlide>
                       ))}
                     </Swiper>
