@@ -31,8 +31,7 @@ export const removeEmptyObject = obj => {
 };
 
 export const getParameter = key => {
-  return "";
-  // return new URLSearchParams(location.search).get(key);
+  return new URLSearchParams(window.location.search).get(key);
 };
 
 export const convertIntObj = obj => {

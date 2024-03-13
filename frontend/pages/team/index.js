@@ -6,42 +6,33 @@ import NavBottom from "@/components/layout/NavBottom";
 import { Spinner } from "react-bootstrap";
 import { useRouter } from "next/router";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
-import {useSelector} from "react-redux";
-//스크롤 추후 적용 필요
+import { useSelector } from "react-redux";
+import { SetupInfiniteScroll } from "@/helper/scrollLoader";
+import { removeEmptyObject, getParameter, replaceQueryPage } from "@/helper/UIHelper";
 
-const searchFilter = {
-  current_page: 1,
-  per_page: 10,
+const initialSearch = {
+  page: 1,
+  per_page: 7,
 };
 
 export default function Index() {
   const [teamList, setTeamList] = useState([]);
   const router = useRouter();
-    const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user);
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [limit, setLimit] = useState(10);
 
   const getTeamList = function () {
-    sendAnonymousGet(
-      "/api/teams/",
-      {
-        ...searchFilter,
-      },
-      res => {
-        setTeamList(res.data.teams.data);
-      }
-    );
+    sendAnonymousGet("/api/teams/", { ...removeEmptyObject(searchFilter) }, res => {
+      setTeamList([...teamList, ...res.data.teams.data]);
+    });
   };
-
-  useEffect(() => {
-    getTeamList();
-  }, []);
 
   const searchTeam = () => {
     router.push("/team/search");
   };
 
-  // setupInfiniteScroll(() => {
-  //   getTeamList();
-  // });
+  SetupInfiniteScroll(initialSearch, searchFilter, setSearchFilter, limit, getTeamList);
 
   return (
     <div>
@@ -62,10 +53,9 @@ export default function Index() {
             ))
           )}
         </div>
-          {!user.tid &&
-              <FloatAddBtn path={"/team/create"} text={"팀만들기"} isNav></FloatAddBtn>
-          }
-
+        {!user.tid && (
+          <FloatAddBtn path={"/team/create"} text={"팀만들기"} isNav></FloatAddBtn>
+        )}
       </main>
       <NavBottom></NavBottom>
     </div>
