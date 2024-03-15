@@ -90,6 +90,60 @@ class MatchService extends Services
             if($request->t1_score) $match->t1_score = $request->t1_score;
             if($request->t2_score) $match->t2_score = $request->t2_score;
             if($request->matched_at) $match->matched_at = $request->matched_at;
+            $match->save();
+
+            $now = date('Y-m-d H:i:s');
+
+            $data = [
+                "result" => $match,
+            ];
+
+            $this->dbCommit('매치 대진표 수정');
+
+            return response()->json([
+                'message' => 'Successfully store Match!',
+                'state' => "S",
+                "data" => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->dbRollback('Error store Match!',$e);
+        }
+    }
+
+    public function completeMatch(String $mid, Request $request)
+    {
+        $user = auth()->user();
+        $user_level = Team_User::where( [
+            'del_yn' => 'N',
+            'uid' => $user->sid,
+        ])->first();
+
+        if($user_level->level != 'L'){
+            return response()->json([
+                'message' => '팀의 리더만 경기를 완료 할 수 있습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        $match = Matches::where( ['del_yn' => 'N', 'sid' => $mid ])->first();
+        if(!$match){
+            return response()->json([
+                'message' => '경기 대진표 정보가 없습니다.',
+                'state' => "E",
+            ], 500);
+        }
+
+        if($request->state != 'Y'){
+            return response()->json([
+                'message' => '경기 완료를 선택해주세요.',
+                'state' => "E",
+            ], 500);
+        }
+
+
+        try {
+            $this->transaction();
+
             if($request->state) $match->state = $request->state;
             $match->save();
 
@@ -274,19 +328,17 @@ class MatchService extends Services
                 "result" => $match,
             ];
 
-            $this->dbCommit('매치 대진표 수정');
+            $this->dbCommit('매치 대진표 완료');
 
             return response()->json([
-                'message' => 'Successfully store Match!',
+                'message' => 'Successfully complete Match!',
                 'state' => "S",
                 "data" => $data,
             ], 200);
         } catch (\Exception $e) {
-            return $this->dbRollback('Error store Match!',$e);
+            return $this->dbRollback('Error complete Match!',$e);
         }
     }
-
-
     public function showRanking(String $cid)
     {
         $comp = Competition::where( [

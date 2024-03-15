@@ -99,21 +99,22 @@ class BoardService extends Services
                 $per_page = 10;
             }
 
-            $boards = DB::table('boards')
+            $query = DB::table('boards')
                 ->join('users', 'boards.uid', '=', 'users.sid')
-
                 ->select('boards.*', 'users.file_path as user_thum')
                 ->where('boards.ccode', '=', '1')
                 ->where('boards.tid', '=', $tid)
                 ->where('boards.display_yn', '=', 'Y')
-                ->where('boards.del_yn', '=', 'N')
-                ->simplePaginate($per_page);
+                ->where('boards.del_yn', '=', 'N');
+
+            $totalCount = $query->count();
+            $boards = $query->simplePaginate($per_page);
 
 //                $boards = board::where( ['del_yn' => 'N' ])->simplePaginate($per_page);
             return response()->json([
                 'message' => 'Successfully loaded 팀공지사항 리스트!',
                 'state' => "S",
-                "data" => ["boards" => $boards],
+                "data" => [ "total_count" => $totalCount, "boards" => $boards],
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

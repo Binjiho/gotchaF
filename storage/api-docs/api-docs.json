@@ -626,8 +626,8 @@
                                         "type": "string",
                                         "example": "5:5,11:11 형태로 구분"
                                     },
-                                    "regist_sdate": {
-                                        "description": "모집시작일",
+                                    "regist_edate": {
+                                        "description": "모집마감일",
                                         "type": "string",
                                         "example": "2024-01-01 00:00:00"
                                     },
@@ -785,6 +785,40 @@
                                         "type": "timestamp",
                                         "example": "2024-02-13 18:30"
                                     },
+                                    "state": {
+                                        "description": "매치완료 토글버튼",
+                                        "type": "string",
+                                        "example": "Y"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "500": {
+                        "description": "Fail"
+                    }
+                }
+            }
+        },
+        "/api/matches/score-complete/{$mid}": {
+            "post": {
+                "tags": [
+                    "경기"
+                ],
+                "description": "경기 완료 저장",
+                "operationId": "e981b6f19dafa58e161baf5e370b3d61",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
                                     "state": {
                                         "description": "매치완료 토글버튼",
                                         "type": "string",

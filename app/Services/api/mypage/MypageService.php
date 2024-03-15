@@ -55,11 +55,13 @@ class MypageService extends Services
         $myteam = DB::table('teams')
             ->join('team_users', function ($join) use ($user) {
                 $join->on('teams.sid', '=', 'team_users.tid')
-                    ->where('team_users.uid', '=', $user->sid);
+                    ->where('team_users.uid', '=', $user->sid)
+                    ->where('team_users.del_yn', '=', 'N');
             })
             ->select('teams.*')
             ->where('team_users.uid','=',$user->sid)
             ->where('team_users.level', '!=', 'W')
+            ->orderBy('team_users.sid','desc')
             ->first();
 
         try {
@@ -78,7 +80,7 @@ class MypageService extends Services
                             ->where('match_users.uid', '=', $user->sid);
                     })
                     ->leftJoin('competitions as c','c.sid','=','matches.cid')
-                    ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
+                    ->select(DB::raw('( CASE WHEN DATEDIFF( matches.matched_at,NOW() ) > 0 THEN DATEDIFF(matches.matched_at,NOW() ) ELSE 0 END ) as d_day, matches.matched_at, c.title, t1.title as title1, t2.title as title2, t1.file_path as t1_thum, t2.file_path as t2_thum, matches.sid,matches.round,matches.order'))
                     ->where('matches.del_yn', '=', 'N')
                     ->where('matches.state', '=', 'N')
                     ->where('matches.matched_at', '<>', null)
@@ -105,10 +107,13 @@ class MypageService extends Services
             $myteam_ranks = array();
             if($myteams){
                 foreach($myteams as $mt){
+//                    DB::enableQueryLog();
                     $comp = DB::table('competition_teams as ct')
                         ->select(DB::raw('ct.tid, ct.state,  ct.w_cnt, ct.d_cnt, ct.l_cnt, ct.tot_score, ct.step, ROW_NUMBER() OVER (ORDER BY ct.tot_score DESC) AS `rank`'))
                         ->where('ct.cid', '=', $mt->sid)
                         ->get();
+//                    print_r(DB::getQueryLog());
+                    $tot_comp = count($comp);
                     foreach($comp as $cp){
                         if($myteam->sid == $cp->tid){
                             $myteam_ranks[$mt->sid] = [
@@ -122,6 +127,7 @@ class MypageService extends Services
                                 'tot_score' => $cp->tot_score,
                                 'step' => $cp->step,
                                 'rank' => $cp->rank,
+                                'gang' => (int)$cp->step==0 ? $tot_comp : $tot_comp/(int)$cp->step,
                             ];
                         }
                     }

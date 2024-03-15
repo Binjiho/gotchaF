@@ -160,6 +160,7 @@ class CompetitionService extends Services
              */
             $query->orderByRaw("FIELD(end_yn,'N','Y'), sid desc");
 
+            $totalCount = $query->count();
             $comps = $query->simplePaginate($per_page);
 
             foreach($comps as $comp_idx => $comp) {
@@ -169,6 +170,7 @@ class CompetitionService extends Services
 
 
             $data = [
+                "total_count" => $totalCount,
                 "result" => $comps,
             ];
 

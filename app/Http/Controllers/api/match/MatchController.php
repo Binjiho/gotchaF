@@ -54,6 +54,29 @@ class MatchController extends Controller
     }
 
     /**
+     * @OA\Post (
+     *     path="/api/matches/score-complete/{$mid}",
+     *     tags={"경기"},
+     *     description="경기 완료 저장",
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema (
+     *                  @OA\Property (property="state", type="string", description="매치완료 토글버튼", example="Y"),
+     *              )
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="Success"),
+     *     @OA\Response(response="500", description="Fail")
+     * )
+     */
+    public function completeMatch(String $mid, Request $request)
+    {
+        return $this->matchService->completeMatch($mid, $request);
+    }
+
+    /**
      * @OA\Get (
      *     path="/api/matches/ranking/{$cid}",
      *     tags={"경기"},

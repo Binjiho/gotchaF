@@ -124,6 +124,7 @@ Route::prefix('/matches')->group(function () {
     Route::get('/ranking/{cid}', [App\Http\Controllers\api\match\MatchController::class, 'showRanking']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/score/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'storeMatch']);
+        Route::post('/score-complete/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'completeMatch']);
         Route::get('/match-in/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'signinMatch']);
         Route::get('/match-out/{mid}', [App\Http\Controllers\api\match\MatchController::class, 'signinMatch']);
     });
