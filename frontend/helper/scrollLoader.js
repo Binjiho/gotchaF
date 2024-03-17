@@ -15,18 +15,20 @@ export function SetupInfiniteScroll(
   scrollFunction
 ) {
   const [fetching, setFetching] = useState(false); // 추가 데이터를 로드하는지 아닌지를 담기위한 state
+  const [totalCount, setTotalCount] = useState(0); // 추가 데이터를 로드하는지 아닌지를 담기위한 state
   const router = useRouter();
 
   useEffect(() => {
-    // scroll event listener 등록
-
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      // scroll event listener 해제
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [totalCount]);
+
+  useEffect(() => {
+    setTotalCount(limit);
+  }, [limit, searchFilter]);
 
   useEffect(() => {
     setSearchFilter(prevState => {
@@ -61,7 +63,7 @@ export function SetupInfiniteScroll(
     const PAGE = Number(getParameter(PAGE_STATE.PAGE));
     const PER_PAGE = Number(getParameter(PAGE_STATE.PER_PAGE));
 
-    if (PAGE * PER_PAGE > limit) {
+    if (PAGE * PER_PAGE > totalCount) {
       return;
     }
 

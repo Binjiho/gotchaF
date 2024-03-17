@@ -12,7 +12,7 @@ import { removeEmptyObject, getParameter, replaceQueryPage } from "@/helper/UIHe
 
 const initialSearch = {
   page: 1,
-  per_page: 7,
+  per_page: 10,
 };
 
 export default function Index() {
@@ -20,11 +20,12 @@ export default function Index() {
   const router = useRouter();
   const user = useSelector(state => state.user);
   const [searchFilter, setSearchFilter] = useState(null);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(0);
 
   const getTeamList = function () {
     sendAnonymousGet("/api/teams/", { ...removeEmptyObject(searchFilter) }, res => {
       setTeamList([...teamList, ...res.data.teams.data]);
+      setLimit(res.data.total_count);
     });
   };
 
