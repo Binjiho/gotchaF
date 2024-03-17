@@ -1,6 +1,7 @@
 import RoundProfile from "@/components/image/RoundProfile";
 import React from "react";
 import { useRouter } from "next/router";
+import { printDateTimeFormat } from "@/helper/value";
 
 export default function MyCompetition({ match }) {
   const router = useRouter();
@@ -16,7 +17,9 @@ export default function MyCompetition({ match }) {
         D-3
       </div>
       <div className={`py-[14px]`}>
-        <p className={`text-[13px] text-center font-bold mb-[8px]`}>날짜</p>
+        <p className={`text-[13px] text-center font-bold mb-[8px]`}>
+          {printDateTimeFormat(match.matched_at, "M월 d일(E) AA hh:mm")}
+        </p>
         <ul className={`flex items-center text-[14px]`}>
           <li className={`flex items-center gap-[10px] justify-end w-full font-medium`}>
             {match.title1}
