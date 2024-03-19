@@ -43,6 +43,22 @@ export function SetupInfiniteScroll(
     });
   }, [router]);
 
+  //새로고침 시
+  useEffect(() => {
+    if (performance.navigation.type === 1) {
+      setSearchFilter(prevState => {
+        return {
+          ...initialSearch,
+          ...prevState,
+          ...removeEmptyObject({
+            page: 1,
+            per_page: getParameter("per_page"),
+          }),
+        };
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const query = removeEmptyObject({ ...searchFilter });
     const currentQuery = Object.entries(router.query).toString();
@@ -66,8 +82,7 @@ export function SetupInfiniteScroll(
     if (PAGE * PER_PAGE > totalCount) {
       return;
     }
-
-    if (scrollTop + clientHeight >= scrollHeight && fetching === false) {
+    if (scrollTop + clientHeight + 10 >= scrollHeight && fetching === false) {
       // 페이지 끝에 도달하면 추가 데이터를 받아온다
       success();
     }
