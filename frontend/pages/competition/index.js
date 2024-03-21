@@ -14,34 +14,21 @@ import {
 } from "@/constants/serviceConstants";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
 import { useSelector } from "react-redux";
+import { SetupInfiniteScroll } from "@/helper/scrollLoader";
 
 const initialSearch = {
   page: 1,
-  limit: 100,
+  per_page: 10,
   type: COMPETITION_TYPE.LEAGUE,
   sorting: COMPETITION_SORTING.ALL,
 };
 
 export default function Index() {
   const router = useRouter();
-  const [competitionList, setCompetitionList] = useState(null);
+  const [competitionList, setCompetitionList] = useState([]);
   const [searchFilter, setSearchFilter] = useState(null);
   const user = useSelector(state => state.user);
-
-  useEffect(() => {
-    setSearchFilter(prevState => {
-      return {
-        ...initialSearch,
-        ...prevState,
-        ...removeEmptyObject({
-          page: getParameter("page"),
-          limit: getParameter("limit"),
-          type: getParameter("type"),
-          sorting: getParameter("sorting"),
-        }),
-      };
-    });
-  }, [router]);
+  const [limit, setLimit] = useState(0);
 
   useEffect(() => {
     const query = removeEmptyObject({ ...searchFilter });
@@ -60,6 +47,7 @@ export default function Index() {
   };
 
   const changeSearchFilter = (key, value) => {
+    setCompetitionList([]);
     setSearchFilter(prevState => {
       return {
         ...prevState,
@@ -72,11 +60,20 @@ export default function Index() {
 
   const getCompetitionList = () => {
     sendAnonymousGet(`/api/competitions`, { ...removeEmptyObject(searchFilter) }, res => {
-      setCompetitionList(res.data.result.data);
+      setCompetitionList([...competitionList, ...res.data.result.data]);
+      setLimit(res.data.total_count);
     });
   };
 
   const isLeader = user.tid && user.level === TEAM_MEMBER_LEVEL.LEADER;
+
+  SetupInfiniteScroll(
+    initialSearch,
+    searchFilter,
+    setSearchFilter,
+    limit,
+    getCompetitionList
+  );
 
   return (
     <div>
@@ -126,9 +123,7 @@ export default function Index() {
             <div className={"text-center text-gray8 my-[50px]"}>대회가 없습니다.</div>
           ) : (
             competitionList?.map(item => (
-              <div key={item.sid}>
-                <CompetitionItem item={item}></CompetitionItem>
-              </div>
+              <CompetitionItem item={item} key={item.sid}></CompetitionItem>
             ))
           )}
         </div>

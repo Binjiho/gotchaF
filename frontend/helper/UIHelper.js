@@ -9,12 +9,10 @@ export const replaceSpacesWithDot = inputString => {
 
 export const replaceQueryPage = (obj = {}, router) => {
   const query = removeEmptyObject({ ...obj });
+  const params = new URLSearchParams(query);
+  const pathname = window.location.pathname;
 
-  let location = {
-    query: query,
-  };
-
-  router.replace(location, undefined, { shallow: true });
+  router.replace({ pathname, query: params.toString() }, undefined, { shallow: true });
 };
 
 export const removeEmptyObject = obj => {

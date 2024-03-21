@@ -61,7 +61,14 @@ export function SetupInfiniteScroll(
 
   useEffect(() => {
     const query = removeEmptyObject({ ...searchFilter });
-    const currentQuery = Object.entries(router.query).toString();
+    const url = new URL(router.asPath, "https://example.com");
+
+    const queryParams = {};
+    for (const [key, value] of url.searchParams.entries()) {
+      queryParams[key] = value;
+    }
+
+    const currentQuery = Object.entries(queryParams).toString();
     const newQuery = Object.entries(query).toString();
 
     if (currentQuery !== newQuery) {

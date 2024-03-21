@@ -7,23 +7,31 @@ import NoticeItem from "@/components/team/NoticeItem";
 import FloatAddBtn from "@/components/btn/FloatAddBtn";
 import { TEAM_MEMBER_LEVEL } from "@/constants/serviceConstants";
 import { useSelector } from "react-redux";
+import { SetupInfiniteScroll } from "@/helper/scrollLoader";
+import { removeEmptyObject } from "@/helper/UIHelper";
 
-export default function Notice() {
+const initialSearch = {
+  page: 1,
+  per_page: 10,
+};
+
+export default function Notice({ teamId }) {
   const router = useRouter();
   const [teamNotice, setTeamNotice] = useState([]);
-  const teamId = router.query.id;
   const user = useSelector(state => state.user);
+  const [searchFilter, setSearchFilter] = useState(null);
+  const [limit, setLimit] = useState(0);
 
   const getNotice = function () {
-    sendGet(`/api/boards/board-notice/${teamId}`, null, res => {
-      setTeamNotice(res.data.boards.data);
-    });
+    sendGet(
+      `/api/boards/board-notice/${teamId}`,
+      { ...removeEmptyObject(searchFilter) },
+      res => {
+        setTeamNotice([...teamNotice, ...res.data.boards.data]);
+        setLimit(res.data.total_count);
+      }
+    );
   };
-
-  useEffect(() => {
-    if (!teamId) return;
-    getNotice();
-  }, [teamId]);
 
   const isLeader = () => {
     const team = Number(teamId) === Number(user.tid);
@@ -31,6 +39,8 @@ export default function Notice() {
 
     return user && team && leader;
   };
+
+  SetupInfiniteScroll(initialSearch, searchFilter, setSearchFilter, limit, getNotice);
 
   return (
     <>
@@ -66,4 +76,10 @@ export default function Notice() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { id } = context.query;
+
+  return { props: { teamId: id } };
 }
