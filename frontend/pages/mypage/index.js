@@ -12,6 +12,7 @@ import MyScoreList from "@/components/competition/MyScoreList";
 import RightIcon from "@/public/icons/system/arrow-right-s-line.svg";
 import CupIcon from "@/public/icons/social/cup_line.svg";
 import LeagueIcon from "@/public/icons/social/league_line.svg";
+import TeamIcon from "@/public/icons/social/team_line.svg";
 import { COMPETITION_TYPE, CUP_STATE } from "@/constants/serviceConstants";
 import MyCompetition from "@/components/competition/MyCompetition";
 
@@ -20,7 +21,7 @@ export default function Index() {
   const user = useSelector(state => state.user);
   const [myTeam, setMyTeam] = useState(null);
   const [myTeamRank, setMyTeamRank] = useState([]);
-  const [myTeamMatch, setMyTeamMatch] = useState(null);
+  const [myTeamMatch, setMyTeamMatch] = useState([]);
 
   const getMyInfo = async () => {
     sendGet(`/api/mypage/detail`, {}, res => {
@@ -110,7 +111,7 @@ export default function Index() {
             </div>
             <div className={`mt-[20px]`}>
               <h3 className={`text-[16px] font-bold pb-[10px]`}>내 경기 일정</h3>
-              {myTeamMatch ? (
+              {myTeamMatch.length ? (
                 <MyCompetition match={myTeamMatch}></MyCompetition>
               ) : (
                 <div
@@ -125,61 +126,89 @@ export default function Index() {
             <div className={`mt-[40px]`}>
               <h3 className={`text-[16px] font-bold pb-[10px]`}>내 팀 경기</h3>
               <ul className={`flex flex-column gap-[10px]`}>
-                {myTeamRank.map(match => {
-                  return (
-                    <li
-                      className={`bg-gray1 rounded-[5px] cursor-pointer`}
-                      key={`match-${match.sid}`}
-                      onClick={() => goMyMatch(match)}>
-                      <div
-                        className={`py-[16px] px-[20px] border-b-[1px] !border-gray4 flex justify-between align-items-center`}>
+                {myTeam ? (
+                  myTeamRank.map(match => {
+                    return (
+                      <li
+                        className={`bg-gray1 rounded-[5px] cursor-pointer`}
+                        key={`match-${match.sid}`}
+                        onClick={() => goMyMatch(match)}>
                         <div
-                          className={`w-[30px] h-[30px] bg-gray7 rounded-[5px] text-white flex align-items-center justify-center overflow-hidden ${
-                            Number(match.type) === COMPETITION_TYPE.LEAGUE
-                              ? "bg-blue_primary"
-                              : "bg-yellow_sub1"
-                          }`}>
-                          {Number(match.type) === COMPETITION_TYPE.LEAGUE ? (
-                            <LeagueIcon width={17}></LeagueIcon>
-                          ) : (
-                            <CupIcon width={17}></CupIcon>
-                          )}
+                          className={`py-[16px] px-[20px] border-b-[1px] !border-gray4 flex justify-between align-items-center`}>
+                          <div
+                            className={`w-[30px] h-[30px] bg-gray7 rounded-[5px] text-white flex align-items-center justify-center overflow-hidden ${
+                              Number(match.type) === COMPETITION_TYPE.LEAGUE
+                                ? "bg-blue_primary"
+                                : "bg-yellow_sub1"
+                            }`}>
+                            {Number(match.type) === COMPETITION_TYPE.LEAGUE ? (
+                              <LeagueIcon width={17}></LeagueIcon>
+                            ) : (
+                              <CupIcon width={17}></CupIcon>
+                            )}
+                          </div>
+                          <p
+                            className={`ml-[12px] mr-auto text-[15px] font-medium text-gray10`}>
+                            {match.title}
+                          </p>
+                          <button className={`text-gray7`}>
+                            <RightIcon width={20}></RightIcon>
+                          </button>
                         </div>
-                        <p
-                          className={`ml-[12px] mr-auto text-[15px] font-medium text-gray10`}>
-                          {match.title}
-                        </p>
-                        <button className={`text-gray7`}>
-                          <RightIcon width={20}></RightIcon>
-                        </button>
+                        {Number(match.type) === COMPETITION_TYPE.LEAGUE ? (
+                          <MyScoreList
+                            list={[
+                              { title: "승", score: match?.w_cnt || 0 },
+                              { title: "무", score: match?.d_cnt || 0 },
+                              { title: "패", score: match?.l_cnt || 0 },
+                              {
+                                title: "RANK",
+                                score: match?.step
+                                  ? `${match?.rank}/${match?.step}`
+                                  : "-",
+                              },
+                            ]}></MyScoreList>
+                        ) : (
+                          <MyScoreList
+                            list={[
+                              { title: "승", score: match?.w_cnt || 0 },
+                              { title: "패", score: match?.l_cnt || 0 },
+                              {
+                                title: `${
+                                  CUP_STATE[match.state] === "LOSE" ? "패배" : "진출"
+                                }`,
+                                score: `???`,
+                              },
+                            ]}></MyScoreList>
+                        )}
+                      </li>
+                    );
+                  })
+                ) : (
+                  <li className={`bg-gray1 rounded-[5px] cursor-pointer`}>
+                    <div
+                      className={`py-[16px] px-[20px] border-b-[1px] !border-gray4 flex justify-between align-items-center`}>
+                      <div
+                        className={`w-[30px] h-[30px] bg-gray7 rounded-[5px] text-white flex align-items-center justify-center overflow-hidden`}>
+                        <TeamIcon width={17}></TeamIcon>
                       </div>
-                      {Number(match.type) === COMPETITION_TYPE.LEAGUE ? (
-                        <MyScoreList
-                          list={[
-                            { title: "승", score: match?.w_cnt || 0 },
-                            { title: "무", score: match?.d_cnt || 0 },
-                            { title: "패", score: match?.l_cnt || 0 },
-                            {
-                              title: "RANK",
-                              score: match?.step ? `${match?.rank}/${match?.step}` : "-",
-                            },
-                          ]}></MyScoreList>
-                      ) : (
-                        <MyScoreList
-                          list={[
-                            { title: "승", score: match?.w_cnt || 0 },
-                            { title: "패", score: match?.l_cnt || 0 },
-                            {
-                              title: `${
-                                CUP_STATE[match.state] === "LOSE" ? "패배" : "진출"
-                              }`,
-                              score: `???`,
-                            },
-                          ]}></MyScoreList>
-                      )}
-                    </li>
-                  );
-                })}
+                      <p
+                        className={`ml-[12px] mr-auto text-[15px] font-medium text-gray10`}>
+                        아직 소속된 팀이 없습니다.
+                      </p>
+                    </div>
+                    <MyScoreList
+                      list={[
+                        { title: "승", score: 0 },
+                        { title: "무", score: 0 },
+                        { title: "패", score: 0 },
+                        {
+                          title: "TOTAL",
+                          score: 0,
+                        },
+                      ]}></MyScoreList>
+                  </li>
+                )}
               </ul>
             </div>
             {/*<div className={`mt-[40px]`}>*/}
