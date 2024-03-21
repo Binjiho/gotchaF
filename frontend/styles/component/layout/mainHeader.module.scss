@@ -7,14 +7,21 @@
   transition: background 0.3s;
   position: fixed;
   left: 50%;
-  top: 0;
-  width: 100%;
+  top: 20px;
+  width: calc($max-layout - 40px);
   background: #fff;
   transform: translateX(-50%);
   z-index: 100;
   justify-content: space-between;
 
-  & + main {
-    padding-top: 60px;
+  .left {
+    a {
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-right: -1px;
+      }
+    }
   }
 }

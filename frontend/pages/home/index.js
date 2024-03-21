@@ -1,5 +1,4 @@
 import NavBottom from "@/components/layout/NavBottom";
-import LogoIcon from "@/public/icons/logos/black_logo.svg";
 import MainHeader from "@/components/layout/MainHeader";
 import { useDispatch } from "react-redux";
 import { getCookie, removeCookie, setCookie } from "@/helper/cookies";
@@ -7,6 +6,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { sendGet } from "@/helper/api";
 import { setUser } from "@/actions/userActions";
+import Image from "next/image";
 
 export default function Index() {
   const dispatch = useDispatch();
@@ -35,12 +35,18 @@ export default function Index() {
 
   return (
     <>
-      <MainHeader>
-        <a type={"left"}>
-          <LogoIcon width={42}></LogoIcon>
-        </a>
-      </MainHeader>
-      <main></main>
+      <MainHeader></MainHeader>
+      <main>
+        <div>
+          <Image
+            src={"/images/main_banner.png"}
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: "100%", height: "auto" }}
+            alt="main banner"></Image>
+        </div>
+      </main>
       <NavBottom></NavBottom>
     </>
   );
