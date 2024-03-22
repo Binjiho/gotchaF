@@ -13,15 +13,31 @@
   transform: translateX(-50%);
   z-index: 100;
   justify-content: space-between;
+  border-radius: 100px;
+  border: 1px solid $gray4;
+}
 
-  .left {
-    a {
-      display: flex;
-      align-items: center;
+.left {
+  a {
+    display: flex;
+    align-items: center;
 
-      img {
-        margin-right: -1px;
-      }
+    img {
+      margin-right: -1px;
     }
   }
+}
+
+.loginBtn {
+  background: $green_primary;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  gap: 4px;
+  border-radius: 100px;
+  width: 137px;
+  height: 32px;
+  justify-content: center;
 }

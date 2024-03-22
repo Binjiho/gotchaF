@@ -8,7 +8,7 @@ import RightIcon from "@/public/icons/system/arrow-right-line.svg";
 export default function MainHeader({ children, onSearch }) {
   return (
     <header className={`${styles.header}`}>
-      <div className={`left`}>
+      <div className={`${styles.left}`}>
         <Link href={"/"}>
           <Image
             src={"/images/logo_simbol.png"}
@@ -18,9 +18,9 @@ export default function MainHeader({ children, onSearch }) {
           <LogoIcon width={42}></LogoIcon>
         </Link>
       </div>
-      <Link href="/auth/signin" className={`text-[15px] text-gray10 flex`}>
+      <Link href="/auth/signin" className={`${styles.loginBtn}`}>
         로그인/회원가입
-        <RightIcon></RightIcon>
+        <RightIcon width={14}></RightIcon>
       </Link>
     </header>
   );
